@@ -14,7 +14,7 @@ import org.junit.runner.RunWith;
  * @author jkesanie
  */
 @RunWith(Cucumber.class)
-@CucumberOptions(plugin = {"pretty"}, features="src/test/resources")
+@CucumberOptions(plugin = {"pretty"}, features="src/test/resources", tags = {"~@ignore"})
 public class RunDemoTests {
     
 }

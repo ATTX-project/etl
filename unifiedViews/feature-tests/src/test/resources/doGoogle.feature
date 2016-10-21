@@ -2,7 +2,7 @@
 # Testing Google search features
 #----------------------------------
     
-@RunWith 
+@ignore
 Feature: Do Google search
 
    # A very simple scenario
