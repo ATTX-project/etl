@@ -1,5 +1,5 @@
 #----------------------------------
-# Example of Cucumber .feature file
+# Login feature
 #----------------------------------
     
 Feature: Users can login and have rights permissions assigned to them

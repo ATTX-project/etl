@@ -18,13 +18,13 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-
+import static org.junit.Assert.assertEquals;
 
 /**
  *
  * @author jkesanie
  */
-public class GoogleSteps implements En {
+public class GithubSteps implements En {
 
     private WebDriver driver = null;
 
@@ -62,34 +62,16 @@ public class GoogleSteps implements En {
             return null;
         }
     }
-    public GoogleSteps() {
+    public GithubSteps() {
         System.setProperty("webdriver.chrome.driver" ,  "/Users/jkesanie/Applications/chromedriver");
-        
-        Given("use has navigated to (.*)", (String url) -> {
-           System.out.println("navigating to " + url);            
-           driver.get(url.trim());
+
+        When("^he logs in$", () -> {
+            assertEquals(true, true);
         });
-        When("search for (.*)", (String keyword) -> {
-            System.out.println("searching for " + keyword);
-            WebElement input = null;
-            input = getWebElementByName(driver, "q");
-            
-            input.clear();
-            input.sendKeys(keyword);
-            
-            driver.findElement(By.className("js-site-search-form")).submit(); 
-            
-        });
-        Then("there should be test results", () -> {
-            System.out.println("Looking for results");
-            /*
-            String source = driver.findElement(By.id("resultStats")).getText();
-            System.out.println(source);
-            Pattern p = Pattern.compile("About (.*) results");
-            Matcher m = p.matcher(source);
-            Assert.assertTrue(m.matches());
-            */
-            Assert.assertTrue(true);
+
+        Given("^he is admin$", () -> {
+            // Write code here that turns the phrase above into concrete actions
+            assertEquals(true, true);
         });
         
         

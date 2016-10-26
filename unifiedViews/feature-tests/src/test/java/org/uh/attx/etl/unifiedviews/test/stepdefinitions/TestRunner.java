@@ -14,7 +14,7 @@ import org.junit.runner.RunWith;
  * @author jkesanie
  */
 @RunWith(Cucumber.class)
-@CucumberOptions(plugin = {"pretty"}, features="src/test/resources", tags = {"~@ignore"})
-public class RunDemoTests {
+@CucumberOptions(plugin = {"pretty"}, features="classpath:features", tags = {"~@ignore"}, glue={"classpath:org.uh.attx.etl.unifiedviews.test.stepdefinitions", "src/test/resources/python/steps"})
+public class TestRunner {
     
 }
