@@ -11,9 +11,6 @@ Feature: Users can login and have rights permissions assigned to them
         When he logs in
         Then he should see "welcome X"
 
-    
-   
-
     Scenario: Admin login
         Given user "X" has acount
         And he is admin
