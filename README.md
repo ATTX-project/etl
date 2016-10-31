@@ -4,7 +4,7 @@ Code and configuration related to running UnifiedViews as the ETL component.
 Unified Views requires Backend (MariaDB) and Frontend (Apache Tomcat) servers. The commisioning procedure consists in installing MariaDB, configuring the DB schema and permissions, and installing the Frontend server. The DB configuration scripts can be found at https://github.com/tenforce/docker-unified-views. A ready-made Docker image for Unified Views backened that includes 
 
 # STARTING MARIADB INSTANCE WITH OPTIONS
-´´´
+```
 $ docker run --name my-mysql \
 	-v /<EXPOSED_FILE_SYSTEM_DIRECTORY>/tmp \
         -p 3306:3306 \
@@ -13,7 +13,7 @@ $ docker run --name my-mysql \
         -e MYSQL_PASSWORD=unified_views_pwd \
         -e MYSQL_DATABASE=unified_views_db \
         -d mariadb
-´´´
+```
 
 # CONFIGURING MARIADB SCHEMA AND PERMISSIONS 
 A ready-made Docker image with configured schema and permissions can be found at https://hub.docker.com/r/attxproject/unifiedviewsbackend/.
