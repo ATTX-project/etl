@@ -1,7 +1,7 @@
 # etl-unifiedViews
 Code and configuration related to running UnifiedViews as the ETL component.
 # ASSUMPTIONS
-Unified Views requires Backend (MariaDB) and Frontend (Apache Tomcat) servers. The commisioning procedure consists in installing MariaDB, configuring the DB schema and permissions, and installing the Frontend server. The DB configuration scripts can be found at https://github.com/tenforce/docker-unified-views.
+Unified Views requires Backend (MariaDB) and Frontend (Apache Tomcat) servers. The commisioning procedure consists in installing MariaDB, configuring the DB schema and permissions, and installing the Frontend server. The DB configuration scripts can be found at https://github.com/tenforce/docker-unified-views. A ready-made Docker image for Unified Views backened that includes 
 
 # STARTING MARIADB INSTANCE WITH OPTIONS
 $ docker run --name my-mysql \
@@ -13,11 +13,17 @@ $ docker run --name my-mysql \
            -e MYSQL_DATABASE=unified_views_db \
            -d mariadb
            
-# CONFIGURING MARIADB SCHEMA AND PERMISSIONS           
+# CONFIGURING MARIADB SCHEMA AND PERMISSIONS 
+A ready-made Docker image with configured schema and permissions can be found at https://hub.docker.com/r/attxproject/unifiedviewsbackend/.
+
+Nevertheless, if you need to configure the Unified Views Backend's DB, you can  run it as follows: 
+
 $ docker exec -it <MYSQL_CONTAINER_ID> bash
 <MYSQL_CONTAINER_ID>$ mysql unified_views_db --user=root --password=password < /tmp/schema.sql > output.tab
 <MYSQL_CONTAINER_ID>$ mysql unified_views_db --user=root --password=password < /tmp/data-core.sql > output.tab
 <MYSQL_CONTAINER_ID>$ mysql unified_views_db --user=root --password=password < /tmp/permissions > output.tab
+
+
 
 # CONNECTING TO MARIADB TO CHECK CONFS
 $ docker exec -it <MYSQL_CONTAINER_ID> bash
