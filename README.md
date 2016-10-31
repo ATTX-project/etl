@@ -5,13 +5,13 @@ Unified Views requires Backend (MariaDB) and Frontend (Apache Tomcat) servers. T
 
 # STARTING MARIADB INSTANCE WITH OPTIONS
 $ docker run --name my-mysql \
-			-v /<EXPOSED_FILE_SYSTEM_DIRECTORY>/tmp \
-           -p 3306:3306 \
-           -e MYSQL_ROOT_PASSWORD=password \
-           -e MYSQL_USER=unified_views_user \
-           -e MYSQL_PASSWORD=unified_views_pwd \
-           -e MYSQL_DATABASE=unified_views_db \
-           -d mariadb
+	-v /<EXPOSED_FILE_SYSTEM_DIRECTORY>/tmp \
+        -p 3306:3306 \
+        -e MYSQL_ROOT_PASSWORD=password \
+        -e MYSQL_USER=unified_views_user \
+        -e MYSQL_PASSWORD=unified_views_pwd \
+        -e MYSQL_DATABASE=unified_views_db \
+        -d mariadb
            
 # CONFIGURING MARIADB SCHEMA AND PERMISSIONS 
 A ready-made Docker image with configured schema and permissions can be found at https://hub.docker.com/r/attxproject/unifiedviewsbackend/.
