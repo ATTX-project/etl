@@ -16,13 +16,11 @@ $ docker run --name my-mysql \
 # CONFIGURING MARIADB SCHEMA AND PERMISSIONS 
 A ready-made Docker image with configured schema and permissions can be found at https://hub.docker.com/r/attxproject/unifiedviewsbackend/.
 
-Nevertheless, if you need to configure the Unified Views Backend's DB, you can  run it as follows: 
-
+Nevertheless, if you need to configure the Unified Views Backend's DB, you can still do it as follows: 
 $ docker exec -it <MYSQL_CONTAINER_ID> bash
-<MYSQL_CONTAINER_ID>$ mysql unified_views_db --user=root --password=password < /tmp/schema.sql > output.tab
-<MYSQL_CONTAINER_ID>$ mysql unified_views_db --user=root --password=password < /tmp/data-core.sql > output.tab
-<MYSQL_CONTAINER_ID>$ mysql unified_views_db --user=root --password=password < /tmp/permissions > output.tab
-
+<MYSQL_CONTAINER_ID>$ mysql unified_views_db --user=root --password=password < /tmp/schema.sql
+<MYSQL_CONTAINER_ID>$ mysql unified_views_db --user=root --password=password < /tmp/data-core.sql
+<MYSQL_CONTAINER_ID>$ mysql unified_views_db --user=root --password=password < /tmp/permissions.sql
 
 
 # CONNECTING TO MARIADB TO CHECK CONFS
