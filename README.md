@@ -6,15 +6,13 @@ Unified Views requires backend (MariaDB) and Frontend (Apache Tomcat) servers. T
 
 # RUNNING THE ATTX PROJECT'S CONTAINERISED IMPLEMENTATION OF UNIFIED VIEWS
 Creating the data volume container:
-
 ``` 
-docker create --name etldata attxproject/mariadb_persistance
+$ docker create --name etldata attxproject/mariadb_persistance
 ```
 
 Running the ATTX Project ready-made Docker image for Unified Views backend, that includes a preconfigured MariaDB (the SQL scripts can be found here: https://github.com/tenforce/docker-unified-views):
-
 ```
-docker run --volumes-from etldata \
+$ docker run --volumes-from etldata \
 --name unifiedviewsbackend \
 -p 3306:3306 \
 -e MYSQL_ROOT_PASSWORD=password \
@@ -25,8 +23,6 @@ docker run --volumes-from etldata \
 ```
 
 Running the ATTX Project Unified Views frontend:
-
-
 ```
 $ docker run --name unifiedviewsfrontend \
 -p 8080:8080 --link unifiedviewsbackend:mysql \
@@ -38,11 +34,13 @@ $ docker run --name unifiedviewsfrontend \
 -d attxproject/unifiedviewsfrontend
 ```
 
+# Verifying the containerised Unified Views envinronment
 
-
-# Verifying the containerised 
+Connecting to MariaDB:
+```
 $ docker exec -it <MYSQL_CONTAINER_ID> bash
 <MYSQL_CONTAINER_ID>$ mysql --user=unified_views_user --password=unified_views_pwd;
 <MYSQL_CONTAINER_ID>$ connect unified_views_db;
+```
 
-
+Checking the UnifiedViews Frontend UI: open http://localhost:8080/unifiedviews @ your favourite www browser.
