@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 frontend:
   image: tenforce/unified-views-frontend:latest
   ports:
@@ -24,31 +23,3 @@ mysql:
     - MYSQL_ROOT_PASSWORD=iamroot!
 virtuoso:
   image: tenforce/virtuoso:virtuoso-v7.2.0-latest
-=======
-version: '2'
-
-services:
-  unifiedviewsbackend:
-    image: attxproject/unifiedviewsbackend
-    volumes:
-      - ~/database:/var/lib/mysql
-    ports:
-      - "3306:3306"
-    environment:
-      - MYSQL_ROOT_PASSWORD=password
-      - MYSQL_USER=unified_views_user
-      - MYSQL_PASSWORD=unified_views_pwd
-      - MYSQL_DATABASE=unified_views_db
-  unifiedviewsfrontend:
-    image: attxproject/unifiedviewsfrontend
-    ports:
-      - 8080:8080
-    links:
-      - "unifiedviewsbackend:mysql"
-    environment:
-      - UV_DATABASE_SQL_URL=jdbc:mysql://unifiedviewsbackend:3306/unified_views_db?characterEncoding=utf8
-      - UV_DATABASE_SQL_USER=unified_views_user
-      - UV_DATABASE_SQL_PASSWORD=unified_views_pwd
-      - MASTER_API_USER=master
-      - MASTER_API_PASSWORD=mysecretpassword
->>>>>>> 03d497903f53617568b2e22a5545254996976098
