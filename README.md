@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # Unified Views docker
 Docker images for hosting Unified Views, as of version 2.3 this repository switched to a modular approach.
 
@@ -76,4 +75,3 @@ docker run --name uv-frontend --volumes-from uv-shared --link uv-backend:backend
 If the resulting RDF should be written to a Virtuoso running in a Docker container it might be helpful to link the [Virtuoso container](https://hub.docker.com/r/tenforce/virtuoso/) to the Unified Views container using the option `--link my-virtuoso:virtuoso`.
 
 If you want to use Virtuoso instead of the local RDF store as RDF platform to run the Unified Views pipelines, you have to configure the following environment variables: `UV_DATABASE_RDF_PLATFORM=virtuoso`, `UV_DATABASE_RDF_URL=jdbc:virtuoso://virtuoso:1111/charset=UTF-8/log_enable=2`, `UV_DATABASE_RDF_USER=dba`, `UV_DATABASE_RDF_PASSWORD=dba_pwd`.
-=======
