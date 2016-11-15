@@ -12,7 +12,7 @@ The following unified views dockers are provided:
 
 Download/pull the `docker-compose.yml` file plus the above-mentioned folders to the target directory (e.g. `etl-unified-views`), and run `docker compose up` in the same directory path as the target directory.
 
-## adding dpu's
+## Adding dpu's
 By default the unified-views installation is provided without DPU's, DPU's can be added through the GUI or the master API. To quickly add a set of dpu's a convience docker image is provided. The following command will add all official DPU's to your unified-views installation.
 
 `docker run --rm --link uv-frontend:frontend tenforce/unified-views-add-dpus` 
