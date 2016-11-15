@@ -1,5 +1,5 @@
 # Unified Views docker
-Docker images for hosting Unified Views, as of version 2.3 this repository switched to a modular approach.
+Docker images for hosting Unified Views, as of version 2.3 this repository switched to a modular approach wuth Docker Compose.
 
 The following unified views dockers are provided:
  * [uv-shared](uv-shared): a data docker providing the shared libraries and configuration
@@ -7,6 +7,20 @@ The following unified views dockers are provided:
  * [uv-backend](uv-backend): a docker image that runs the unified views backend, requires uv-shared
  * [uv-mariadb](uv-mariadb): a docker image for mariadb that has the unified-views schema and required data preloaded
  * [uv-add-dpus](uv-add-dpus): a docker image that can be used to add dpus to unified-views via the master api
+
+## Getting Started
+
+Download/pull the 'docker-compose.yml' file plus the above-mentioned folders to the target directory (e.g. 'etl-unified-views'), and run 'docker compose up' in the same directory path as the target directory.
+
+## adding dpu's
+By default the unified-views installation is provided without DPU's, DPU's can be added through the GUI or the master API. To quickly add a set of dpu's a convience docker image is provided. The following command will add all official DPU's to your unified-views installation.
+
+`docker run --rm --link uv-frontend:frontend tenforce/unified-views-add-dpus` 
+
+To add your own dpu's use the following command with your dpu directory.
+`docker run --rm -v /your/dpu/directory:/dpus --link uv-frontend:frontend tenforce/unified-views-add-dpus` 
+
+
 
 ## Usage with uv-shared
 The backend and frontend share a config file (`/config/config.properties`), libraries (`/unified-views/lib`) and a folder to store dpu's (`/unified-views/dpu`). We've provided a docker image that provides these volumes for you, so you can just run it and use [docker's volumes-from directive](https://docs.docker.com/engine/userguide/containers/dockervolumes/#creating-and-mounting-a-data-volume-container).
