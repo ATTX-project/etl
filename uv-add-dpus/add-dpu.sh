@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# MAINTAINER João M. da Silva <joao.silva@helsinki.fi>
+# Modified URL to 127.0.0.1 (was: 'frontend') so that the Tomcat master can be found
 URL="http://127.0.0.1:8080/master/api/1/import/dpu/jar"
 
 echo "---------------------------------------------------------------------"
