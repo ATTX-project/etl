@@ -45,7 +45,7 @@ public class UnifiedViewsSteps implements En {
         });
         
         When("^he logs in$", () -> {
-            driver.get("http://localhost:8080/unifiedviews/");
+            driver.get("http://localhost:8080/unifiedviews/");            
             WebElement username = driver.findElement(By.cssSelector("input[type='text']"));
             username.sendKeys("Admin");
             WebElement password = driver.findElement(By.cssSelector("input[type='password']"));
