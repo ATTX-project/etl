@@ -1,4 +1,3 @@
-
 # Created by https://www.gitignore.io/api/netbeans,java,gradle
 
 ### NetBeans ###
@@ -43,3 +42,6 @@ gradle-app.setting
 
 # # Work around https://youtrack.jetbrains.com/issue/IDEA-116898
 # gradle/wrapper/gradle-wrapper.properties
+
+### JYTHON ###
+clean/
