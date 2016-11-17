@@ -27,8 +27,9 @@ public class TransformerATTXMetadata extends AbstractDpu<TransformerATTXMetadata
 		
     @Override
     protected void innerExecute() throws DPUException {
-
-        ContextUtils.sendShortInfo(ctx, "t-attx-metadata.message");
+        // This step is not doing anything.
+        // It is just a data holder.
+        
         
     }
 	
