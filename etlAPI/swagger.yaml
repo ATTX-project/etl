@@ -38,6 +38,8 @@ paths:
         required: false
         type: string
         format: date-time
+
+      # should serve by default text/turtle
       produces:
         - text/turtle
         - application/ld+json
@@ -59,9 +61,6 @@ paths:
         This operation gathers all the information necessary to describe the activities, datasets and how the datasets are acquired (input dataset) or produced (output dataset).
       summary: |
         Retrieve the latest activity and associated datasets.
-      produces:
-        - text/turtle
-        - application/ld+json
       parameters:
        -
         name: modifiedSince
@@ -70,6 +69,11 @@ paths:
         required: false
         type: string
         format: date-time
+
+      # should serve by default text/turtle
+      produces:
+        - text/turtle
+        - application/ld+json
       responses:
         200:
           description: Successful response.
