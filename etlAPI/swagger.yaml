@@ -3,62 +3,60 @@ swagger: '2.0'
 
 info:
   version: "0.0.1"
-  title: ATTX ETl API
-
+  title: ATTX ETL API
+  description: ATTX ETL internal API for communication between ETL tool and Graph Manager component.
+  contact:
+    name: "ATTX project"
+    url: http://helsinki.fi/library
+  license:
+    name: "MIT"
 paths:
   /workflows:
     get:
       description: |
-        Gets `Workflow` objects.
-        Optional query param of **size** determines
-        size of returned array
+        This operation gathers all the information necessary to describe the workflows, steps and relationships between them
+      summary: |
+        List the latest workflow and associated steps.
       parameters:
-        -
-          name: size
-          in: query
-          description: Size of array
-          required: true
-          type: number
-          format: double
+       -
+        name: modifiedSince
+        in: query
+        description: Size of array
+        required: false
+        type: string
+        format: date-time
+      produces:
+        - text/turtle
+        - application/ld+json
       responses:
         200:
-          description: Successful response
-          schema:
-            title: ArrayOfPersons
-            type: array
-            items:
-              title: Person
-              type: object
-              properties:
-                name:
-                  type: string
-                single:
-                  type: boolean
-  /step:
+          description: Successful response.
+    post:
+      responses:
+        500:
+          description: This operation cannot be Perfomed.
+
+  /activities:
     get:
       description: |
-        Gets `Workflow` objects.
-        Optional query param of **size** determines
-        size of returned array
+        This operation gathers all the information necessary to describe the activities, datasets and how the datasets are acquired (input dataset) or produced (output dataset).
+      summary: |
+        Retrieve the latest activity and associated datasets.
+      produces:
+        - text/turtle
+        - application/ld+json
       parameters:
-        -
-          name: size
-          in: query
-          description: Size of array
-          required: true
-          type: number
-          format: double
+       -
+        name: modifiedSince
+        in: query
+        description: Size of array
+        required: false
+        type: string
+        format: date-time
       responses:
         200:
-          description: Successful response
-          schema:
-            title: ArrayOfPersons
-            type: array
-            items:
-              title: Person
-              type: object
-              properties:
-                name:
-                  type: string
-                single:
-                  type: boolean
+          description: Successful response.
+    post:
+      responses:
+        500:
+          description: This operation cannot be Perfomed.
