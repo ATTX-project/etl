@@ -10,9 +10,22 @@ info:
     url: http://helsinki.fi/library
   license:
     name: "MIT"
+
+tags:
+- name: "etlAPI"
+  description: "Internal etlAPI for workflow metadata"
+  externalDocs:
+    description: "just use it"
+    url: http://helsinki.fi/library
+
+schemes:
+- "http"
+
 paths:
   /workflow:
     get:
+      tags:
+        - "etlAPI"
       description: |
         This operation gathers all the information necessary to describe the workflows, steps and relationships between them
       summary: |
@@ -32,12 +45,16 @@ paths:
         200:
           description: Successful response.
     post:
+      tags:
+        - "etlAPI"
       responses:
         500:
           description: This operation cannot be Perfomed.
 
   /activity:
     get:
+      tags:
+        - "etlAPI"
       description: |
         This operation gathers all the information necessary to describe the activities, datasets and how the datasets are acquired (input dataset) or produced (output dataset).
       summary: |
@@ -57,6 +74,8 @@ paths:
         200:
           description: Successful response.
     post:
+      tags:
+        - "etlAPI"
       responses:
         500:
           description: This operation cannot be Perfomed.
