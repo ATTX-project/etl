@@ -34,7 +34,7 @@ paths:
        -
         name: modifiedSince
         in: query
-        description: Size of array
+        description: Date since last check.
         required: false
         type: string
         format: date-time
@@ -65,7 +65,7 @@ paths:
        -
         name: modifiedSince
         in: query
-        description: Size of array
+        description: Date since last check.
         required: false
         type: string
         format: date-time
