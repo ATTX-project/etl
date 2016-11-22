@@ -11,7 +11,7 @@ info:
   license:
     name: "MIT"
 paths:
-  /workflows:
+  /workflow:
     get:
       description: |
         This operation gathers all the information necessary to describe the workflows, steps and relationships between them
@@ -36,7 +36,7 @@ paths:
         500:
           description: This operation cannot be Perfomed.
 
-  /activities:
+  /activity:
     get:
       description: |
         This operation gathers all the information necessary to describe the activities, datasets and how the datasets are acquired (input dataset) or produced (output dataset).
