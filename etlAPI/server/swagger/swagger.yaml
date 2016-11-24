@@ -1,0 +1,89 @@
+---
+swagger: "2.0"
+info:
+  description: "ATTX ETL internal API for communication between ETL tool and Graph\
+    \ Manager component."
+  version: "0.0.1"
+  title: "ATTX ETL API"
+  contact:
+    name: "ATTX project"
+    url: "http://helsinki.fi/library"
+  license:
+    name: "MIT"
+tags:
+- name: "etlAPI"
+  description: "Internal etlAPI for workflow metadata"
+  externalDocs:
+    description: "just use it"
+    url: "http://helsinki.fi/library"
+schemes:
+- "http"
+paths:
+  /activity:
+    get:
+      tags:
+      - "etlAPI"
+      summary: "Retrieve the latest activity and associated datasets.\n"
+      description: "This operation gathers all the information necessary to describe\
+        \ the activities, datasets and how the datasets are acquired (input dataset)\
+        \ or produced (output dataset).\n"
+      operationId: "controllers.etl_api_controller.activity_get"
+      produces:
+      - "text/turtle"
+      - "application/ld+json"
+      parameters:
+      - name: "modifiedSince"
+        in: "query"
+        description: "Date since last check."
+        required: false
+        type: "string"
+        format: "date-time"
+      responses:
+        200:
+          description: "Successful response."
+      x-tags:
+      - tag: "etlAPI"
+    post:
+      tags:
+      - "etlAPI"
+      operationId: "controllers.etl_api_controller.activity_post"
+      parameters: []
+      responses:
+        500:
+          description: "This operation cannot be Perfomed."
+      x-tags:
+      - tag: "etlAPI"
+  /workflow:
+    get:
+      tags:
+      - "etlAPI"
+      summary: "List the latest workflow and associated steps.\n"
+      description: "This operation gathers all the information necessary to describe\
+        \ the workflows, steps and relationships between them\n"
+      operationId: "controllers.etl_api_controller.workflow_get"
+      produces:
+      - "text/turtle"
+      - "application/ld+json"
+      parameters:
+      - name: "modifiedSince"
+        in: "query"
+        description: "Date since last check."
+        required: false
+        type: "string"
+        format: "date-time"
+      responses:
+        200:
+          description: "Successful response."
+      x-tags:
+      - tag: "etlAPI"
+    post:
+      tags:
+      - "etlAPI"
+      operationId: "controllers.etl_api_controller.workflow_post"
+      parameters: []
+      responses:
+        500:
+          description: "This operation cannot be Perfomed."
+      x-tags:
+      - tag: "etlAPI"
+definitions: {}
