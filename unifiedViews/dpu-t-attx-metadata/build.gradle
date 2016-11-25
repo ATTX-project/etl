@@ -116,6 +116,7 @@ jar {
         instruction 'Embedded-Artifacts', 'dependencies/uv-dataunit-helpers-2.1.7.jar;g="eu.unifiedviews";a="uv-dataunit-helpers";v="2.1.7",dependencies/uv-dpu-helpers-2.1.7.jar;g="eu.unifiedviews";a="uv-dpu-helpers";v="2.1.7"'
         instruction 'Require-Capability', 'osgi.ee; filter="(&(osgi.ee=JavaSE)(version=1.8))"'
         instruction 'Import-Package', 'com.thoughtworks.xstream;version="[1.4,2)",com.thoughtworks.xstream.io;version="[1.4,2)",com.thoughtworks.xstream.io.xml;version="[1.4,2)",com.thoughtworks.xstream.mapper;version="[1.4,2)",com.vaadin.data;version="[7.3,8)",com.vaadin.shared.ui.label;version="[7.3,8)",com.vaadin.ui;version="[7.3,8)",eu.unifiedviews.dataunit;version="[2.1,3)",eu.unifiedviews.dataunit.files;version="[2.1,3)",eu.unifiedviews.dataunit.rdf;version="[2.1,3)",eu.unifiedviews.dataunit.relational;version="[2.1,3)",eu.unifiedviews.dpu;version="[2.1,3)",eu.unifiedviews.dpu.config;version="[2.1,3)",eu.unifiedviews.dpu.config.vaadin;version="[2.1,3)",info.aduna.iteration,javax.net.ssl,org.apache.commons.io,org.openrdf,org.openrdf.model,org.openrdf.model.impl,org.openrdf.model.vocabulary,org.openrdf.query,org.openrdf.query.impl,org.openrdf.repository,org.openrdf.rio,org.slf4j;version="[1.7,2)"'
+        //instruction 'Import-Package', '*'
 
     }
     
