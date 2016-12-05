@@ -7,9 +7,9 @@ Current directory contains:
 ### ETL API Docker container
 
 Using the ETL API Docker container:
-* build the container `docker build -t attxproject/etlapi .` in the etlAPI folder;
-* running the container `docker run -d -p 4301:4301 attxproject/etlapi` runs the container in detached mode on the `4301` port;
-* connect to the address of your server e.g. `http://localhost:4301/ui` for local development and a swagger UI will be available;
-* using the endpoints `http://localhost:4301/activity` or `http://localhost:4301/workflow`.
+* build the container `docker build -t attxproject/wfcapi .` in the etlAPI folder;
+* running the container `docker run -d -p 4301:4301 attxproject/wfcapi` runs the container in detached mode on the `4301` port (production version should have this port hidden);
+* connect to the address of your server e.g. `http://localhost:4301/v0.1/ui` for local development and a swagger UI will be available;
+* using the endpoints `http://localhost:4301/v0.1/activity` or `http://localhost:4301/v0.1/workflow`.
 
 This container will be part of the docker-compose run together with the unifiedviews tool.

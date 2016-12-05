@@ -1,60 +1,90 @@
 from api.serialization import convert
-import pymysql as mariadb
+import pymysql as mysql
+from flask import Response
+from rdflib import Graph, URIRef, Literal, BNode
+from rdflib.namespace import DC, RDF
+import urllib
 
-static_workflow = """
-@base <http://helsinki.fi/library/> .
-@prefix kaisa: <http://helsinki.fi/library/onto#> .
-@prefix owl: <http://www.w3.org/2002/07/owl#> .
-@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
-@prefix xml: <http://www.w3.org/XML/1998/namespace> .
-@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
-@prefix prov: <http://www.w3.org/ns/prov#> .
-@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
-@prefix dcterms: <http://purl.org/dc/terms/> .
-@prefix sd: <http://www.w3.org/ns/sparql-service-description#> .
-@prefix pwo: <http://purl.org/spar/pwo/> .
+# class createWorkflow():
+#
+#     @staticmethod
+#     def databaseSetup():
 
-kaisa:wf1
-  a kaisa:Workflow ;
-  dcterms:title "Acquisition and Mapping the VIRTA pubs data." ;
-  dcterms:description "Workflow that uses VIRTA publication data in order to map titles and external identifiers for every publication and research fields."@en ;
-  pwo:hasFirstStep kaisa:wf1_step1 ;
-  pwo:hasStep
-    kaisa:wf1_step2 ,
-    kaisa:wf1_step1 ,
-    kaisa:wf1_step3 ,
-    kaisa:wf1_step4 .
+workflow_graph = Graph()
+kaisa_namespace = 'http://helsinki.fi/library/onto#'
+workflow_graph.bind('kaisa', kaisa_namespace)
+workflow_graph.bind('dc','http://purl.org/dc/elements/1.1/')
+workflow_graph.bind('schema', 'http://schema.org/')
 
-kaisa:wf1_step1
-  a kaisa:Step ;
-  dcterms:title "VIRTA Publication Input Step" ;
-  dcterms:description "DPU that gets the latest publication from VIRTA using the API."@en ;
-  pwo:hasNextStep kaisa:wf1_step2 .
+try:
+    conn = mysql.connect(
+        host='localhost',
+        port=3306,
+        user='unified_views',
+        passwd='s00pers3cur3',
+        db='unified_views',
+        charset='utf8'
+    )
+except Exception as e:
+    print('Connection Failed!\nError Code is %s;\nError Content is %s;' % (e.args[0],e.args[1]))
 
-kaisa:wf1_step2
-  a kaisa:Step ;
-  dcterms:title "VIRTA Transformation Step" ;
-  dcterms:description "DPU that transforms the VIRTA data into RDF format. At the same time it maps titles and external identifiers."@en ;
-  pwo:hasNextStep kaisa:wf1_step3 .
+cursor = conn.cursor(mysql.cursors.DictCursor)
 
-kaisa:wf1_step3
-  a kaisa:Step ;
-  dcterms:title "Adding wf1 Metadata Step" ;
-  dcterms:description "DPU that add necessary Metadata, to the specify provenance information."@en ;
-  pwo:hasNextStep kaisa:wf1_step4 .
+# Get general workflow information on the last executed workflow
+cursor.execute("""
+    SELECT ppl_model.name AS 'workflowId', ppl_model.description AS 'description'
+    FROM exec_pipeline, ppl_model
+    WHERE exec_pipeline.pipeline_id = ppl_model.id
+    ORDER BY pipeline_id DESC LIMIT 1
+""")
 
-kaisa:wf1_step4
-  a kaisa:Step ;
-  dcterms:title "VIRTA Publication Output Step" ;
-  dcterms:description "DPU that that contains the mapped data and writes it to the a file."@en .
-"""
+result_set1 = cursor.fetchall()
+
+# conn.close()
+
+for row in result_set1:
+    workflow_graph.add((URIRef("{0}{1}".format(kaisa_namespace,row['workflowId'])), RDF.type, URIRef("{0}{1}".format(kaisa_namespace,'Workflow')) ))
+    workflow_graph.add((URIRef("{0}{1}".format(kaisa_namespace,row['workflowId'])), DC.title,  Literal(row['workflowId']) ))
+    workflow_graph.add((URIRef("{0}{1}".format(kaisa_namespace,row['workflowId'])), DC.description,  Literal(row['description']) ))
+
+new_cursor = conn.cursor(mysql.cursors.DictCursor)
+
+#Get steps information along with configuration
+new_cursor.execute("""
+SELECT dpu_instance.id AS 'stepId', dpu_instance.name AS 'stepTitle',
+	   dpu_instance.description AS 'description',
+	   dpu_instance.configuration AS 'config',
+	   dpu_template.name AS 'templateName', ppl_model.name AS 'workflowId'
+FROM ppl_model, dpu_template, dpu_instance INNER JOIN
+     exec_context_dpu ON exec_context_dpu.dpu_instance_id=dpu_instance.id
+     WHERE exec_context_dpu.exec_context_pipeline_id = (
+        SELECT id
+        FROM exec_pipeline
+        ORDER BY id DESC LIMIT 1)
+    AND dpu_instance.dpu_id = dpu_template.id
+""")
+
+result_set2 = new_cursor.fetchall()
+
+for row in result_set2:
+    workflow_graph.add((URIRef("{0}Step{1}".format(kaisa_namespace,row['stepId'])), RDF.type, URIRef("{0}{1}".format(kaisa_namespace,'Step')) ))
+    workflow_graph.add((URIRef("{0}Step{1}".format(kaisa_namespace,row['stepId'])), DC.title,  Literal(row['stepTitle']) ))
+    workflow_graph.add((URIRef("{0}Step{1}".format(kaisa_namespace,row['stepId'])), DC.description,  Literal(row['description']) ))
+    workflow_graph.add((URIRef("{0}Step{1}".format(kaisa_namespace,row['stepId'])), URIRef('http://schema.org/query'),  Literal(row['config'], "utf-8") ))
+    workflow_graph.add(( URIRef("{0}{1}".format(kaisa_namespace,row['workflowId'])), URIRef("{0}{1}".format(kaisa_namespace,'hasStep')), URIRef("{0}Step{1}".format(kaisa_namespace,row['stepId'])) ))
 
 def workflow_get(modifiedSince = None):
     """List the latest workflow and associated steps.
 
       This operation gathers all the information necessary to describe the workflows, steps and relationships between them
     """
-    return static_workflow
+    # data = convert(workflow_graph.serialize(format='turtle'))
+    the_workflow = Response (
+        response = workflow_graph.serialize(format='turtle'),
+        status = 200,
+        mimetype = 'text/turtle'
+    )
+    return the_workflow
 
 def workflow_post():
     """ This operation cannot be Perfomed."""

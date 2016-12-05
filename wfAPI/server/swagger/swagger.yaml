@@ -47,6 +47,7 @@ paths:
     post:
       tags:
       - "wfAPI"
+      summary: "Creating a new activity is not permitted.\n"
       operationId: "api.activity.activity_post"
       parameters: []
       responses:
@@ -80,6 +81,7 @@ paths:
     post:
       tags:
       - "wfAPI"
+      summary: "Creating a new workflow is not permitted.\n"
       operationId: "api.workflow.workflow_post"
       parameters: []
       responses:
