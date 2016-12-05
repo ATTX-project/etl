@@ -24,17 +24,19 @@ class WorkflowGraph(object):
         workflow_graph.bind('schema', 'http://schema.org/')
         workflow_graph.bind('pwo', 'http://purl.org/spar/pwo/')
 
-        conn = mysql.connect(
-            host=host_ip,
-            port=3306,
-            user=user_name,
-            passwd=passwd,
-            db=db_name,
-            charset='utf8')
-        # logger.error('Connection Failed!\
-        #     \nError Code is {0};\
-        #     \nError Content is {1};'
-        #              .format(error.args[0], error.args[1]))
+        try:
+            conn = mysql.connect(
+                host=host_ip,
+                port=3306,
+                user=user_name,
+                passwd=passwd,
+                db=db_name,
+                charset='utf8')
+        except Exception as error:
+            logger.error('Connection Failed!\
+                \nError Code is {0};\
+                \nError Content is {1};'
+                         .format(error.args[0], error.args[1]))
 
         cls.fetch_workflows(conn, workflow_graph, kaisa_namespace)
         cls.fetch_steps(conn, workflow_graph, kaisa_namespace)
@@ -145,7 +147,7 @@ def construct_output(serialization):
     parser.read('database.conf')
     data = WorkflowGraph()
     workflow_graph = data.workflow(
-            '0.0.0.0',
+            parser.get('database', 'host'),
             parser.get('database', 'user'),
             parser.get('database', 'passwd'),
             parser.get('database', 'db'))
