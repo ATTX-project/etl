@@ -1,4 +1,10 @@
-# Unified Views docker
+# HOW TO RUN UNIFIED VIEWS DOCKER-COMPOSE IN YOUR LOCAL FILESYSTEM
+1. Install docker engine
+2. Install docker-compose
+3. Download the `docker-compose.yml` file and run `docker-compose up . -d` in the same directory
+4. For deploying DPUs, please refer to the "adding dpu's" section below (under "Technical Details")
+
+#  Technical Details
 Docker images for hosting Unified Views, as of version 2.3 this repository switched to a modular approach.
 
 The following unified views dockers are provided:
