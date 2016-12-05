@@ -1,33 +1,34 @@
 ---
 swagger: "2.0"
 info:
-  description: "ATTX ETL internal API for communication between ETL tool and Graph\
+  description: "ATTX WF internal API for communication between wf tool and Graph\
     \ Manager component."
-  version: "0.0.1"
-  title: "ATTX ETL API"
+  version: "0.1"
+  title: "ATTX wf API"
   contact:
     name: "ATTX project"
     url: "http://helsinki.fi/library"
   license:
     name: "MIT"
 tags:
-- name: "etlAPI"
-  description: "Internal etlAPI for workflow metadata"
+- name: "wfAPI"
+  description: "Internal wfAPI for workflow metadata"
   externalDocs:
     description: "just use it"
     url: "http://helsinki.fi/library"
 schemes:
 - "http"
+
 paths:
   /activity:
     get:
       tags:
-      - "etlAPI"
+      - "wfAPI"
       summary: "Retrieve the latest activity and associated datasets.\n"
       description: "This operation gathers all the information necessary to describe\
         \ the activities, datasets and how the datasets are acquired (input dataset)\
         \ or produced (output dataset).\n"
-      operationId: "controllers.etl_api_controller.activity_get"
+      operationId: "api.activity.activity_get"
       produces:
       - "text/turtle"
       - "application/ld+json"
@@ -42,25 +43,25 @@ paths:
         200:
           description: "Successful response."
       x-tags:
-      - tag: "etlAPI"
+      - tag: "wfAPI"
     post:
       tags:
-      - "etlAPI"
-      operationId: "controllers.etl_api_controller.activity_post"
+      - "wfAPI"
+      operationId: "api.activity.activity_post"
       parameters: []
       responses:
-        500:
-          description: "This operation cannot be Perfomed."
+        405:
+          description: "This operation cannot be perfomed."
       x-tags:
-      - tag: "etlAPI"
+      - tag: "wfAPI"
   /workflow:
     get:
       tags:
-      - "etlAPI"
+      - "wfAPI"
       summary: "List the latest workflow and associated steps.\n"
       description: "This operation gathers all the information necessary to describe\
         \ the workflows, steps and relationships between them\n"
-      operationId: "controllers.etl_api_controller.workflow_get"
+      operationId: "api.workflow.workflow_get"
       produces:
       - "text/turtle"
       - "application/ld+json"
@@ -75,15 +76,15 @@ paths:
         200:
           description: "Successful response."
       x-tags:
-      - tag: "etlAPI"
+      - tag: "wfAPI"
     post:
       tags:
-      - "etlAPI"
-      operationId: "controllers.etl_api_controller.workflow_post"
+      - "wfAPI"
+      operationId: "api.workflow.workflow_post"
       parameters: []
       responses:
-        500:
+        405:
           description: "This operation cannot be Perfomed."
       x-tags:
-      - tag: "etlAPI"
+      - tag: "wfAPI"
 definitions: {}
