@@ -1,7 +1,7 @@
 # HOW TO RUN UNIFIED VIEWS DOCKER-COMPOSE IN YOUR LOCAL FILESYSTEM
 1. Install docker engine
 2. Install docker-compose
-3. Download the `docker-compose.yml` file and run `docker-compose up . -d` in the same directory
+3. Download the `docker-compose.yml` file and run `docker-compose up -d` in the same directory
 4. For deploying DPUs, please refer to the "adding dpu's" section below (under "Technical Details")
 
 #  Technical Details
