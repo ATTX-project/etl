@@ -1,7 +1,7 @@
 import pymysql as mysql
-from rdflib import Graph, URIRef, Literal
+from rdflib import Graph, URIRef, Literal, Namespace
 from rdflib.namespace import DC, RDF
-import html
+# import html
 import logging
 import logging.config
 from configparser import SafeConfigParser
@@ -17,11 +17,14 @@ class WorkflowGraph(object):
     def workflow(cls, host_ip, user_name, passwd, db_name):
         """Build workflow graph with associated information."""
         workflow_graph = Graph()
-        kaisa_namespace = 'http://helsinki.fi/library/onto#'
-        workflow_graph.bind('kaisa', kaisa_namespace)
+
+        workflow_graph.bind('kaisa', 'http://helsinki.fi/library/onto#')
         workflow_graph.bind('dc', 'http://purl.org/dc/elements/1.1/')
         workflow_graph.bind('schema', 'http://schema.org/')
         workflow_graph.bind('pwo', 'http://purl.org/spar/pwo/')
+        workflow_graph.bind('prov', 'http://www.w3.org/ns/prov#')
+
+        KAISA = Namespace('http://helsinki.fi/library/onto#')
 
         try:
             conn = mysql.connect(
@@ -37,9 +40,9 @@ class WorkflowGraph(object):
                 \nError Content is {1};'
                          .format(error.args[0], error.args[1]))
 
-        cls.fetch_workflows(conn, workflow_graph, kaisa_namespace)
-        cls.fetch_steps(conn, workflow_graph, kaisa_namespace)
-        cls.fetch_steps_sequence(conn, workflow_graph, kaisa_namespace)
+        cls.fetch_workflows(conn, workflow_graph, KAISA)
+        cls.fetch_steps(conn, workflow_graph, KAISA)
+        cls.fetch_steps_sequence(conn, workflow_graph, KAISA)
         conn.close()
         return workflow_graph
 
@@ -50,23 +53,26 @@ class WorkflowGraph(object):
 
         # Get general workflow information on the last executed workflow
         cursor.execute("""
-            SELECT ppl_model.name AS 'workflowId',
-            ppl_model.description AS 'description'
-            FROM exec_pipeline, ppl_model
-            WHERE exec_pipeline.pipeline_id = ppl_model.id
-            ORDER BY pipeline_id DESC LIMIT 1
+             SELECT ppl_model.id AS 'workflowId',
+             ppl_model.description AS 'description',
+             ppl_model.name AS 'workflowTitle'
+             FROM ppl_model
+             ORDER BY ppl_model.id DESC LIMIT 1
         """)
 
         result_set = cursor.fetchall()
 
         for row in result_set:
-            graph.add((URIRef("{0}{1}".format(namespace, row['workflowId'])),
+            graph.add((URIRef("{0}workflow{1}".format(namespace,
+                                                      row['workflowId'])),
                        RDF.type,
-                       URIRef("{0}{1}".format(namespace, 'Workflow'))))
-            graph.add((URIRef("{0}{1}".format(namespace, row['workflowId'])),
+                      namespace.Workflow))
+            graph.add((URIRef("{0}workflow{1}".format(namespace,
+                                                      row['workflowId'])),
                       DC.title,
-                      Literal(row['workflowId'])))
-            graph.add((URIRef("{0}{1}".format(namespace, row['workflowId'])),
+                      Literal(row['workflowTitle'])))
+            graph.add((URIRef("{0}workflow{1}".format(namespace,
+                                                      row['workflowId'])),
                       DC.description,
                       Literal(row['description'])))
         return graph
@@ -81,35 +87,38 @@ class WorkflowGraph(object):
         SELECT dpu_instance.id AS 'stepId', dpu_instance.name AS 'stepTitle',
         dpu_instance.description AS 'description',
         dpu_instance.configuration AS 'config',
-        dpu_template.name AS 'templateName', ppl_model.name AS 'workflowId'
+        dpu_template.name AS 'templateName', ppl_model.id AS 'workflowId'
         FROM ppl_model, dpu_template, dpu_instance INNER JOIN
-        exec_context_dpu ON exec_context_dpu.dpu_instance_id=dpu_instance.id
-             WHERE exec_context_dpu.exec_context_pipeline_id = (
+        ppl_node ON ppl_node.instance_id=dpu_instance.id
+             WHERE ppl_node.graph_id = (
                 SELECT id
-                FROM exec_pipeline
-                ORDER BY id DESC LIMIT 1)
+                FROM ppl_model
+                ORDER BY ppl_model.id DESC LIMIT 1)
             AND dpu_instance.dpu_id = dpu_template.id
         """)
 
         result_set = cursor.fetchall()
 
+        PWO = Namespace('http://purl.org/spar/pwo/')
+
         for row in result_set:
-            graph.add((URIRef("{0}Step{1}".format(namespace, row['stepId'])),
+            graph.add((URIRef("{0}step{1}".format(namespace, row['stepId'])),
                       RDF.type,
-                      URIRef("{0}{1}".format(namespace, 'Step'))))
-            graph.add((URIRef("{0}Step{1}".format(namespace, row['stepId'])),
+                      namespace.Step))
+            graph.add((URIRef("{0}step{1}".format(namespace, row['stepId'])),
                       DC.title,
                       Literal(row['stepTitle'])))
-            graph.add((URIRef("{0}Step{1}".format(namespace, row['stepId'])),
+            graph.add((URIRef("{0}step{1}".format(namespace, row['stepId'])),
                       DC.description,
                       Literal(row['description'])))
-            graph.add((URIRef("{0}Step{1}".format(namespace, row['stepId'])),
-                      URIRef('http://schema.org/query'),
-                      Literal(html.unescape(str(row['config'], 'UTF-8')))))
-            graph.add((URIRef("{0}{1}".format(namespace, row['workflowId'])),
-                      URIRef("{0}{1}".format('http://purl.org/spar/pwo/',
-                             'hasStep')),
-                      URIRef("{0}Step{1}".format(namespace, row['stepId']))))
+            # Config placement in steps not required
+            # graph.add((URIRef("{0}Step{1}".format(namespace, row['stepId'])),
+            #           URIRef('http://schema.org/query'),
+            #           Literal(html.unescape(str(row['config'], 'UTF-8')))))
+            graph.add((URIRef("{0}workflow{1}".format(namespace,
+                                                      row['workflowId'])),
+                      PWO.hasStep,
+                      URIRef("{0}step{1}".format(namespace, row['stepId']))))
         return graph
 
     @staticmethod
@@ -131,11 +140,12 @@ class WorkflowGraph(object):
 
         result_set = cursor.fetchall()
 
+        PWO = Namespace('http://purl.org/spar/pwo/')
+
         for row in result_set:
-            graph.add((URIRef("{0}Step{1}".format(namespace, row['fromStep'])),
-                      URIRef("{0}{1}".format('http://purl.org/spar/pwo/',
-                             'hasNextStep')),
-                      URIRef("{0}Step{1}".format(namespace, row['toStep']))))
+            graph.add((URIRef("{0}step{1}".format(namespace, row['fromStep'])),
+                      PWO.hasNextStep,
+                      URIRef("{0}step{1}".format(namespace, row['toStep']))))
         return graph
 
 
