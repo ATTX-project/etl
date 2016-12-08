@@ -1,6 +1,11 @@
 from rdflib import URIRef, Literal, Namespace
 from rdflib.namespace import DC, DCTERMS, RDF
 from bs4 import BeautifulSoup
+import logging
+import logging.config
+
+logging.config.fileConfig('logging.conf')
+logger = logging.getLogger('appLogger')
 
 metadata_transformer = 'org.uh.attx.etl.uv.dpu.transformer.metadata.Transformer\
 ATTXMetadataConfig__V1'

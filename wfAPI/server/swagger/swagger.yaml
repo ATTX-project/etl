@@ -4,7 +4,7 @@ info:
   description: "ATTX WF internal API for communication between wf tool and Graph\
     \ Manager component."
   version: "0.1"
-  title: "ATTX wf API"
+  title: "ATTX wfAPI"
   contact:
     name: "ATTX project"
     url: "http://helsinki.fi/library"

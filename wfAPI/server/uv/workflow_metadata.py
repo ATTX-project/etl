@@ -7,7 +7,7 @@ import logging.config
 from configparser import SafeConfigParser
 
 logging.config.fileConfig('logging.conf')
-logger = logging.getLogger('workflowLogger')
+logger = logging.getLogger('appLogger')
 
 
 class WorkflowGraph(object):
@@ -34,6 +34,7 @@ class WorkflowGraph(object):
                 passwd=passwd,
                 db=db_name,
                 charset='utf8')
+            logger.info('Connecting to database.')
         except Exception as error:
             logger.error('Connection Failed!\
                 \nError Code is {0};\
@@ -75,6 +76,8 @@ class WorkflowGraph(object):
                                                       row['workflowId'])),
                       DC.description,
                       Literal(row['description'])))
+            logger.info('Construct workflow metadata for Workflow{0}.'
+                        .format(row['workflowId']))
         return graph
 
     @staticmethod
@@ -119,6 +122,8 @@ class WorkflowGraph(object):
                                                       row['workflowId'])),
                       PWO.hasStep,
                       URIRef("{0}step{1}".format(namespace, row['stepId']))))
+            logger.info('Construct step metadata for Step{0}.'
+                        .format(row['stepId']))
         return graph
 
     @staticmethod
@@ -146,6 +151,8 @@ class WorkflowGraph(object):
             graph.add((URIRef("{0}step{1}".format(namespace, row['fromStep'])),
                       PWO.hasNextStep,
                       URIRef("{0}step{1}".format(namespace, row['toStep']))))
+            logger.info('Fetch steps sequence between steps Step{0} '
+                        'and Step{1}.'.format(row['fromStep'], row['toStep']))
         return graph
 
 
@@ -165,5 +172,6 @@ def construct_output(serialization=None):
         result = workflow_graph.serialize(format=serialization)
     elif len(workflow_graph) == 0:
         result = "No new Workflow to be loaded."
-    logger.info('Performing UV Workflow metadata extraction and enrichment.')
+    logger.info('Constructed Output for UnifiedViews Workflow '
+                'metadata enrichment finalized and set to API.')
     return result

@@ -1,6 +1,11 @@
 from flask import Response
 from uv.activity_metadata import construct_output
 import datetime
+import logging
+import logging.config
+
+logging.config.fileConfig('logging.conf')
+logger = logging.getLogger('appLogger')
 
 
 def activity_get(modifiedSince=None):

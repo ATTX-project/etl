@@ -1,13 +1,9 @@
-import api.activity
+import uv.parse_config
 import unittest
 
 
-class ActivityAPI(unittest.TestCase):
-    """Test Activity API."""
-
-    def setUp(self):
-        """Set up."""
-        pass
+class ParsingConfigTests(unittest.TestCase):
+    """Test the Parsing of UV specific plugin encoding."""
 
     def parse_metadata_config(self):
         """Test if input output encoding is pefromed correctly."""

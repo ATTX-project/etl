@@ -3,7 +3,7 @@ swagger: '2.0'
 
 info:
   version: "0.1"
-  title: ATTX wf API
+  title: ATTX wfAPI
   description: ATTX wf internal API for communication between wf tool and Graph Manager component.
   contact:
     name: "ATTX project"
@@ -46,6 +46,8 @@ paths:
       responses:
         200:
           description: Successful response.
+        304:
+          description: "No Change."
     post:
       tags:
         - "wfAPI"
@@ -77,6 +79,8 @@ paths:
       responses:
         200:
           description: Successful response.
+        304:
+          description: "No Change."
     post:
       tags:
         - "wfAPI"

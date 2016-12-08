@@ -1,9 +1,9 @@
-import api.activity
+import uv.workflow_metadata
 import unittest
 
 
-class ActivityAPI(unittest.TestCase):
-    """Test Activity API."""
+class WorkflowMetadata(unittest.TestCase):
+    """Test of UnifiedViews specific activity metadata encoding."""
 
     def setUp(self):
         """Set up."""

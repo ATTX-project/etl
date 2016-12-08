@@ -8,7 +8,7 @@ from configparser import SafeConfigParser
 from uv.parse_config import parse_metadata_config
 
 logging.config.fileConfig('logging.conf')
-logger = logging.getLogger('workflowLogger')
+logger = logging.getLogger('appLogger')
 
 artifact = 'UnifiedViews'  # Define the ETL agent
 agent = 'ETL'  # Define Agent type
@@ -192,8 +192,6 @@ def construct_output(serialization):
             parser.get('database', 'passwd'),
             parser.get('database', 'db'))
     result = activity_graph.serialize(format='turtle')
+    logger.info('Constructed Output for UnifiedViews Activity '
+                'metadata enrichment finalized and set to API.')
     return result
-
-
-if __name__ == '__main__':
-    logger.info('Performing UV Activity Metadata extraction and enrichment.')
