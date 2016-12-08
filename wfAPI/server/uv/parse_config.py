@@ -71,4 +71,8 @@ def parse_metadata_config(config, activityId, namespace, graph):
         graph.add((URIRef(soup.outputGraphURI.get_text()),
                   DCTERMS.license,
                   Literal(soup.outputGraphLicence.get_text())))
+        logger.info('Construct activity config metadata for InputGraph: {0}.'
+                    'and OutputGraph: {1}'
+                    .format(soup.inputGraphURI.get_text(),
+                            soup.outputGraphURI.get_text()))
     return graph

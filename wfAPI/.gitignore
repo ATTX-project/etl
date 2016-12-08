@@ -90,3 +90,8 @@ ENV/
 
 # Rope project settings
 .ropeproject
+
+# API logs
+
+logs/
+logs/api.log

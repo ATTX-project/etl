@@ -14,7 +14,7 @@ class WorkflowGraph(object):
     """Create WorkflowGraph class."""
 
     @classmethod
-    def workflow(cls, host_ip, user_name, passwd, db_name):
+    def workflow(cls, databaseConfig):
         """Build workflow graph with associated information."""
         workflow_graph = Graph()
 
@@ -28,11 +28,11 @@ class WorkflowGraph(object):
 
         try:
             conn = mysql.connect(
-                host=host_ip,
+                host=databaseConfig.get('uv_database', 'host'),
                 port=3306,
-                user=user_name,
-                passwd=passwd,
-                db=db_name,
+                user=databaseConfig.get('uv_database', 'user'),
+                passwd=databaseConfig.get('uv_database', 'passwd'),
+                db=databaseConfig.get('uv_database', 'db'),
                 charset='utf8')
             logger.info('Connecting to database.')
         except Exception as error:
@@ -156,16 +156,10 @@ class WorkflowGraph(object):
         return graph
 
 
-def construct_output(serialization=None):
+def construct_output(parser, serialization=None):
     """Construct the Ouput for the Get request."""
-    parser = SafeConfigParser()
-    parser.read('database.conf')
     data = WorkflowGraph()
-    workflow_graph = data.workflow(
-            parser.get('database', 'host'),
-            parser.get('database', 'user'),
-            parser.get('database', 'passwd'),
-            parser.get('database', 'db'))
+    workflow_graph = data.workflow(parser)
     if len(workflow_graph) > 0 and serialization is None:
         result = workflow_graph.serialize(format='turtle')
     elif len(workflow_graph) > 0 and serialization is not None:
