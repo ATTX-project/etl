@@ -1,13 +1,16 @@
-import api.serialization
+import uv.parse_config
 import unittest
 
-class SerializationTests(unittest.TestCase):
+
+class ParsingConfigTests(unittest.TestCase):
 
     def testOne(self):
-        return True
+            return True
+
 
 def main():
     unittest.main()
+
 
 if __name__ == '__main__':
     main()

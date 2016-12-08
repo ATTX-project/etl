@@ -5,9 +5,13 @@ import html
 import logging
 import logging.config
 from configparser import SafeConfigParser
+from uv.parse_config import parse_metadata_config
 
 logging.config.fileConfig('logging.conf')
 logger = logging.getLogger('workflowLogger')
+
+artifact = 'UnifiedViews'  # Define the ETL agent
+agent = 'ETL'  # Define Agent type
 
 
 class ActivityGraph(object):
@@ -20,9 +24,12 @@ class ActivityGraph(object):
 
         activity_graph.bind('kaisa', 'http://helsinki.fi/library/onto#')
         activity_graph.bind('dc', 'http://purl.org/dc/elements/1.1/')
+        activity_graph.bind('dcterms', 'http://purl.org/dc/terms/')
         activity_graph.bind('schema', 'http://schema.org/')
         activity_graph.bind('pwo', 'http://purl.org/spar/pwo/')
         activity_graph.bind('prov', 'http://www.w3.org/ns/prov#')
+        activity_graph.bind('sd',
+                            'http://www.w3.org/ns/sparql-service-description#')
 
         KAISA = Namespace('http://helsinki.fi/library/onto#')
 
@@ -41,7 +48,7 @@ class ActivityGraph(object):
                          .format(error.args[0], error.args[1]))
 
         cls.fetch_activities(conn, activity_graph, KAISA)
-        # cls.fetch_datasets(conn, activity_graph, KAISA)
+        cls.fetch_metadata(conn, activity_graph, KAISA)
         conn.close()
         return activity_graph
 
@@ -92,8 +99,42 @@ class ActivityGraph(object):
                       PROV.Assocation))
             graph.add((bnode,
                       PROV.hadPlan,
-                      URIRef("{0}activity{1}".format(namespace,
+                      URIRef("{0}workflow{1}".format(namespace,
                                                      row['workflowId']))))
+            graph.add((bnode,
+                      PROV.agent,
+                      URIRef("{0}{1}".format(namespace, agent))))
+            graph.add((URIRef("{0}{1}".format(namespace, agent)),
+                      RDF.type,
+                      PROV.Agent))
+            graph.add((URIRef("{0}{1}".format(namespace, agent)),
+                      namespace.usesArtifact,
+                      URIRef("{0}{1}".format(namespace, artifact))))
+        return graph
+
+    @staticmethod
+    def fetch_metadata(db_connector, graph, namespace):
+        """Create Datasets ID and description."""
+        cursor = db_connector.cursor(mysql.cursors.DictCursor)
+
+        # Get steps information along with configuration
+        cursor.execute("""
+        SELECT dpu_instance.configuration AS 'config',
+        exec_pipeline.id AS 'activityId'
+        FROM exec_pipeline, dpu_instance INNER JOIN
+        ppl_node ON ppl_node.instance_id=dpu_instance.id
+             WHERE ppl_node.graph_id = (
+                SELECT id
+                FROM ppl_model
+                ORDER BY ppl_model.id DESC LIMIT 1)
+        """)
+
+        result_set = cursor.fetchall()
+
+        for row in result_set:
+            parse_metadata_config(html.unescape(str(row['config'],
+                                                'UTF-8')),
+                                  row['activityId'], namespace, graph)
         return graph
 
     @staticmethod
