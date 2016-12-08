@@ -1,5 +1,5 @@
-import api.workflow
-import unittest
+from api.workflow import workflow_get, workflow_post
+import unittest2 as unittest
 
 
 class WorkflowAPI(unittest.TestCase):

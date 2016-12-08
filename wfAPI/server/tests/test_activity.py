@@ -1,5 +1,5 @@
 import api.activity
-import unittest
+import unittest2 as unittest
 
 
 class ActivityAPI(unittest.TestCase):

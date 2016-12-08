@@ -1,6 +1,6 @@
 import pymysql as mysql
 from rdflib import Graph, URIRef, Literal, Namespace, BNode
-from rdflib.namespace import DC, RDF, XSD
+from rdflib.namespace import RDF, XSD
 import html
 import logging
 import logging.config

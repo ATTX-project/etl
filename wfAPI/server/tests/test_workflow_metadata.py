@@ -1,5 +1,5 @@
-import uv.workflow_metadata
-import unittest
+from uv.workflow_metadata import WorkflowGraph, construct_output
+import unittest2 as unittest
 
 
 class WorkflowMetadata(unittest.TestCase):

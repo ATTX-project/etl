@@ -158,6 +158,8 @@ class WorkflowGraph(object):
 
 def construct_output(parser, serialization=None):
     """Construct the Ouput for the Get request."""
+    parser = SafeConfigParser()
+    parser.read('database.conf')
     data = WorkflowGraph()
     workflow_graph = data.workflow(parser)
     if len(workflow_graph) > 0 and serialization is None:
