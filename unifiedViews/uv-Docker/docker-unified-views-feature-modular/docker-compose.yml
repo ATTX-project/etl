@@ -25,3 +25,10 @@ mysql:
     - MYSQL_ROOT_PASSWORD=iamroot!
 virtuoso:
   image: tenforce/virtuoso:virtuoso-v7.2.0-latest
+
+wfapi:
+  image: attxproject/wfapi:0.2
+  links:
+    - mysql:mysql
+  ports:
+    - "4301:4301"
