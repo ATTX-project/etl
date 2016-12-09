@@ -1,7 +1,9 @@
 from api.activity import activity_get, activity_post
-from nose.tools import eq_, ok_
+from nose.tools import eq_, assert_is_instance
 import unittest
 from app import version, wfm_app
+from rdflib import Graph
+from flask import Response
 
 
 class ActivityResponseTest(unittest.TestCase):
@@ -13,37 +15,49 @@ class ActivityResponseTest(unittest.TestCase):
         # propagate the exceptions to the test client
         self.app.testing = True
 
-    def teadDown(self):
+        self.graph = Graph()
+
+    def tearDown(self):
         """Tear down test fixtures."""
-        pass
+        self.graph.destroy()
 
     def test_activity_post_response(self):
-        """Test POST Endpoint responds properly."""
+        """Test Activity POST Endpoint responds properly."""
         result = self.app.post('/v{0}/activity'.format(version))
 
         # assert the status code of the response
         eq_(result.status_code, 405)
 
     def test_activity_get_response(self):
-        """Test GET Endpoint responds properly."""
+        """Test Activity GET Endpoint responds properly."""
         result = self.app.get('/v{0}/activity'.format(version))
 
         # assert the status code of the response
         eq_(result.status_code, 200)
 
     def test_activity_post_data(self):
-        """Test GET Endpoint responds properly."""
+        """Test Activity POST Endpoint data response."""
         result = self.app.post('/v{0}/activity'.format(version))
 
         # assert the status code of the response
         eq_(str(result.data, 'utf-8'), """Operation Not Allowed.""")
 
     def test_activity_get_data(self):
-        """Test GET Endpoint responds properly."""
+        """Test Activity GET Endpoint data response."""
         result = self.app.get('/v{0}/activity'.format(version))
 
-        # assert the status code of the response
-        eq_(result.data, 200)
+        data = self.graph.parse(data=str(result.data, 'utf-8'),
+                                format='turtle')
+        if result.status_code == 200:
+            assert_is_instance(data, type(Graph()))
+
+    def test_activity_get(self):
+        """Test Activity GET provides a proper Reponse typ."""
+        assert_is_instance(activity_get(), type(Response()))
+
+    def test_activity_post(self):
+        """Test Activity POST provides a proper Reponse type."""
+        assert_is_instance(activity_post(), type(Response()))
 
 
 if __name__ == "__main__":

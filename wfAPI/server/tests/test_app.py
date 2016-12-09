@@ -12,7 +12,7 @@ class TestApp(unittest.TestCase):
         # propagate the exceptions to the test client
         self.app.testing = True
 
-    def teadDown(self):
+    def tearDown(self):
         """Tear down test fixtures."""
         pass
 

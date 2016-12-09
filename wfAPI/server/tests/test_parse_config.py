@@ -26,7 +26,7 @@ class ParseConfigTest(unittest.TestCase):
         self.config = open('tests/examples/config.xml', 'r')
         self.test_graph.parse('tests/examples/dataset.ttl', format='turtle')
 
-    def teadDown(self):
+    def tearDown(self):
         """Tear down test fixtures."""
         self.graph.destroy()
 

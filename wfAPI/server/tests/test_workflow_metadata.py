@@ -1,6 +1,7 @@
 from uv.workflow_metadata import WorkflowGraph, workflow_get_output
-from nose.tools import eq_, ok_
+from nose.tools import eq_, assert_is_instance
 import unittest
+from rdflib import Graph
 
 
 class WorkflowGraphTest(unittest.TestCase):
@@ -8,16 +9,20 @@ class WorkflowGraphTest(unittest.TestCase):
 
     def setUp(self):
         """Set up test fixtures."""
+        self.graph = Graph()
 
-    def teadDown(self):
+    def tearDown(self):
         """Tear down test fixtures."""
         self.graph.destroy()
 
     def test_activity_post(self):
         """Test POST Endpoint responds properly."""
 
-    def test_construct_output(self):
+    def test_workflow_get_output(self):
         """Test GET Endpoint responds properly."""
+        data = self.graph.parse(data=str(workflow_get_output(), 'utf-8'),
+                                format='turtle')
+        assert_is_instance(data, type(Graph()))
 
 
 if __name__ == "__main__":
