@@ -35,10 +35,10 @@ class ParseConfigTest(unittest.TestCase):
         result = Graph()
         result = parse_metadata_config(self.config, self.activityId,
                                        self.graph.namespace, self.graph)
-        # print(str(result.serialize(format='turtle')))
-        # print(str(self.test_graph.serialize(format='turtle')))
+        print(str(result.serialize(format='turtle')))
+        print(str(self.test_graph.serialize(format='turtle')))
 
-        print(similar(result, self.test_graph))
+        print(isomorphic(result, self.test_graph))
         # Considering blank nodes we need t check if the graphs are similar
         eq_(similar(result, self.test_graph), True,
             "Test to if the resulting graph corresponds to test graph.")

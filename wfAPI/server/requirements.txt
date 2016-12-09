@@ -19,7 +19,6 @@ gunicorn==19.6.0
 isodate==0.5.4
 itsdangerous==0.24
 jsonschema==2.5.1
-lettuce==0.2.23
 linecache2==1.0.0
 lxml==3.6.4
 mock==2.0.0
