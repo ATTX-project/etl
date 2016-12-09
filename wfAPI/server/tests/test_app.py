@@ -1,23 +1,26 @@
 from app import wfm_app
-import urllib
-# from flask import Flask
-from flask_testing import LiveServerTestCase
+import unittest
+from nose.tools import eq_
 
 
-class TestApp(LiveServerTestCase):
+class TestApp(unittest.TestCase):
     """Test app is ok."""
 
-    def create_app(self):
-        """Set up."""
-        # app = Flask(__name__)
-        wfm_app.config['TESTING'] = True
-        # Default port is 5000
-        wfm_app.config['LIVESERVER_PORT'] = 4301
-        # Default timeout is 5 seconds
-        wfm_app.config['LIVESERVER_TIMEOUT'] = 10
-        return wfm_app
+    def setUp(self):
+        """Set up test fixtures."""
+        self.app = wfm_app.app.test_client()
+        # propagate the exceptions to the test client
+        self.app.testing = True
 
-    def test_server_is_up_and_running(self):
+    def teadDown(self):
+        """Tear down test fixtures."""
+        pass
+
+    def test_main(self):
         """Test the server is up and running."""
-        response = urllib.urlopen(self.get_server_url())
-        self.assertEqual(response.code, 200)
+        response = self.app.get('/')
+        eq_(response.status_code, 404)
+
+
+if __name__ == "__main__":
+    unittest.main()

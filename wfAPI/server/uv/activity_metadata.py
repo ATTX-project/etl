@@ -143,7 +143,7 @@ class ActivityGraph(object):
         return graph
 
 
-def construct_output(serialization):
+def activity_get_output(serialization=None):
     """Construct the Ouput for the Get request."""
     parser = SafeConfigParser()
     parser.read('database.conf')

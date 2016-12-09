@@ -1,5 +1,5 @@
 from flask import Response
-from uv.workflow_metadata import construct_output
+from uv.workflow_metadata import workflow_get_output
 import datetime
 import logging
 import logging.config
@@ -10,7 +10,7 @@ logger = logging.getLogger('appLogger')
 
 def workflow_get(modifiedSince=None):
     """List the latest workflow and associated steps."""
-    data = construct_output('turtle')
+    data = workflow_get_output('turtle')
     workflow = ''
     if data != "No new Workflow to be loaded.":
         workflow = Response(
@@ -30,4 +30,8 @@ def workflow_get(modifiedSince=None):
 def workflow_post():
     """Operation cannot be perfomed."""
     logger.info('Reponse from the Workflow API is: POST not allowed.')
-    return """Operation Not Allowed.""", 405
+    response = Response(
+        response='Operation Not Allowed.',
+        status=405,
+        mimetype='text/plain')
+    return response

@@ -1,5 +1,5 @@
 from flask import Response
-from uv.activity_metadata import construct_output
+from uv.activity_metadata import activity_get_output
 import datetime
 import logging
 import logging.config
@@ -10,7 +10,7 @@ logger = logging.getLogger('appLogger')
 
 def activity_get(modifiedSince=None):
     """Retrieve the latest activity and associated datasets."""
-    data = construct_output('turtle')
+    data = activity_get_output('turtle')
     activity = ''
     if data != "No new activity to be loaded.":
         activity = Response(
@@ -32,4 +32,8 @@ def activity_get(modifiedSince=None):
 def activity_post():
     """Operation cannot be perfomed."""
     logger.info('Reponse from the Activity API is: POST not allowed.')
-    return """Operation Not Allowed.""", 405
+    response = Response(
+        response='Operation Not Allowed.',
+        status=405,
+        mimetype='text/plain')
+    return response
