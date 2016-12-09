@@ -19,7 +19,7 @@ class ActivityResponseTest(unittest.TestCase):
 
     def tearDown(self):
         """Tear down test fixtures."""
-        self.graph.destroy()
+        pass
 
     def test_activity_post_response(self):
         """Test Activity POST Endpoint responds properly."""

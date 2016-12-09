@@ -1,6 +1,6 @@
 from uv.parse_config import parse_metadata_config
 from rdflib import Graph, Namespace
-from rdflib.compare import similar, graph_diff, to_isomorphic, isomorphic
+from rdflib.compare import similar
 from nose.tools import eq_, ok_
 import unittest
 
@@ -28,17 +28,15 @@ class ParseConfigTest(unittest.TestCase):
 
     def tearDown(self):
         """Tear down test fixtures."""
-        self.graph.destroy()
+        pass
 
     def test_parse_metadata_config(self):
         """Test if input output encoding is peformed correctly."""
         result = Graph()
         result = parse_metadata_config(self.config, self.activityId,
                                        self.graph.namespace, self.graph)
-        print(str(result.serialize(format='turtle')))
-        print(str(self.test_graph.serialize(format='turtle')))
 
-        print(isomorphic(result, self.test_graph))
+        print(similar(result, self.test_graph))
         # Considering blank nodes we need t check if the graphs are similar
         eq_(similar(result, self.test_graph), True,
             "Test to if the resulting graph corresponds to test graph.")

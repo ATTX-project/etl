@@ -19,7 +19,7 @@ class WorkflowResponseTest(unittest.TestCase):
 
     def tearDown(self):
         """Tear down test fixtures."""
-        self.graph.destroy()
+        pass
 
     def test_workflow_post_response(self):
         """Test Workflow POST Endpoint responds properly."""
@@ -56,6 +56,7 @@ class WorkflowResponseTest(unittest.TestCase):
     def test_activity_post(self):
         """Test Workflow POST provides a proper Reponse type."""
         assert_is_instance(workflow_post(), type(Response()))
+
 
 if __name__ == "__main__":
     unittest.main()

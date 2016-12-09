@@ -1,6 +1,6 @@
 from uv.activity_metadata import ActivityGraph, activity_get_output
 from rdflib import Graph
-from nose.tools import eq_, assert_is_instance
+from nose.tools import assert_is_instance
 import unittest
 
 
@@ -13,10 +13,7 @@ class ActivityGraphTest(unittest.TestCase):
 
     def tearDown(self):
         """Tear down test fixtures."""
-        self.graph.destroy()
-
-    def test_activity_post(self):
-        """Test POST Endpoint responds properly."""
+        pass
 
     def test_activity_get_output(self):
         """Test GET Endpoint responds properly."""
