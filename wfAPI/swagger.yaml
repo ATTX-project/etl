@@ -1,10 +1,10 @@
-#ATTX ETL API specification
+#ATTX wf API specification
 swagger: '2.0'
 
 info:
-  version: "0.0.1"
-  title: ATTX ETL API
-  description: ATTX ETL internal API for communication between ETL tool and Graph Manager component.
+  version: "0.1"
+  title: ATTX wfAPI
+  description: ATTX wf internal API for communication between wf tool and Graph Manager component.
   contact:
     name: "ATTX project"
     url: http://helsinki.fi/library
@@ -12,8 +12,8 @@ info:
     name: "MIT"
 
 tags:
-- name: "etlAPI"
-  description: "Internal etlAPI for workflow metadata"
+- name: "wfAPI"
+  description: "Internal wfAPI for workflow metadata"
   externalDocs:
     description: "just use it"
     url: http://helsinki.fi/library
@@ -25,7 +25,7 @@ paths:
   /workflow:
     get:
       tags:
-        - "etlAPI"
+        - "wfAPI"
       description: |
         This operation gathers all the information necessary to describe the workflows, steps and relationships between them
       summary: |
@@ -46,9 +46,11 @@ paths:
       responses:
         200:
           description: Successful response.
+        304:
+          description: "No Change."
     post:
       tags:
-        - "etlAPI"
+        - "wfAPI"
       responses:
         500:
           description: This operation cannot be Perfomed.
@@ -56,7 +58,7 @@ paths:
   /activity:
     get:
       tags:
-        - "etlAPI"
+        - "wfAPI"
       description: |
         This operation gathers all the information necessary to describe the activities, datasets and how the datasets are acquired (input dataset) or produced (output dataset).
       summary: |
@@ -77,9 +79,11 @@ paths:
       responses:
         200:
           description: Successful response.
+        304:
+          description: "No Change."
     post:
       tags:
-        - "etlAPI"
+        - "wfAPI"
       responses:
         500:
           description: This operation cannot be Perfomed.
