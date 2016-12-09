@@ -20,7 +20,7 @@ backend:
 mysql:
   image: tenforce/unified-views-mariadb
   volumes:
-    - data/unifiedviews:/var/lib/mysql
+    - /data/unifiedviews:/var/lib/mysql
   environment:
     - MYSQL_ROOT_PASSWORD=iamroot!
 virtuoso:
