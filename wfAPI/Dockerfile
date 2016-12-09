@@ -14,6 +14,6 @@ COPY server /app
 RUN pip install --no-cache-dir --upgrade pip \
     && pip install --no-cache-dir -r requirements.txt
 
-RUN mkdir /app/logs
+RUN mkdir -p /app/logs
 
 CMD gunicorn -w 2 -b 0.0.0.0:4301 app:wfm_app --log-file logs/server.log
