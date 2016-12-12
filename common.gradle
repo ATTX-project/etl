@@ -5,7 +5,7 @@
 apply plugin: 'java'
 apply plugin: 'maven'
 
-String mavenGroupId = 'org.uh.attx.etl.unifiedviews'
+String mavenGroupId = 'org.uh.attx.wf'
 String mavenVersion = '1.0-SNAPSHOT'
 
 sourceCompatibility = '1.8'
