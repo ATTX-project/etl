@@ -1,6 +1,6 @@
 #### Description
-Describe the issue or task at hand with dependencies and possible links to code/external/internal sources.
+_Describe the issue or task at hand with dependencies and possible links to code/external/internal sources._
 #### DoD
-Itemized things or artifacts of the task at hand, what one expects to achieve - tangible output.
+_Itemized things or artifacts of the task at hand, what one expects to achieve - tangible output._
 #### Testing
-How one would test that the things/artifacts have been achieved. Options (Peer review, Unit Test, BDD testing, Integration Test).
+_How one would test that the things/artifacts have been achieved. Options (Peer review, Unit Test, BDD testing, Integration Test)._
