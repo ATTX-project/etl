@@ -1,4 +1,4 @@
-from api.activity import activity_get, activity_post
+from src.api.activity import activity_get, activity_post
 from nose.tools import eq_, assert_is_instance
 import unittest
 from app import version, wfm_app
@@ -22,14 +22,14 @@ class ActivityResponseTest(unittest.TestCase):
         pass
 
     def test_activity_post_response(self):
-        """Test Activity POST Endpoint responds properly."""
+        """Test Activity POST Endpoint responds with a status code."""
         result = self.app.post('/v{0}/activity'.format(version))
 
         # assert the status code of the response
         eq_(result.status_code, 405)
 
     def test_activity_get_response(self):
-        """Test Activity GET Endpoint responds properly."""
+        """Test Activity GET Endpoint responds with a status code."""
         result = self.app.get('/v{0}/activity'.format(version))
 
         # assert the status code of the response
@@ -52,7 +52,7 @@ class ActivityResponseTest(unittest.TestCase):
             assert_is_instance(data, type(Graph()))
 
     def test_activity_get(self):
-        """Test Activity GET provides a proper Reponse typ."""
+        """Test Activity GET provides a proper Reponse type."""
         assert_is_instance(activity_get(), type(Response()))
 
     def test_activity_post(self):

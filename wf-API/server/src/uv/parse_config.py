@@ -1,11 +1,7 @@
 from rdflib import URIRef, Literal, Namespace
 from rdflib.namespace import DC, DCTERMS, RDF
 from bs4 import BeautifulSoup
-import logging
-import logging.config
-
-logging.config.fileConfig('logging.conf')
-logger = logging.getLogger('appLogger')
+from logs import app_logger
 
 metadata_transformer = 'org.uh.attx.etl.uv.dpu.transformer.metadata.Transformer\
 ATTXMetadataConfig__V1'
@@ -71,8 +67,8 @@ def parse_metadata_config(config, activityId, namespace, graph):
         graph.add((URIRef(soup.outputGraphURI.get_text()),
                   DCTERMS.license,
                   Literal(soup.outputGraphLicence.get_text())))
-        logger.info('Construct activity config metadata for InputGraph: {0}.'
-                    'and OutputGraph: {1}'
-                    .format(soup.inputGraphURI.get_text(),
-                            soup.outputGraphURI.get_text()))
+        app_logger.info('Construct config metadata for InputGraph: {0}.'
+                        'and OutputGraph: {1}'
+                        .format(soup.inputGraphURI.get_text(),
+                                soup.outputGraphURI.get_text()))
     return graph

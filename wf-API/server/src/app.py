@@ -1,9 +1,5 @@
 import connexion
-import logging
-import logging.config
-
-logging.config.fileConfig('logging.conf')
-logger = logging.getLogger('mainLogger')
+from logs import main_logger
 
 version = "0.1"
 
@@ -17,3 +13,4 @@ wfm_app.add_api(
 
 if __name__ == '__main__':
     wfm_app.run(port=4301, host="0.0.0.0")
+    main_logger.info('App is running.')

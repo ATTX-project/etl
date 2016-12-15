@@ -1,13 +1,8 @@
 import pymysql as mysql
 from rdflib import Graph, URIRef, Literal, Namespace
 from rdflib.namespace import DC, RDF
-# import html
-import logging
-import logging.config
+from logs import app_logger
 from configparser import SafeConfigParser
-
-logging.config.fileConfig('logging.conf')
-logger = logging.getLogger('appLogger')
 
 
 class WorkflowGraph(object):
@@ -34,12 +29,12 @@ class WorkflowGraph(object):
                 passwd=databaseConfig.get('uv_database', 'passwd'),
                 db=databaseConfig.get('uv_database', 'db'),
                 charset='utf8')
-            logger.info('Connecting to database.')
+            app_logger.info('Connecting to database.')
         except Exception as error:
-            logger.error('Connection Failed!\
+            app_logger.error('Connection Failed!\
                 \nError Code is {0};\
                 \nError Content is {1};'
-                         .format(error.args[0], error.args[1]))
+                             .format(error.args[0], error.args[1]))
 
         cls.fetch_workflows(conn, workflow_graph, KAISA)
         cls.fetch_steps(conn, workflow_graph, KAISA)
@@ -76,8 +71,8 @@ class WorkflowGraph(object):
                                                       row['workflowId'])),
                       DC.description,
                       Literal(row['description'])))
-            logger.info('Construct workflow metadata for Workflow{0}.'
-                        .format(row['workflowId']))
+            app_logger.info('Construct metadata for Workflow{0}.'
+                            .format(row['workflowId']))
         return graph
 
     @staticmethod
@@ -122,8 +117,8 @@ class WorkflowGraph(object):
                                                       row['workflowId'])),
                       PWO.hasStep,
                       URIRef("{0}step{1}".format(namespace, row['stepId']))))
-            logger.info('Construct step metadata for Step{0}.'
-                        .format(row['stepId']))
+            app_logger.info('Construct step metadata for Step{0}.'
+                            .format(row['stepId']))
         return graph
 
     @staticmethod
@@ -151,8 +146,9 @@ class WorkflowGraph(object):
             graph.add((URIRef("{0}step{1}".format(namespace, row['fromStep'])),
                       PWO.hasNextStep,
                       URIRef("{0}step{1}".format(namespace, row['toStep']))))
-            logger.info('Fetch steps sequence between steps Step{0} '
-                        'and Step{1}.'.format(row['fromStep'], row['toStep']))
+            app_logger.info('Fetch steps sequence between steps Step{0} '
+                            'and Step{1}.'.format(row['fromStep'],
+                                                  row['toStep']))
         return graph
 
 
@@ -167,7 +163,7 @@ def workflow_get_output(serialization=None):
     elif len(workflow_graph) > 0 and serialization is not None:
         result = workflow_graph.serialize(format=serialization)
     elif len(workflow_graph) == 0:
-        result = "No new Workflow to be loaded."
-    logger.info('Constructed Output for UnifiedViews Workflow '
-                'metadata enrichment finalized and set to API.')
+        result = "No Workflow to be loaded."
+    app_logger.info('Constructed Output for UnifiedViews Workflow '
+                    'metadata enrichment finalized and set to API.')
     return result

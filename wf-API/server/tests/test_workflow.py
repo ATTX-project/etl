@@ -1,4 +1,4 @@
-from api.workflow import workflow_get, workflow_post
+from src.api.workflow import workflow_get, workflow_post
 from nose.tools import eq_, assert_is_instance
 import unittest
 from app import version, wfm_app
@@ -22,14 +22,14 @@ class WorkflowResponseTest(unittest.TestCase):
         pass
 
     def test_workflow_post_response(self):
-        """Test Workflow POST Endpoint responds properly."""
+        """Test Workflow POST Endpoint responds with a status code."""
         result = self.app.post('/v{0}/workflow'.format(version))
 
         # assert the status code of the response
         eq_(result.status_code, 405)
 
     def test_workflow_get_response(self):
-        """Test Workflow GET Endpoint responds properly."""
+        """Test Workflow GET Endpoint responds with a status code."""
         result = self.app.get('/v{0}/workflow'.format(version))
 
         # assert the status code of the response
@@ -50,7 +50,7 @@ class WorkflowResponseTest(unittest.TestCase):
             assert_is_instance(data, type(Graph()))
 
     def test_workflow_get(self):
-        """Test Workflow GET provides a proper Reponse typ."""
+        """Test Workflow GET provides a proper Reponse type."""
         assert_is_instance(workflow_get(), type(Response()))
 
     def test_activity_post(self):
