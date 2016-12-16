@@ -1,3 +1,4 @@
+# Adapted from pygradle base example.
 #
 # Copyright 2016 LinkedIn Corp.
 #
@@ -27,18 +28,22 @@ from setuptools.dist import Distribution
 
 
 class EntryPoints(Command):
+    """Get entrypoints for a distribution."""
+
     description = 'get entrypoints for a distribution'
     user_options = [
         ('dist=', None, 'get entrypoints for specified distribution'),
     ]
 
     def initialize_options(self):
+        """Initialize options."""
         self.dist = self.distribution.get_name()
 
     def finalize_options(self):
-        """Abstract method that is required to be overwritten"""
+        """Abstract method that is required to be overwritten."""
 
     def run(self):
+        """Run."""
         req_entry_points = pkg_resources.get_entry_map(self.dist)
         if req_entry_points and 'console_scripts' in req_entry_points:
             for entry in list(req_entry_points['console_scripts'].values()):
@@ -84,12 +89,14 @@ class install_egg_info(_install_egg_info):  # noqa
 
 
 class GradleDistribution(Distribution, object):
+    """Get entrypoints for a distribution."""
 
     PINNED_TXT = 'pinned.txt'
 
     excluded_platform_packages = {}
 
     def __init__(self, attrs):
+        """Initialize options."""
         attrs['name'] = os.getenv('PYGRADLE_PROJECT_NAME')
         attrs['version'] = os.getenv('PYGRADLE_PROJECT_VERSION')
         attrs['install_requires'] = list(self.load_pinned_deps())
@@ -106,9 +113,11 @@ class GradleDistribution(Distribution, object):
 
     @property
     def excluded_packages(self):
+        """Excluded packages."""
         platform_name = platform.system().lower()
         if platform_name in self.excluded_platform_packages:
-            return set(pkg.lower() for pkg in self.excluded_platform_packages[platform_name])
+            return set(pkg.lower() for pkg in
+                       self.excluded_platform_packages[platform_name])
         return set()
 
     def load_pinned_deps(self):
@@ -144,20 +153,10 @@ setup(
     packages=find_packages('src'),
     include_package_data=True,
     name='ATTXwfAPI',
-    version=0.1,
-    author='ATTX project',
+    version='0.1',
     description='ATTX WF-API',
-    include_package_data=True,
-    zip_safe=False,
-    license='Apache',
-    classifiers=[
-        'Development Status :: 5 - Production/Stable',
-        'Intended Audience :: Developers',
-        'License :: OSI Approved :: BSD License',
-        'Operating System :: OS Independent'
-        'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.3',
-        'Programming Language :: Python :: 3.4',
-        'Programming Language :: Python :: 3.5',
-    ],
+    entry_points='''
+        [console_scripts]
+        wfapi=wf_api.wfapi:main
+    '''
 )

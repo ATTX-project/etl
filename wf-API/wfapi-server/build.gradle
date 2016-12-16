@@ -2,11 +2,15 @@ plugins {
   id "com.linkedin.python-cli" version "0.3.36"
 }
 
+version=1.0
+
 python {
-  forceVersion('pypi', 'pip', '9.0.1')
+  forceVersion('pypi', 'pip', '8.1.2')
+  testDir = file('tests')
 }
 
 dependencies {
+    python 'pypi:pathlib:1.0.1'
     python 'pypi:connexion:1.0.129'
     python 'pypi:beautifulsoup4:4.5.1'
     python 'pypi:gunicorn:19.6.0'
@@ -36,10 +40,11 @@ dependencies {
 
 repositories {
     // This repository is provided for example purposes only
-    pyGradlePyPi()
+    // pyGradlePyPi()
 
     ivy{
-  		url "/tmp/repo"
+      name 'pypi-local'
+  		url "/home/stefanne/Software/pivy"
   		layout 'pattern' , {
   			artifact '[organisation]/[module]/[revision]/[artifact]-[revision](-[classifier]).[ext]'
   			ivy '[organisation]/[module]/[revision]/[module]-[revision].ivy'

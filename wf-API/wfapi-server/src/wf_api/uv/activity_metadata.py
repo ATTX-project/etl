@@ -122,6 +122,7 @@ def activity_get_output(serialization=None):
     elif len(activity_graph) > 0 and serialization is not None:
         result = activity_graph.serialize(format=serialization)
     elif len(activity_graph) == 0:
+        print(activity_graph)
         result = "No Activity to be loaded."
     app_logger.info('Constructed Output for UnifiedViews Activity '
                     'metadata enrichment finalized and set to API.')
