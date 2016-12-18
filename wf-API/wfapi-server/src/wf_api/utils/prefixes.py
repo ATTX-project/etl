@@ -1,4 +1,4 @@
-from configparser import SafeConfigParser
+from ConfigParser import SafeConfigParser
 
 
 def bind_prefix(graph):

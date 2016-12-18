@@ -1,8 +1,8 @@
 from rdflib import Graph, URIRef, Literal, Namespace
 from rdflib.namespace import DC, RDF
-from logs import app_logger
-from utils.db import connect_DB
-from utils.prefixes import bind_prefix
+from wf_api.utils.logs import app_logger
+from wf_api.utils.db import connect_DB
+from wf_api.utils.prefixes import bind_prefix
 
 
 class WorkflowGraph(object):

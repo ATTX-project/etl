@@ -1,10 +1,10 @@
-from html import unescape
+import HTMLParser
 from rdflib import Graph, URIRef, Literal, Namespace, BNode
 from rdflib.namespace import RDF, XSD
-from logs import app_logger
-from utils.db import connect_DB
-from utils.prefixes import bind_prefix
-from uv.parse_config import parse_metadata_config
+from wf_api.utils.logs import app_logger
+from wf_api.utils.db import connect_DB
+from wf_api.utils.prefixes import bind_prefix
+from wf_api.uv.parse_config import parse_metadata_config
 
 artifact = 'UnifiedViews'  # Define the ETL agent
 agent = 'ETL'  # Define Agent type
@@ -106,7 +106,8 @@ class ActivityGraph(object):
         result_set = db_cursor.fetchall()
 
         for row in result_set:
-            parse_metadata_config(unescape(str(row['config'], 'UTF-8')),
+            parse_metadata_config(HTMLParser.HTMLParser().unescape(
+                                  str(row['config'], 'UTF-8')),
                                   row['activityId'], namespace, graph)
             app_logger.info('Construct config metadata for Activity{0}.'
                             .format(row['activityId']))

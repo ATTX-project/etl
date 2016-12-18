@@ -1,5 +1,5 @@
 import connexion
-from logs import main_logger
+from wf_api.utils.logs import main_logger
 
 version = "0.1"
 

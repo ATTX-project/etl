@@ -25,6 +25,11 @@ def number_of_workers():
     return (multiprocessing.cpu_count() * 2) + 1
 
 
+def main():
+    """Main function."""
+    cli()
+
+
 class WFApplication(gunicorn.app.base.BaseApplication):
     """Create Standalone Application WF-API."""
 
@@ -47,4 +52,4 @@ class WFApplication(gunicorn.app.base.BaseApplication):
 
 
 if __name__ == '__main__':
-    cli()
+    main()

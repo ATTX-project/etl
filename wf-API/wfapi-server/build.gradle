@@ -2,12 +2,16 @@ plugins {
   id "com.linkedin.python-cli" version "0.3.36"
 }
 
-version=1.0
+version=0.1
 
 python {
-  forceVersion('pypi', 'pip', '8.1.2')
+  // forceVersion('pypi', 'pip', '9.0.1') // using this version until known way to upgrade
+  // forceVersion('pypi', 'setuptools', '28.0.0')
   testDir = file('tests')
+  // details.pythonVersion = '3.4'
 }
+
+project.tasks.findByName('installPythonRequirements').sorted = false
 
 dependencies {
     python 'pypi:pathlib:1.0.1'
@@ -21,27 +25,7 @@ dependencies {
     test 'pypi:nose:1.3.7'
 }
 
-// publishing {
-//   publications {
-//     ivy(IvyPublication) {
-//       organisation 'org.gradle.sample'
-//       module 'project1-sample'
-//       revision '1.1'
-//       artifact source: tasks.packageSdist.getSdistOutput(), builtBy: tasks.packageSdist
-//     }
-//   }
-//   repositories {
-//     ivy {
-//       url "/tmp/repo"
-//       layout('ivy')
-//     }
-//   }
-// }
-
 repositories {
-    // This repository is provided for example purposes only
-    // pyGradlePyPi()
-
     ivy{
       name 'pypi-local'
   		url "/home/stefanne/Software/pivy"

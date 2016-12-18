@@ -1,7 +1,7 @@
 from flask import Response
-from uv.activity_metadata import activity_get_output
+from wf_api.uv.activity_metadata import activity_get_output
 import datetime
-from logs import app_logger
+from wf_api.utils.logs import app_logger
 
 
 def activity_get(modifiedSince=None):

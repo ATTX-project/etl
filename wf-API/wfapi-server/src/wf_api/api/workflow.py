@@ -1,7 +1,7 @@
 from flask import Response
-from uv.workflow_metadata import workflow_get_output
+from wf_api.uv.workflow_metadata import workflow_get_output
 import datetime
-from logs import app_logger
+from wf_api.utils.logs import app_logger
 
 
 def workflow_get(modifiedSince=None):
