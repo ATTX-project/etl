@@ -5,10 +5,7 @@ plugins {
 version=0.1
 
 python {
-  // forceVersion('pypi', 'pip', '9.0.1') // using this version until known way to upgrade
-  // forceVersion('pypi', 'setuptools', '28.0.0')
   testDir = file('tests')
-  // details.pythonVersion = '3.4'
 }
 
 project.tasks.findByName('installPythonRequirements').sorted = false
@@ -47,12 +44,16 @@ repositories {
 
 }
 
+task wrapper(type: Wrapper) {
+   gradleVersion = '3.0'
+}
+
 task runTests(type:Exec) {
   workingDir '.'
 
   commandLine 'source', 'activate'
 
-  commandLine 'py.test', 'tests' , '--html=report.html', '--self-contained-html'
+  // commandLine 'py.test', 'tests' , '--html=report.html', '--self-contained-html'
 
   //store the output instead of printing to the console:
   standardOutput = new ByteArrayOutputStream()
