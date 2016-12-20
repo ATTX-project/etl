@@ -55,11 +55,11 @@ class ActivityResponseTest(unittest.TestCase):
             assert_is_instance(data, type(Graph()))
 
     def test_activity_get(self):
-        """Test Activity GET provides a proper Reponse type."""
+        """Test Activity GET provides a proper Response type."""
         assert_is_instance(activity_get(), type(Response()))
 
     def test_activity_post(self):
-        """Test Activity POST provides a proper Reponse type."""
+        """Test Activity POST provides a proper Response type."""
         assert_is_instance(activity_post(), type(Response()))
 
 

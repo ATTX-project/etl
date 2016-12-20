@@ -53,11 +53,11 @@ class WorkflowResponseTest(unittest.TestCase):
             assert_is_instance(data, type(Graph()))
 
     def test_workflow_get(self):
-        """Test Workflow GET provides a proper Reponse type."""
+        """Test Workflow GET provides a proper Response type."""
         assert_is_instance(workflow_get(), type(Response()))
 
     def test_activity_post(self):
-        """Test Workflow POST provides a proper Reponse type."""
+        """Test Workflow POST provides a proper Response type."""
         assert_is_instance(workflow_post(), type(Response()))
 
 
