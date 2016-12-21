@@ -1,5 +1,6 @@
 plugins {
   id "com.linkedin.python-cli" version "0.3.36"
+  id 'distribution'
 }
 
 version=0.1
@@ -44,6 +45,7 @@ repositories {
 
 }
 
+
 // Succesfully running the tests requires a logs folder existing.
 task creatLogsFolder {
   doFirst {
@@ -51,9 +53,17 @@ task creatLogsFolder {
   }
 }
 
+task addConfigs(type: Copy) {
+  doFirst{
+    from '.'
+    into 'build/deployable'
+    include 'database.conf'
+  }
+}
+
 // in case we want have a ./gradlw command.
 task wrapper(type: Wrapper) {
-   gradleVersion = '3.0'
+   gradleVersion = '3.2.1'
 }
 
 // generate Tests report via a script.
@@ -70,3 +80,4 @@ task runTests(type:Exec) {
 
 // the pytest taks depends on the logs folder and this specifies that.
 pytest.dependsOn creatLogsFolder
+packageDeployable.dependsOn addConfigs
