@@ -54,11 +54,11 @@ task creatLogsFolder {
 }
 
 task addConfigs(type: Copy) {
-  doFirst{
-    from '.'
+    from '.' 
     into 'build/deployable'
     include 'database.conf'
-  }
+
+
 }
 
 // in case we want have a ./gradlw command.
