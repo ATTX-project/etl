@@ -1,4 +1,4 @@
-from app import wfm_app
+from wf_api.app import wfm_app
 import unittest
 from nose.tools import eq_
 

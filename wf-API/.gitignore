@@ -1,3 +1,5 @@
+activate
+pinned.txt
 
 ### Python ###
 # Byte-compiled / optimized / DLL files
@@ -96,3 +98,4 @@ ENV/
 
 logs/
 logs/api.log
+logs/server.log

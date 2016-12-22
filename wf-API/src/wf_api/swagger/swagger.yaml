@@ -28,7 +28,7 @@ paths:
       description: "This operation gathers all the information necessary to describe\
         \ the activities, datasets and how the datasets are acquired (input dataset)\
         \ or produced (output dataset).\n"
-      operationId: "api.activity.activity_get"
+      operationId: "wf_api.api.activity.activity_get"
       produces:
       - "text/turtle"
       - "application/ld+json"
@@ -50,7 +50,7 @@ paths:
       tags:
       - "wfAPI"
       summary: "Creating a new activity is not permitted.\n"
-      operationId: "api.activity.activity_post"
+      operationId: "wf_api.api.activity.activity_post"
       parameters: []
       responses:
         405:
@@ -64,7 +64,7 @@ paths:
       summary: "List the latest workflow and associated steps.\n"
       description: "This operation gathers all the information necessary to describe\
         \ the workflows, steps and relationships between them\n"
-      operationId: "api.workflow.workflow_get"
+      operationId: "wf_api.api.workflow.workflow_get"
       produces:
       - "text/turtle"
       - "application/ld+json"
@@ -86,7 +86,7 @@ paths:
       tags:
       - "wfAPI"
       summary: "Creating a new workflow is not permitted.\n"
-      operationId: "api.workflow.workflow_post"
+      operationId: "wf_api.api.workflow.workflow_post"
       parameters: []
       responses:
         405:

@@ -1,4 +1,4 @@
-from uv.parse_config import parse_metadata_config
+from wf_api.uv.parse_config import parse_metadata_config
 from rdflib import Graph, Namespace
 from rdflib.compare import similar
 from nose.tools import eq_, ok_
