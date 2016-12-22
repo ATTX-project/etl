@@ -14,7 +14,9 @@ def cli(host, port, log, workers):
     """Run the server with options."""
     options = {
         'bind': '{0}:{1}'.format(host, port),
-        'workers': workers
+        'workers': workers,
+        'daemon': 'True',
+        'errorlog': log
     }
     WFApplication(wfm_app, options).run()
 
