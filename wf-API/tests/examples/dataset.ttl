@@ -8,6 +8,7 @@
 @prefix sd: <http://www.w3.org/ns/sparql-service-description#> .
 @prefix xml: <http://www.w3.org/XML/1998/namespace> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix schema: <http://schema.org/> .
 
 kaisa:activity1
     prov:generated kaisa:dataset2 ;
@@ -25,6 +26,6 @@ kaisa:dataset2 a kaisa:Dataset,
         sd:Dataset ;
     dc:description "Test Data" ;
     dc:publisher "http://helsinki.fi/library" ;
-    dc:source "http://dbpedia.org/sparql" ;
+    dc:source "http://helsinki.fi/library" ;
     dc:title "Testing specific output" ;
     dcterms:license "http://creativecommons.org/licenses/by-sa/3.0/" .

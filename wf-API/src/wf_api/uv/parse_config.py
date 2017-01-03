@@ -10,7 +10,6 @@ ATTXMetadataConfig__V1'
 def parse_metadata_config(config, activityId, namespace, graph):
     """Parse metadata specific configuration."""
     soup = BeautifulSoup(config, 'lxml-xml')
-
     # If the date in the input and ouput graphs will be empty
     # it will not return any dataset information.
     if soup.find(metadata_transformer):

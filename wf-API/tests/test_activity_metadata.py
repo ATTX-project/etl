@@ -17,10 +17,12 @@ class ActivityGraphTest(unittest.TestCase):
 
     def test_activity_get_output(self):
         """Test Activity processing output is Graph."""
-        if len(activity_get_output()) is 25:
-            eq_(activity_get_output(), "No Activity to be loaded.")
+        if activity_get_output('turtle', None) is None:
+            eq_(activity_get_output('turtle', None), None)
         else:
-            data = self.graph.parse(data=str(activity_get_output()).encode('utf-8'),
+            data = self.graph.parse(data=str(activity_get_output('turtle',
+                                                                 None))
+                                    .encode('utf-8'),
                                     format='turtle')
             assert_is_instance(data, type(Graph()))
 
