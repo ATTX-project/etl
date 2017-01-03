@@ -23,70 +23,84 @@ class ActivityGraph(object):
 
         db_cursor = connect_DB()
 
-        cls.fetch_activities(db_cursor, activity_graph, KAISA)
-        cls.fetch_metadata(db_cursor, activity_graph, KAISA)
-        db_cursor.connection.close()
-        return activity_graph
+        test_activities = cls.fetch_activities(db_cursor, activity_graph,
+                                               KAISA)
+        if test_activities == "No workflows":
+            db_cursor.connection.close()
+            return activity_graph
+        else:
+            cls.fetch_activities(db_cursor, activity_graph, KAISA)
+            cls.fetch_metadata(db_cursor, activity_graph, KAISA)
+            db_cursor.connection.close()
+            return activity_graph
 
     @staticmethod
     def fetch_activities(db_cursor, graph, namespace):
         """Create activity ID and description."""
         # Get general workflow information on the last executed workflow
+        # Get based only on public workflows and successful pipeline execution
         db_cursor.execute("""
             SELECT ppl_model.id AS 'workflowId',
             exec_pipeline.id AS 'activityId',
             exec_pipeline.t_start AS 'activityStart',
             exec_pipeline.t_end AS 'activityEnd'
             FROM exec_pipeline, ppl_model
-            WHERE exec_pipeline.pipeline_id = ppl_model.id
-            ORDER BY ppl_model.id DESC LIMIT 1
+            WHERE exec_pipeline.pipeline_id = ppl_model.id AND\
+            (ppl_model.visibility = 1 OR ppl_model.visibility = 2) AND\
+            exec_pipeline.status = 5
+            ORDER BY ppl_model.id
         """)
+        # replace last line above with one below if only latest result required
+        #  ORDER BY ppl_model.last_change DESC LIMIT 1
 
         result_set = db_cursor.fetchall()
 
         PROV = Namespace('http://www.w3.org/ns/prov#')
-
-        for row in result_set:
-            bnode = BNode()
-            graph.add((URIRef("{0}activity{1}".format(namespace,
-                                                      row['activityId'])),
-                       RDF.type,
-                      PROV.Activity))
-            graph.add((URIRef("{0}activity{1}".format(namespace,
-                                                      row['activityId'])),
-                       RDF.type,
-                      namespace.WorkflowExecution))
-            graph.add((URIRef("{0}activity{1}".format(namespace,
-                                                      row['activityId'])),
-                      PROV.startedAtTime,
-                      Literal(row['activityStart'], datatype=XSD.date)))
-            graph.add((URIRef("{0}activity{1}".format(namespace,
-                                                      row['activityId'])),
-                      PROV.endedAtTime,
-                      Literal(row['activityEnd'], datatype=XSD.date)))
-            graph.add((URIRef("{0}activity{1}".format(namespace,
-                                                      row['activityId'])),
-                      PROV.qualifiedAssociation,
-                      bnode))
-            graph.add((bnode,
-                      RDF.type,
-                      PROV.Assocation))
-            graph.add((bnode,
-                      PROV.hadPlan,
-                      URIRef("{0}workflow{1}".format(namespace,
-                                                     row['workflowId']))))
-            graph.add((bnode,
-                      PROV.agent,
-                      URIRef("{0}{1}".format(namespace, agent))))
-            graph.add((URIRef("{0}{1}".format(namespace, agent)),
-                      RDF.type,
-                      PROV.Agent))
-            graph.add((URIRef("{0}{1}".format(namespace, agent)),
-                      namespace.usesArtifact,
-                      URIRef("{0}{1}".format(namespace, artifact))))
-            app_logger.info('Construct activity metadata for Activity{0}.'
-                            .format(row['activityId']))
-        return graph
+        if db_cursor.rowcount > 0:
+            for row in result_set:
+                bnode = BNode()
+                graph.add((URIRef("{0}activity{1}".format(namespace,
+                                                          row['activityId'])),
+                           RDF.type,
+                          PROV.Activity))
+                graph.add((URIRef("{0}activity{1}".format(namespace,
+                                                          row['activityId'])),
+                           RDF.type,
+                          namespace.WorkflowExecution))
+                graph.add((URIRef("{0}activity{1}".format(namespace,
+                                                          row['activityId'])),
+                          PROV.startedAtTime,
+                          Literal(row['activityStart'], datatype=XSD.date)))
+                graph.add((URIRef("{0}activity{1}".format(namespace,
+                                                          row['activityId'])),
+                          PROV.endedAtTime,
+                          Literal(row['activityEnd'], datatype=XSD.date)))
+                graph.add((URIRef("{0}activity{1}".format(namespace,
+                                                          row['activityId'])),
+                          PROV.qualifiedAssociation,
+                          bnode))
+                graph.add((bnode,
+                          RDF.type,
+                          PROV.Assocation))
+                graph.add((bnode,
+                          PROV.hadPlan,
+                          URIRef("{0}workflow{1}".format(namespace,
+                                                         row['workflowId']))))
+                graph.add((bnode,
+                          PROV.agent,
+                          URIRef("{0}{1}".format(namespace, agent))))
+                graph.add((URIRef("{0}{1}".format(namespace, agent)),
+                          RDF.type,
+                          PROV.Agent))
+                # information about the agent and the artifact used.
+                graph.add((URIRef("{0}{1}".format(namespace, agent)),
+                          namespace.usesArtifact,
+                          URIRef("{0}{1}".format(namespace, artifact))))
+                app_logger.info('Construct activity metadata for Activity{0}.'
+                                .format(row['activityId']))
+            return graph
+        else:
+            return "No activities"
 
     @staticmethod
     def fetch_metadata(db_cursor, graph, namespace):
@@ -107,7 +121,7 @@ class ActivityGraph(object):
 
         for row in result_set:
             parse_metadata_config(HTMLParser.HTMLParser().unescape(
-                                  str(row['config'], 'UTF-8')),
+                                  str(row['config'])),
                                   row['activityId'], namespace, graph)
             app_logger.info('Construct config metadata for Activity{0}.'
                             .format(row['activityId']))

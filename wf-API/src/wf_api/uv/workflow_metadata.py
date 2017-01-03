@@ -19,42 +19,53 @@ class WorkflowGraph(object):
 
         db_cursor = connect_DB()
 
-        cls.fetch_workflows(db_cursor, workflow_graph, KAISA)
-        cls.fetch_steps(db_cursor, workflow_graph, KAISA)
-        cls.fetch_steps_sequence(db_cursor, workflow_graph, KAISA)
-        db_cursor.connection.close()
-        return workflow_graph
+        test_workflows = cls.fetch_workflows(db_cursor, workflow_graph, KAISA)
+        if test_workflows == "No workflows":
+            db_cursor.connection.close()
+            return workflow_graph
+        else:
+            cls.fetch_workflows(db_cursor, workflow_graph, KAISA)
+            cls.fetch_steps(db_cursor, workflow_graph, KAISA)
+            cls.fetch_steps_sequence(db_cursor, workflow_graph, KAISA)
+            db_cursor.connection.close()
+            return workflow_graph
 
     @staticmethod
     def fetch_workflows(db_cursor, graph, namespace):
         """Create Workflow ID and description."""
         # Get general workflow information on the last executed workflow
+        # Get only public workflows
         db_cursor.execute("""
              SELECT ppl_model.id AS 'workflowId',
              ppl_model.description AS 'description',
              ppl_model.name AS 'workflowTitle'
              FROM ppl_model
-             ORDER BY ppl_model.id DESC LIMIT 1
+             WHERE (ppl_model.visibility = 1 OR ppl_model.visibility = 2)
+             ORDER BY ppl_model.id
         """)
+        # replace last line above with one below if only latest result required
+        #  ORDER BY ppl_model.last_change DESC LIMIT 1
 
         result_set = db_cursor.fetchall()
-
-        for row in result_set:
-            graph.add((URIRef("{0}workflow{1}".format(namespace,
-                                                      row['workflowId'])),
-                       RDF.type,
-                      namespace.Workflow))
-            graph.add((URIRef("{0}workflow{1}".format(namespace,
-                                                      row['workflowId'])),
-                      DC.title,
-                      Literal(row['workflowTitle'])))
-            graph.add((URIRef("{0}workflow{1}".format(namespace,
-                                                      row['workflowId'])),
-                      DC.description,
-                      Literal(row['description'])))
-            app_logger.info('Construct metadata for Workflow{0}.'
-                            .format(row['workflowId']))
-        return graph
+        if db_cursor.rowcount > 0:
+            for row in result_set:
+                graph.add((URIRef("{0}workflow{1}".format(namespace,
+                                                          row['workflowId'])),
+                           RDF.type,
+                          namespace.Workflow))
+                graph.add((URIRef("{0}workflow{1}".format(namespace,
+                                                          row['workflowId'])),
+                          DC.title,
+                          Literal(row['workflowTitle'])))
+                graph.add((URIRef("{0}workflow{1}".format(namespace,
+                                                          row['workflowId'])),
+                          DC.description,
+                          Literal(row['description'])))
+                app_logger.info('Construct metadata for Workflow{0}.'
+                                .format(row['workflowId']))
+            return graph
+        else:
+            return "No workflows"
 
     @staticmethod
     def fetch_steps(db_cursor, graph, namespace):
