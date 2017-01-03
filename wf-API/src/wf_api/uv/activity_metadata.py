@@ -1,4 +1,5 @@
 import HTMLParser
+from datetime import datetime
 from rdflib import Graph, URIRef, Literal, Namespace, BNode
 from rdflib.namespace import RDF, XSD
 from wf_api.utils.logs import app_logger
@@ -14,7 +15,7 @@ class ActivityGraph(object):
     """Create WorkflowGraph class."""
 
     @classmethod
-    def activity(cls, db_conf=None, namespace_conf=None):
+    def activity(cls, modifiedSince=None):
         """Build activity graph with associated information."""
         activity_graph = Graph()
 
@@ -24,18 +25,19 @@ class ActivityGraph(object):
         db_cursor = connect_DB()
 
         test_activities = cls.fetch_activities(db_cursor, activity_graph,
-                                               KAISA)
+                                               KAISA, modifiedSince)
         if test_activities == "No workflows":
             db_cursor.connection.close()
             return activity_graph
         else:
-            cls.fetch_activities(db_cursor, activity_graph, KAISA)
+            cls.fetch_activities(db_cursor, activity_graph, KAISA,
+                                 modifiedSince)
             cls.fetch_metadata(db_cursor, activity_graph, KAISA)
             db_cursor.connection.close()
             return activity_graph
 
     @staticmethod
-    def fetch_activities(db_cursor, graph, namespace):
+    def fetch_activities(db_cursor, graph, namespace, modifiedSince):
         """Create activity ID and description."""
         # Get general workflow information on the last executed workflow
         # Get based only on public workflows and successful pipeline execution
@@ -43,7 +45,8 @@ class ActivityGraph(object):
             SELECT ppl_model.id AS 'workflowId',
             exec_pipeline.id AS 'activityId',
             exec_pipeline.t_start AS 'activityStart',
-            exec_pipeline.t_end AS 'activityEnd'
+            exec_pipeline.t_end AS 'activityEnd',
+            ppl_model.last_change AS 'lastChange'
             FROM exec_pipeline, ppl_model
             WHERE exec_pipeline.pipeline_id = ppl_model.id AND\
             (ppl_model.visibility = 1 OR ppl_model.visibility = 2) AND\
@@ -55,9 +58,25 @@ class ActivityGraph(object):
 
         result_set = db_cursor.fetchall()
 
-        PROV = Namespace('http://www.w3.org/ns/prov#')
         if db_cursor.rowcount > 0:
-            for row in result_set:
+            ActivityGraph.construct_act_graph(graph, result_set, namespace,
+                                              modifiedSince)
+        else:
+            return "No activities"
+
+    @staticmethod
+    def construct_act_graph(graph, data_row, namespace, modifiedSince):
+        """Test to see if record has been modifed."""
+        PROV = Namespace('http://www.w3.org/ns/prov#')
+        for row in data_row:
+            old_date = row['lastChange']
+            if modifiedSince is None:
+                new_date = None
+            else:
+                new_date = datetime.strptime(modifiedSince,
+                                             '%Y-%m-%dT%H:%M:%SZ')
+            if modifiedSince is None or (modifiedSince
+                                         and old_date >= new_date):
                 bnode = BNode()
                 graph.add((URIRef("{0}activity{1}".format(namespace,
                                                           row['activityId'])),
@@ -98,9 +117,9 @@ class ActivityGraph(object):
                           URIRef("{0}{1}".format(namespace, artifact))))
                 app_logger.info('Construct activity metadata for Activity{0}.'
                                 .format(row['activityId']))
-            return graph
-        else:
-            return "No activities"
+                return graph
+            else:
+                return "No activities"
 
     @staticmethod
     def fetch_metadata(db_cursor, graph, namespace):
@@ -128,16 +147,14 @@ class ActivityGraph(object):
         return graph
 
 
-def activity_get_output(serialization=None):
+def activity_get_output(serialization, modifiedSince):
     """Construct the Ouput for the Get request."""
     data = ActivityGraph()
-    activity_graph = data.activity()
-    if len(activity_graph) > 0 and serialization is None:
-        result = activity_graph.serialize(format='turtle')
-    elif len(activity_graph) > 0 and serialization is not None:
+    activity_graph = data.activity(modifiedSince)
+    if len(activity_graph) > 0:
         result = activity_graph.serialize(format=serialization)
     elif len(activity_graph) == 0:
-        result = "No Activity to be loaded."
+        result = None
     app_logger.info('Constructed Output for UnifiedViews Activity '
                     'metadata enrichment finalized and set to API.')
     return result

@@ -4,36 +4,15 @@ import datetime
 from wf_api.utils.logs import app_logger
 
 
-# TO DO: figure out using dict how to replace the multiple if
 def activity_get(modifiedSince=None, format=None):
     """Retrieve the latest activity and associated datasets."""
     activity = ''
     if format is None:
-        data = activity_get_output('turtle')
-        if data != "No Activity to be loaded.":
-            activity = Response(
-                response=data,
-                status=200,
-                mimetype='text/turtle')
-            app_logger.info('Activity Reponse is 200 OK.')
-        else:
-            now = datetime.datetime.now()
-            activity = Response(status=304)
-            activity.headers['Last-Modified'] = now
-            app_logger.info('Activity Reponse is 304 Not Modified.')
+        data = activity_get_output('turtle', modifiedSince)
+        activity = format_response(data, 'turtle')
     elif format == 'json-ld':
-        data = activity_get_output('json-ld')
-        if data != "No Activity to be loaded.":
-            activity = Response(
-                response=data,
-                status=200,
-                mimetype='application/json+ld')
-            app_logger.info('Activity Reponse is 200 OK.')
-        else:
-            now = datetime.datetime.now()
-            activity = Response(status=304)
-            activity.headers['Last-Modified'] = now
-            app_logger.info('Activity Reponse is 304 Not Modified.')
+        data = activity_get_output('json-ld', modifiedSince)
+        activity = format_response(data, format)
     else:
         activity = Response(
             response='Operation Not Allowed.',
@@ -51,3 +30,29 @@ def activity_post():
         status=405,
         mimetype='text/plain')
     return response
+
+
+def not_modified():
+    """Response for 304: Not Modified."""
+    now = datetime.datetime.now()
+    response = Response(status=304)
+    response.headers['Last-Modified'] = now
+    app_logger.info('Activity Reponse is 304 Not Modified.')
+    return response
+
+
+def format_response(data, resp_format):
+    """Create proper response based on format."""
+    formats = {
+        'turtle': 'text/turtle',
+        'json-ld': 'application/json+ld'
+    }
+    if data is not None:
+        activity = Response(
+            response=data,
+            status=200,
+            mimetype=formats[resp_format])
+        app_logger.info('Activity Reponse is 200 OK.')
+        return activity
+    else:
+        return not_modified()

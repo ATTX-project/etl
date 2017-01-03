@@ -4,42 +4,21 @@ import datetime
 from wf_api.utils.logs import app_logger
 
 
-# TO DO: figure out using dict how to replace the multiple if
 def workflow_get(modifiedSince=None, format=None):
     """List the latest workflow and associated steps."""
     workflow = ''
     if format is None:
-        data = workflow_get_output('turtle')
-        if data != "No Workflow to be loaded.":
-            workflow = Response(
-                response=data,
-                status=200,
-                mimetype='text/turtle')
-            app_logger.info('Workflow Reponse is 200 OK.')
-        else:
-            now = datetime.datetime.now()
-            workflow = Response(status=304)
-            workflow.headers['Last-Modified'] = now
-            app_logger.info('Workflow Reponse is 304 Not Modified.')
+        data = workflow_get_output('turtle', modifiedSince)
+        workflow = format_response(data, 'turtle')
     elif format == 'json-ld':
-        data = workflow_get_output('json-ld')
-        if data != "No Workflow to be loaded.":
-            workflow = Response(
-                response=data,
-                status=200,
-                mimetype='application/json+ld')
-            app_logger.info('Workflow Reponse is 200 OK.')
-        else:
-            now = datetime.datetime.now()
-            workflow = Response(status=304)
-            workflow.headers['Last-Modified'] = now
-            app_logger.info('Workflow Reponse is 304 Not Modified.')
+        data = workflow_get_output('json-ld', modifiedSince)
+        workflow = format_response(data, format)
     else:
         workflow = Response(
             response='Operation Not Allowed.',
             status=405,
             mimetype='text/plain')
-    app_logger.info('Reponse from the Workflow API was issued.')
+    app_logger.info('Reponse from the workflow API was issued.')
     return workflow
 
 
@@ -51,3 +30,29 @@ def workflow_post():
         status=405,
         mimetype='text/plain')
     return response
+
+
+def not_modified():
+    """Response for 304: Not Modified."""
+    now = datetime.datetime.now()
+    response = Response(status=304)
+    response.headers['Last-Modified'] = now
+    app_logger.info('workflow Reponse is 304 Not Modified.')
+    return response
+
+
+def format_response(data, resp_format):
+    """Create proper response based on format."""
+    formats = {
+        'turtle': 'text/turtle',
+        'json-ld': 'application/json+ld'
+    }
+    if data is not None:
+        workflow = Response(
+            response=data,
+            status=200,
+            mimetype=formats[resp_format])
+        app_logger.info('workflow Reponse is 200 OK.')
+        return workflow
+    else:
+        return not_modified()
