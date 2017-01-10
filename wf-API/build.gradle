@@ -70,7 +70,7 @@ task addConfigs(type: Copy) {
 
 // in case we want have a ./gradlw command.
 task wrapper(type: Wrapper) {
-   gradleVersion = '3.2.1'
+   gradleVersion = '3.3'
 }
 
 // generate Tests report via a script.
