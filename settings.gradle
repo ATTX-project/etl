@@ -1,1 +1,1 @@
-include "wf-feature-tests", "unifiedViews:uv-dpu-t-attx-metadata" , "wf-API"
+include "wf-feature-tests", "unifiedViews:uv-dpu-t-attx-metadata" , "unifiedViews:uv-dpu-t-attx-uc1-infras2internal", "wf-API"

@@ -12,8 +12,17 @@
 if (!hasProperty('mainClass')) {
     ext.mainClass = ''
 }
+buildscript {
+  repositories {
+    mavenCentral()
+    jcenter()
+  }
+  dependencies {
+    classpath 'org.dm.gradle:gradle-bundle-plugin:0.8.5'
+  }
+}
 apply plugin: 'java'
-apply plugin: 'maven'
+apply plugin: 'osgi'
 
 group = 'org.uh.attx.etl.uv.dpu'
 version = '1.0-SNAPSHOT'
@@ -29,6 +38,11 @@ repositories {
      maven { url "http://repository.unifiedviews.eu/nexus/content/repositories/snapshots/" }
      maven { url "http://maven.eea.sk/artifactory/public/" }
      maven { url "http://repo.maven.apache.org/maven2" }
+}
+
+configurations {
+    // configuration that holds jars to copy into lib
+    extraLibs
 }
 
 dependencies {
@@ -74,5 +88,41 @@ dependencies {
        /* This dependency was originally in the Maven provided scope, but the project was not of type war.
        This behavior is not yet supported by Gradle, so this dependency has been converted to a compile dependency.
        Please review and delete this closure when resolved. */
-    }    
+    }  
+    
+    extraLibs group: 'eu.unifiedviews', name: 'uv-dataunit-helpers', version:'2.1.7'
+    extraLibs group: 'eu.unifiedviews', name: 'uv-dpu-helpers', version:'2.1.7'
+    
+}
+
+
+jar {
+    baseName = 'ChangeMe'
+    
+    manifest { // the manifest of the default jar is of type OsgiManifest
+        name = 'ChangeMe'
+        instruction 'DPU-MainClass', 'ChangeMe'
+        instruction 'DPU-Package', 'org.uh.attx.etl.uv.dpu.transformer.ChangeMe'
+        instruction 'Bundle-SymbolicName', 'org.uh.attx.etl.uv.dpu.transformer.ChangeMe'
+        instruction 'Bundle-ClassPath', '.,dependencies/uv-dataunit-helpers-2.1.7.jar,dependencies/uv-dpu-helpers-2.1.7.jar'
+        instruction 'Embed-Dependency', '*;scope=compile|system'
+        instruction 'Embed-Directory', 'dependencies'
+        instruction 'Embed-StripGroup', 'false'
+        instruction 'Embed-Transitive', 'false'
+        instruction 'Embedded-Artifacts', 'dependencies/uv-dataunit-helpers-2.1.7.jar;g="eu.unifiedviews";a="uv-dataunit-helpers";v="2.1.7",dependencies/uv-dpu-helpers-2.1.7.jar;g="eu.unifiedviews";a="uv-dpu-helpers";v="2.1.7"'
+        instruction 'Require-Capability', 'osgi.ee; filter="(&(osgi.ee=JavaSE)(version=1.8))"'
+        instruction 'Import-Package', 'com.thoughtworks.xstream;version="[1.4,2)",com.thoughtworks.xstream.io;version="[1.4,2)",com.thoughtworks.xstream.io.xml;version="[1.4,2)",com.thoughtworks.xstream.mapper;version="[1.4,2)",com.vaadin.data;version="[7.3,8)",com.vaadin.shared.ui.label;version="[7.3,8)",com.vaadin.ui;version="[7.3,8)",eu.unifiedviews.dataunit;version="[2.1,3)",eu.unifiedviews.dataunit.files;version="[2.1,3)",eu.unifiedviews.dataunit.rdf;version="[2.1,3)",eu.unifiedviews.dataunit.relational;version="[2.1,3)",eu.unifiedviews.dpu;version="[2.1,3)",eu.unifiedviews.dpu.config;version="[2.1,3)",eu.unifiedviews.dpu.config.vaadin;version="[2.1,3)",info.aduna.iteration,javax.net.ssl,org.apache.commons.io,org.openrdf,org.openrdf.model,org.openrdf.model.impl,org.openrdf.model.vocabulary,org.openrdf.query,org.openrdf.query.impl,org.openrdf.repository,org.openrdf.rio,org.slf4j;version="[1.7,2)"'
+        //instruction 'Import-Package', '*'
+
+    }
+    
+    into('dependencies') {
+        from {
+            //configurations.runtime
+          configurations.extraLibs
+          //configurations.runtime.collect { it.name.startsWith('uv-dpu-helpers') }
+
+        }
+    }
+    
 }
