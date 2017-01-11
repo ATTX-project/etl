@@ -116,6 +116,7 @@ public class Infras2Internal extends AbstractDpu<Infras2InternalConfig_V1> {
             Rio.write(g, out, RDFFormat.TURTLE);
         
         } catch(Exception ex) {
+            // TODO: add more logging
             throw ContextUtils.dpuException(ctx, ex, "infras2internal.error");
         } 
     }
