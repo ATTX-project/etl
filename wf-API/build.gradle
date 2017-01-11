@@ -56,6 +56,7 @@ repositories {
 
 // Succesfully running the tests requires a logs folder existing.
 task creatLogsFolder {
+  description = "Create logs flder"
   doFirst {
       mkdir('logs')
   }
@@ -63,6 +64,7 @@ task creatLogsFolder {
 
 // adding the database.conf to the distribution
 task addConfigs(type: Copy) {
+    description = "adding the database.conf to the distribution"
     from '.'
     into 'build/deployable'
     include 'database.conf'
@@ -75,12 +77,12 @@ task wrapper(type: Wrapper) {
 
 // generate Tests report via a script.
 task runTests(type:Exec) {
+  description = "generate Tests report via a script."
   workingDir '.'
   // Create the output folder
   doFirst {
     mkdir('build/test-report')
   }
-
   commandLine './runTests.sh'
 }
 
