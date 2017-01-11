@@ -44,7 +44,7 @@ class ActivityGraph(object):
             ppl_model.id AS 'workflowId',
             exec_pipeline.t_start AS 'activityStart',
             exec_pipeline.t_end AS 'activityEnd',
-            ppl_model.last_change AS 'lastChange'
+            exec_pipeline.t_end AS 'lastChange'
             FROM exec_pipeline, ppl_model
             WHERE exec_pipeline.pipeline_id = ppl_model.id AND\
             (ppl_model.visibility = 1 OR ppl_model.visibility = 2) AND\
@@ -87,11 +87,12 @@ class ActivityGraph(object):
                 graph.add((URIRef("{0}activity{1}".format(namespace,
                                                           row['activityId'])),
                           PROV.startedAtTime,
-                          Literal(row['activityStart'], datatype=XSD.date)))
+                          Literal(row['activityStart'],
+                                  datatype=XSD.dateTime)))
                 graph.add((URIRef("{0}activity{1}".format(namespace,
                                                           row['activityId'])),
                           PROV.endedAtTime,
-                          Literal(row['activityEnd'], datatype=XSD.date)))
+                          Literal(row['activityEnd'], datatype=XSD.dateTime)))
                 graph.add((URIRef("{0}activity{1}".format(namespace,
                                                           row['activityId'])),
                           PROV.qualifiedAssociation,

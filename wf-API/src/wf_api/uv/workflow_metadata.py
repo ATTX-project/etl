@@ -79,8 +79,6 @@ class WorkflowGraph(object):
                                                           row['workflowId'])),
                           DC.description,
                           Literal(row['description'])))
-
-                return graph
             else:
                 return "No workflows"
 
