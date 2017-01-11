@@ -30,8 +30,6 @@ class ActivityGraph(object):
             db_cursor.connection.close()
             return activity_graph
         else:
-            cls.fetch_activities(db_cursor, activity_graph, KAISA,
-                                 modifiedSince)
             cls.fetch_metadata(db_cursor, activity_graph, KAISA)
             db_cursor.connection.close()
             return activity_graph
@@ -42,8 +40,8 @@ class ActivityGraph(object):
         # Get general workflow information on the last executed workflow
         # Get based only on public workflows and successful pipeline execution
         db_cursor.execute("""
-            SELECT ppl_model.id AS 'workflowId',
-            exec_pipeline.id AS 'activityId',
+            SELECT exec_pipeline.id AS 'activityId',
+            ppl_model.id AS 'workflowId',
             exec_pipeline.t_start AS 'activityStart',
             exec_pipeline.t_end AS 'activityEnd',
             ppl_model.last_change AS 'lastChange'
@@ -55,12 +53,12 @@ class ActivityGraph(object):
         """)
         # replace last line above with one below if only latest result required
         #  ORDER BY ppl_model.last_change DESC LIMIT 1
-
         result_set = db_cursor.fetchall()
 
         if db_cursor.rowcount > 0:
-            ActivityGraph.construct_act_graph(graph, result_set, namespace,
-                                              modifiedSince)
+            return ActivityGraph.construct_act_graph(graph, result_set,
+                                                     namespace,
+                                                     modifiedSince)
         else:
             return "No activities"
 
@@ -117,7 +115,6 @@ class ActivityGraph(object):
                           URIRef("{0}{1}".format(namespace, artifact))))
                 app_logger.info('Construct activity metadata for Activity{0}.'
                                 .format(row['activityId']))
-                return graph
             else:
                 return "No activities"
 

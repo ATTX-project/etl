@@ -26,8 +26,6 @@ class WorkflowGraph(object):
             db_cursor.connection.close()
             return workflow_graph
         else:
-            cls.fetch_workflows(db_cursor, workflow_graph, KAISA,
-                                modifiedSince)
             cls.fetch_steps(db_cursor, workflow_graph, KAISA)
             cls.fetch_steps_sequence(db_cursor, workflow_graph, KAISA)
             db_cursor.connection.close()
