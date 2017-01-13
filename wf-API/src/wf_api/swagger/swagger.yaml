@@ -39,6 +39,12 @@ paths:
         required: false
         type: "string"
         format: "date-time"
+      - name: "format"
+        in: "query"
+        description: "Response Format. For now use only json-ld."
+        required: false
+        type: "string"
+        format: "string"
       responses:
         200:
           description: "Successful response."
@@ -75,6 +81,12 @@ paths:
         required: false
         type: "string"
         format: "date-time"
+      - name: "format"
+        in: "query"
+        description: "Response Format. For now use only json-ld."
+        required: false
+        type: "string"
+        format: "string"
       responses:
         200:
           description: "Successful response."

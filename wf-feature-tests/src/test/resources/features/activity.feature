@@ -8,4 +8,4 @@ Feature: Handle retrieving of activity metadata from UnifiedViews
     Scenario: Get workflow activities
         Given the wfAPI is running
         When I access the URL activity API and try to retrieve something
-        Then I should get a response with content
+        Then I should get a response with content.

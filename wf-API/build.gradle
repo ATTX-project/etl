@@ -1,6 +1,5 @@
 plugins {
   id "com.linkedin.python-cli" version "0.3.36"
-  id 'distribution'
 }
 
 version=0.1
@@ -25,6 +24,7 @@ dependencies {
 }
 
 repositories {
+    // using a local repository
     ivy{
       name 'pypi-local'
   		url "/home/user/pivy"
@@ -33,7 +33,7 @@ repositories {
   			ivy '[organisation]/[module]/[revision]/[module]-[revision].ivy'
   		}
   	}
-
+    // using a web repository
     ivy{
       name 'pypi-attx'
   		url "http://attx-dev.hulib.helsinki.fi:5039/pivy/"
@@ -42,7 +42,7 @@ repositories {
   			ivy '[organisation]/[module]/[revision]/[module]-[revision].ivy'
   		}
     }
-    
+    // setting the repository for jenkins use
     ivy{
       name 'pypi-jenkins'
   		url "http://pivyrepo:5039/pivy/"
@@ -51,40 +51,39 @@ repositories {
   			ivy '[organisation]/[module]/[revision]/[module]-[revision].ivy'
   		}
     }
-
 }
 
 
 // Succesfully running the tests requires a logs folder existing.
 task creatLogsFolder {
+  description = "Create logs flder"
   doFirst {
       mkdir('logs')
   }
 }
 
+// adding the database.conf to the distribution
 task addConfigs(type: Copy) {
-    from '.' 
+    description = "adding the database.conf to the distribution"
+    from '.'
     into 'build/deployable'
     include 'database.conf'
-
-
 }
 
 // in case we want have a ./gradlw command.
 task wrapper(type: Wrapper) {
-   gradleVersion = '3.2.1'
+   gradleVersion = '3.3'
 }
 
 // generate Tests report via a script.
 task runTests(type:Exec) {
+  description = "generate Tests report via a script."
   workingDir '.'
   // Create the output folder
   doFirst {
     mkdir('build/test-report')
   }
-
   commandLine './runTests.sh'
-
 }
 
 // the pytest taks depends on the logs folder and this specifies that.

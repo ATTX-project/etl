@@ -1,3 +1,4 @@
+from datetime import datetime
 from rdflib import Graph, URIRef, Literal, Namespace
 from rdflib.namespace import DC, RDF
 from wf_api.utils.logs import app_logger
@@ -9,7 +10,7 @@ class WorkflowGraph(object):
     """Create WorkflowGraph class."""
 
     @classmethod
-    def workflow(cls, db_conf=None, namespace_conf=None):
+    def workflow(cls, modifiedSince=None):
         """Build workflow graph with associated information."""
         workflow_graph = Graph()
 
@@ -19,42 +20,67 @@ class WorkflowGraph(object):
 
         db_cursor = connect_DB()
 
-        cls.fetch_workflows(db_cursor, workflow_graph, KAISA)
-        cls.fetch_steps(db_cursor, workflow_graph, KAISA)
-        cls.fetch_steps_sequence(db_cursor, workflow_graph, KAISA)
-        db_cursor.connection.close()
-        return workflow_graph
+        test_workflows = cls.fetch_workflows(db_cursor, workflow_graph, KAISA,
+                                             modifiedSince)
+        if test_workflows == "No workflows":
+            db_cursor.connection.close()
+            return workflow_graph
+        else:
+            cls.fetch_steps(db_cursor, workflow_graph, KAISA)
+            cls.fetch_steps_sequence(db_cursor, workflow_graph, KAISA)
+            db_cursor.connection.close()
+            return workflow_graph
 
     @staticmethod
-    def fetch_workflows(db_cursor, graph, namespace):
+    def fetch_workflows(db_cursor, graph, namespace, modifiedSince):
         """Create Workflow ID and description."""
         # Get general workflow information on the last executed workflow
+        # Get only public workflows
         db_cursor.execute("""
              SELECT ppl_model.id AS 'workflowId',
              ppl_model.description AS 'description',
-             ppl_model.name AS 'workflowTitle'
+             ppl_model.name AS 'workflowTitle',
+             ppl_model.last_change AS 'lastChange'
              FROM ppl_model
-             ORDER BY ppl_model.id DESC LIMIT 1
+             WHERE (ppl_model.visibility = 1 OR ppl_model.visibility = 2)
+             ORDER BY ppl_model.id
         """)
+        # replace last line above with one below if only latest result required
+        #  ORDER BY ppl_model.last_change DESC LIMIT 1
 
         result_set = db_cursor.fetchall()
+        if db_cursor.rowcount > 0:
+            return WorkflowGraph.construct_wf_graph(graph, result_set,
+                                                    namespace, modifiedSince)
+        else:
+            return "No workflows"
 
-        for row in result_set:
-            graph.add((URIRef("{0}workflow{1}".format(namespace,
-                                                      row['workflowId'])),
-                       RDF.type,
-                      namespace.Workflow))
-            graph.add((URIRef("{0}workflow{1}".format(namespace,
-                                                      row['workflowId'])),
-                      DC.title,
-                      Literal(row['workflowTitle'])))
-            graph.add((URIRef("{0}workflow{1}".format(namespace,
-                                                      row['workflowId'])),
-                      DC.description,
-                      Literal(row['description'])))
-            app_logger.info('Construct metadata for Workflow{0}.'
-                            .format(row['workflowId']))
-        return graph
+    @staticmethod
+    def construct_wf_graph(graph, data_row, namespace, modifiedSince):
+        """Test to see if record has been modifed."""
+        for row in data_row:
+            last_date = row['lastChange']
+            if modifiedSince is None:
+                compare_date = None
+            else:
+                compare_date = datetime.strptime(modifiedSince,
+                                                 '%Y-%m-%dT%H:%M:%SZ')
+            if modifiedSince is None or (modifiedSince
+                                         and last_date >= compare_date):
+                graph.add((URIRef("{0}workflow{1}".format(namespace,
+                                                          row['workflowId'])),
+                           RDF.type,
+                          namespace.Workflow))
+                graph.add((URIRef("{0}workflow{1}".format(namespace,
+                                                          row['workflowId'])),
+                          DC.title,
+                          Literal(row['workflowTitle'])))
+                graph.add((URIRef("{0}workflow{1}".format(namespace,
+                                                          row['workflowId'])),
+                          DC.description,
+                          Literal(row['description'])))
+            else:
+                return "No workflows"
 
     @staticmethod
     def fetch_steps(db_cursor, graph, namespace):
@@ -124,16 +150,14 @@ class WorkflowGraph(object):
         return graph
 
 
-def workflow_get_output(serialization=None):
+def workflow_get_output(serialization, modifiedSince):
     """Construct the Ouput for the Get request."""
     data = WorkflowGraph()
-    workflow_graph = data.workflow()
-    if len(workflow_graph) > 0 and serialization is None:
-        result = workflow_graph.serialize(format='turtle')
-    elif len(workflow_graph) > 0 and serialization is not None:
+    workflow_graph = data.workflow(modifiedSince)
+    if len(workflow_graph) > 0:
         result = workflow_graph.serialize(format=serialization)
     elif len(workflow_graph) == 0:
-        result = "No Workflow to be loaded."
+        result = None
     app_logger.info('Constructed Output for UnifiedViews Workflow '
                     'metadata enrichment finalized and set to API.')
     return result

@@ -16,9 +16,10 @@ class ParseConfigTest(unittest.TestCase):
         self.graph.namespace = Namespace('http://helsinki.fi/library/onto#')
         self.graph.bind('kaisa', 'http://helsinki.fi/library/onto#')
         self.graph.bind('dc', 'http://purl.org/dc/elements/1.1/')
-        self.graph.bind('dcterms', 'http://purl.org/dc/terms/')
-        self.graph.bind('prov', 'http://www.w3.org/ns/prov#')
+        self.graph.bind('schema', 'http://schema.org/')
         self.graph.bind('pwo', 'http://purl.org/spar/pwo/')
+        self.graph.bind('prov', 'http://www.w3.org/ns/prov#')
+        self.graph.bind('dcterms', 'http://purl.org/dc/terms/')
         self.graph.bind('sd',
                         'http://www.w3.org/ns/sparql-service-description#')
 
@@ -36,8 +37,7 @@ class ParseConfigTest(unittest.TestCase):
         result = parse_metadata_config(self.config, self.activityId,
                                        self.graph.namespace, self.graph)
 
-        print(similar(result, self.test_graph))
-        # Considering blank nodes we need t check if the graphs are similar
+        # Considering blank nodes we need to check if the graphs are similar
         eq_(similar(result, self.test_graph), True,
             "Test to if the resulting graph corresponds to test graph.")
 

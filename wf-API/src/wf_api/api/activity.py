@@ -4,24 +4,21 @@ import datetime
 from wf_api.utils.logs import app_logger
 
 
-def activity_get(modifiedSince=None):
+def activity_get(modifiedSince=None, format=None):
     """Retrieve the latest activity and associated datasets."""
-    data = activity_get_output('turtle')
     activity = ''
-    if data != "No Activity to be loaded.":
-        activity = Response(
-            response=data,
-            status=200,
-            mimetype='text/turtle')
-        app_logger.info('Activity Response is 200 OK.')
+    if format is None:
+        data = activity_get_output('turtle', modifiedSince)
+        activity = format_response(data, 'turtle')
+    elif format == 'json-ld':
+        data = activity_get_output('json-ld', modifiedSince)
+        activity = format_response(data, format)
     else:
-        now = datetime.datetime.now()
-        headers = {'Last-Modified': now}
         activity = Response(
-            headers=headers,
-            status=304)
-        app_logger.info('Activity Response is 304 Not Modified.')
-    app_logger.info('Response from the Activity API was issued.')
+            response='Operation Not Allowed.',
+            status=405,
+            mimetype='text/plain')
+    app_logger.info('Reponse from the Activity API was issued.')
     return activity
 
 
@@ -33,3 +30,29 @@ def activity_post():
         status=405,
         mimetype='text/plain')
     return response
+
+
+def not_modified():
+    """Response for 304: Not Modified."""
+    now = datetime.datetime.now()
+    response = Response(status=304)
+    response.headers['Last-Modified'] = now
+    app_logger.info('Activity Reponse is 304 Not Modified.')
+    return response
+
+
+def format_response(data, resp_format):
+    """Create proper response based on format."""
+    formats = {
+        'turtle': 'text/turtle',
+        'json-ld': 'application/json+ld'
+    }
+    if data is not None:
+        activity = Response(
+            response=data,
+            status=200,
+            mimetype=formats[resp_format])
+        app_logger.info('Activity Reponse is 200 OK.')
+        return activity
+    else:
+        return not_modified()
