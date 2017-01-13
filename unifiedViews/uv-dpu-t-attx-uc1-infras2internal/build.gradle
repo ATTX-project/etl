@@ -21,13 +21,14 @@ buildscript {
     classpath 'org.dm.gradle:gradle-bundle-plugin:0.8.5'
   }
 }
+
 apply plugin: 'java'
 apply plugin: 'osgi'
 
 group = 'org.uh.attx.etl.uv.dpu'
 version = '1.0-SNAPSHOT'
 
-description = """t-attx-"""
+description = """t-attx-uc1-infras2internal"""
 
 sourceCompatibility = 1.7
 targetCompatibility = 1.8
@@ -88,7 +89,7 @@ dependencies {
        /* This dependency was originally in the Maven provided scope, but the project was not of type war.
        This behavior is not yet supported by Gradle, so this dependency has been converted to a compile dependency.
        Please review and delete this closure when resolved. */
-    }  
+    }    
     
     extraLibs group: 'eu.unifiedviews', name: 'uv-dataunit-helpers', version:'2.1.7'
     extraLibs group: 'eu.unifiedviews', name: 'uv-dpu-helpers', version:'2.1.7'
@@ -97,13 +98,13 @@ dependencies {
 
 
 jar {
-    baseName = 'ChangeMe'
+    baseName = 'Infras2Internal'
     
     manifest { // the manifest of the default jar is of type OsgiManifest
-        name = 'ChangeMe'
-        instruction 'DPU-MainClass', 'ChangeMe'
-        instruction 'DPU-Package', 'org.uh.attx.etl.uv.dpu.transformer.ChangeMe'
-        instruction 'Bundle-SymbolicName', 'org.uh.attx.etl.uv.dpu.transformer.ChangeMe'
+        name = 'Infras2Internal'
+        instruction 'DPU-MainClass', 'Infras2Internal'
+        instruction 'DPU-Package', 'org.uh.attx.etl.uv.dpu.transformer.uc1'
+        instruction 'Bundle-SymbolicName', 'org.uh.attx.etl.uv.dpu.transformer.uc1.Infras2Internal'
         instruction 'Bundle-ClassPath', '.,dependencies/uv-dataunit-helpers-2.1.7.jar,dependencies/uv-dpu-helpers-2.1.7.jar'
         instruction 'Embed-Dependency', '*;scope=compile|system'
         instruction 'Embed-Directory', 'dependencies'
