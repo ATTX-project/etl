@@ -20,4 +20,4 @@ def namspace_config(config_file):
     parser = SafeConfigParser()
     parser.read(config_file)
 
-    return
+    pass
