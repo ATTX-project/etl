@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.uh.attx.etl.unifiedviews.test.stepdefinitions;
+package org.uh.attx.wf.unifiedviews.test.stepdefinitions;
 
 import cucumber.api.CucumberOptions;
 import cucumber.api.junit.Cucumber;
@@ -14,7 +14,7 @@ import org.junit.runner.RunWith;
  * @author jkesanie
  */
 @RunWith(Cucumber.class)
-@CucumberOptions(plugin = {"pretty"}, features="classpath:features", tags = {"~@ignore"}, glue={"classpath:org.uh.attx.etl.unifiedviews.test.stepdefinitions", "src/test/resources/python/steps"})
+@CucumberOptions(plugin = {"pretty"}, features="classpath:features", tags = {"~@ignore"}, glue={"classpath:org.uh.attx.wf.unifiedviews.test.stepdefinitions", "src/test/resources/python/steps"})
 public class TestRunner {
     
 }
