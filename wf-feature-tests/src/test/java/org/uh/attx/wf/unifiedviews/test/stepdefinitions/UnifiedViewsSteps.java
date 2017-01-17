@@ -16,14 +16,12 @@ import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.riot.RDFDataMgr;
 import org.apache.jena.query.Dataset ;
-import org.apache.jena.sparql.core.DatasetGraph;
 import org.json.JSONObject;
 import static org.apache.jena.riot.RDFLanguages.TURTLE ;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static org.apache.jena.vocabulary.DCAT.dataset;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -109,19 +107,17 @@ public class UnifiedViewsSteps implements En {
             String activity_query =  String.format("PREFIX kaisa: <http://helsinki.fi/library/onto#> " +
                     "PREFIX prov: <http://www.w3.org/ns/prov#> " +
                     "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> " +
-                    "ASK{ GRAPH <http://localhost:3030/ds/data/provenance>{" +
+                    "ASK{ " +
                     "  kaisa:activity%d rdf:type ?object" +
-                    "	} " +
                     "}", activity_id);
             String workflow_query =  String.format("PREFIX kaisa: <http://helsinki.fi/library/onto#> " +
                     "PREFIX prov: <http://www.w3.org/ns/prov#> " +
                     "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> " +
-                    "ASK{ GRAPH <http://localhost:3030/ds/data/provenance>{" +
+                    "ASK{ " +
                     "  kaisa:workflow%d rdf:type ?object" +
-                    "	} " +
                     "}", workflow_id);
 
-            Model m = ModelFactory.createDefaultModel();;
+            Model m = ModelFactory.createDefaultModel();
             m.setNsPrefix("dc", "http://purl.org/dc/elements/1.1/");
             m.setNsPrefix("dcterms", "http://purl.org/dc/terms/");
             m.setNsPrefix("kaisa", "http://helsinki.fi/library/onto#");
@@ -136,18 +132,17 @@ public class UnifiedViewsSteps implements En {
 
             try {
                 String the_query = (arg1 == "activity") ? activity_query : workflow_query;
-                String URL = String.format("http://localhost:4301/v0.1/%s", arg1);
-                GetRequest get = Unirest.get(URL);
-                HttpResponse<String> response1 = get.asString();
-                Dataset dataset = DatasetFactory.create(m);
+                String endpoint = (arg1 == "activity") ? "activity" : "workflow";
+                String URL = String.format("http://localhost:4301/v0.1/%s", endpoint);
+                HttpResponse<String> response = Unirest.get(URL).asString();
+                Dataset dataset = DatasetFactory.createTxnMem() ;
 
-                RDFDataMgr.read(dataset, response1.getRawBody(), TURTLE);
+                RDFDataMgr.read(dataset, response.getRawBody(), TURTLE);
 
                 Query query = QueryFactory.create(the_query);
                 QueryExecution qexec = QueryExecutionFactory.create(query, dataset);
                 Boolean result = qexec.execAsk();
-                System.out.println(result);
-//                assertTrue(result);
+                assertTrue(result);
                 qexec.close() ;
             } catch (Exception ex) {
                 Logger.getLogger(UnifiedViewsSteps.class.getName()).log(Level.SEVERE, null, ex);
