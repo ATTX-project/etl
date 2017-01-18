@@ -3,6 +3,7 @@ from wf_api.app import wfm_app
 import unittest
 import click
 from click.testing import CliRunner
+from nose.tools import eq_
 
 
 class TestAPIStart(unittest.TestCase):
