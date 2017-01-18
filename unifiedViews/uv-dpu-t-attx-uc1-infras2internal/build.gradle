@@ -93,6 +93,7 @@ dependencies {
     
     extraLibs group: 'eu.unifiedviews', name: 'uv-dataunit-helpers', version:'2.1.7'
     extraLibs group: 'eu.unifiedviews', name: 'uv-dpu-helpers', version:'2.1.7'
+    extraLibs group: 'org.json', name: 'json', version:'20080701'
     
 }
 
@@ -105,7 +106,7 @@ jar {
         instruction 'DPU-MainClass', 'Infras2Internal'
         instruction 'DPU-Package', 'org.uh.attx.etl.uv.dpu.transformer.uc1'
         instruction 'Bundle-SymbolicName', 'org.uh.attx.etl.uv.dpu.transformer.uc1.Infras2Internal'
-        instruction 'Bundle-ClassPath', '.,dependencies/uv-dataunit-helpers-2.1.7.jar,dependencies/uv-dpu-helpers-2.1.7.jar'
+        instruction 'Bundle-ClassPath', '.,dependencies/uv-dataunit-helpers-2.1.7.jar,dependencies/uv-dpu-helpers-2.1.7.jar,dependencies/json-20080701.jar'
         instruction 'Embed-Dependency', '*;scope=compile|system'
         instruction 'Embed-Directory', 'dependencies'
         instruction 'Embed-StripGroup', 'false'
