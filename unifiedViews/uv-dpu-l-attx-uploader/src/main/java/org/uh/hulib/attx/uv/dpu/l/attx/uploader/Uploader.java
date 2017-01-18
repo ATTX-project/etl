@@ -1,6 +1,5 @@
 package org.uh.hulib.attx.uv.dpu.l.attx.uploader;
 
-
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpEntity;
@@ -18,9 +17,17 @@ import org.apache.http.util.EntityUtils;
 import eu.unifiedviews.dataunit.DataUnit;
 import eu.unifiedviews.dataunit.DataUnitException;
 import eu.unifiedviews.dataunit.files.FilesDataUnit;
+import eu.unifiedviews.dataunit.files.WritableFilesDataUnit;
+import eu.unifiedviews.dataunit.rdf.RDFDataUnit;
+import eu.unifiedviews.dataunit.rdf.WritableRDFDataUnit;
 import eu.unifiedviews.dpu.DPU;
+import eu.unifiedviews.dpu.DPUContext;
 import eu.unifiedviews.dpu.DPUException;
+import eu.unifiedviews.helpers.dataunit.files.FilesDataUnitUtils;
 import eu.unifiedviews.helpers.dataunit.files.FilesHelper;
+import eu.unifiedviews.helpers.dataunit.rdf.RDFHelper;
+import eu.unifiedviews.helpers.dataunit.rdf.RdfDataUnitUtils;
+import eu.unifiedviews.helpers.dataunit.virtualgraph.VirtualGraphHelper;
 import eu.unifiedviews.helpers.dataunit.virtualgraph.VirtualGraphHelpers;
 import eu.unifiedviews.helpers.dataunit.virtualpath.VirtualPathHelpers;
 import eu.unifiedviews.helpers.dpu.config.ConfigHistory;
@@ -32,13 +39,20 @@ import eu.unifiedviews.helpers.dpu.context.UserContext;
 import eu.unifiedviews.helpers.dpu.exec.AbstractDpu;
 import eu.unifiedviews.helpers.dpu.extension.ExtensionInitializer;
 import eu.unifiedviews.helpers.dpu.extension.faulttolerance.FaultTolerance;
+import eu.unifiedviews.helpers.dpu.extension.faulttolerance.FaultToleranceUtils;
 import eu.unifiedviews.helpers.dpu.vaadin.dialog.AbstractDialog;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.net.URI;
 import java.net.URISyntaxException;
-
-
+import java.nio.charset.Charset;
+import java.util.List;
+import org.openrdf.repository.RepositoryConnection;
+import org.openrdf.rio.RDFFormat;
+import org.openrdf.rio.RDFWriter;
+import org.openrdf.rio.Rio;
 
 /**
  * Main data processing unit class.
@@ -50,8 +64,14 @@ public class Uploader extends AbstractDpu<UploaderConfig_V1> {
 
     private static final Logger LOG = LoggerFactory.getLogger(Uploader.class);
 
-    @DataUnit.AsInput(name = "input")
+    @DataUnit.AsInput(name = "fileInput", optional = true)
     public FilesDataUnit filesInput;
+
+    @DataUnit.AsInput(name = "rdfInput", optional = true)
+    public RDFDataUnit rdfInput;
+
+    @DataUnit.AsOutput(name = "fileOutput", optional = true)
+    public WritableFilesDataUnit filesOutput;
 
     @ExtensionInitializer.Init
     public FaultTolerance faultTolerance;
@@ -59,7 +79,6 @@ public class Uploader extends AbstractDpu<UploaderConfig_V1> {
     public Uploader() {
         super(UploaderVaadinDialog.class, ConfigHistory.noHistory(UploaderConfig_V1.class));
     }
-
 
     public void sendFile(UserContext ctx, String parliamentBulkInsertLocation, CloseableHttpClient client, String graph, String rdfFormat, String filename, FilesDataUnit.Entry entry) throws DPUException {
         CloseableHttpResponse response = null;
@@ -97,7 +116,7 @@ public class Uploader extends AbstractDpu<UploaderConfig_V1> {
             }
         }
     }
-    
+
     public void sendClear(UserContext ctx, String parliamentSparqlLocation, CloseableHttpClient client, String graph) throws DPUException {
         CloseableHttpResponse response = null;
         try {
@@ -109,7 +128,7 @@ public class Uploader extends AbstractDpu<UploaderConfig_V1> {
             HttpPost httpPost = new HttpPost(uriBuilder.build().normalize());
             EntityBuilder entityBuilder = EntityBuilder.create()
                     .setParameters(new BasicNameValuePair("update", query));
-                    
+
             HttpEntity entity = entityBuilder.build();
             httpPost.setEntity(entity);
             response = client.execute(httpPost);
@@ -148,7 +167,7 @@ public class Uploader extends AbstractDpu<UploaderConfig_V1> {
                 if (StringUtils.isEmpty(filename)) {
                     filename = entry.getSymbolicName();
                 }
-                String outGraph= null;
+                String outGraph = null;
                 if (globalOutGraph == null) {
                     String outGraphURIString = VirtualGraphHelpers.getVirtualGraph(filesInput, entry.getSymbolicName());
                     if (outGraphURIString == null) {
@@ -158,13 +177,42 @@ public class Uploader extends AbstractDpu<UploaderConfig_V1> {
                     }
                 } else {
                     outGraph = globalOutGraph;
-                }                
+                }
                 if (globalOutGraph == null && config.isClearDestinationGraph()) {
                     LOG.info("Clearing destination graph");
                     sendClear(ctx, config.getEndpointURL() + "update", client, outGraph);
                     LOG.info("Cleared destination graph");
                 }
                 sendFile(ctx, config.getEndpointURL() + "upload", client, outGraph, config.getRdfFileFormat().toUpperCase(), filename, entry);
+
+            }
+
+            if (rdfInput != null) {
+                final List<RDFDataUnit.Entry> graphs = FaultToleranceUtils.getEntries(faultTolerance, rdfInput,
+                        RDFDataUnit.Entry.class);
+
+                if (graphs.size() > 0) {
+                    // Create output file.
+                    final String outputFileName = "attx-uploader.nt";
+                    // Prepare output file entity.
+                    final FilesDataUnit.Entry outputFile = faultTolerance.execute(new FaultTolerance.ActionReturn<FilesDataUnit.Entry>() {
+
+                        @Override
+                        public FilesDataUnit.Entry action() throws Exception {
+                            return FilesDataUnitUtils.createFile(filesOutput, outputFileName);
+                        }
+                    });
+                    exportGraph(graphs, outputFile);
+
+                    String outGraph = null;
+                    if (globalOutGraph != null) {
+                        outGraph = globalOutGraph;
+                    }
+                    sendFile(ctx, config.getEndpointURL() + "upload", client, outGraph, config.getRdfFileFormat().toUpperCase(), outputFileName, outputFile);
+                }
+            } else {
+                //no data to be exported, no file being produced. 
+                ContextUtils.sendMessage(ctx, DPUContext.MessageType.INFO, "no rdfInput", "");
             }
         } catch (DataUnitException ex) {
             throw ContextUtils.dpuException(ctx, ex, "FilesToParliament.execute.exception");
@@ -178,5 +226,32 @@ public class Uploader extends AbstractDpu<UploaderConfig_V1> {
             }
         }
     }
-	
+
+    private void exportGraph(final List<RDFDataUnit.Entry> sources, FilesDataUnit.Entry target) throws DPUException {
+        final File targetFile = FaultToleranceUtils.asFile(faultTolerance, target);
+        // Create parent directories.
+        targetFile.getParentFile().mkdirs();
+        // Prepare inputs.
+        final org.openrdf.model.URI[] sourceUris = faultTolerance.execute(new FaultTolerance.ActionReturn<org.openrdf.model.URI[]>() {
+
+            @Override
+            public org.openrdf.model.URI[] action() throws Exception {
+                return RdfDataUnitUtils.asGraphs(sources);
+            }
+        });
+        try (FileOutputStream outStream = new FileOutputStream(targetFile); OutputStreamWriter outWriter = new OutputStreamWriter(outStream, Charset.forName("UTF-8"))) {
+            faultTolerance.execute(rdfInput, new FaultTolerance.ConnectionAction() {
+
+                @Override
+                public void action(RepositoryConnection connection) throws Exception {
+                    RDFWriter writer = Rio.createWriter(RDFFormat.NTRIPLES, outWriter);
+                    // Export data.
+                    connection.export(writer, sourceUris);
+                }
+            });
+        } catch (IOException ex) {
+            throw ContextUtils.dpuException(ctx, ex, "rdfToFiles.error.output");
+        }
+    }
+
 }
