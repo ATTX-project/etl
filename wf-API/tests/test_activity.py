@@ -1,4 +1,4 @@
-from wf_api.api.activity import activity_get, activity_post, format_response
+from wf_api.api.activity import activity_get, activity_post
 from nose.tools import eq_, assert_is_instance
 import unittest
 from wf_api.app import version, wfm_app

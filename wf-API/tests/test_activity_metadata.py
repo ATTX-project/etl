@@ -2,6 +2,7 @@ from wf_api.uv.activity_metadata import activity_get_output, ActivityGraph
 from rdflib import Graph
 from nose.tools import eq_, assert_is_instance
 import unittest
+from nose.tools import eq_
 
 
 class ActivityGraphTest(unittest.TestCase):
