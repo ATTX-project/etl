@@ -1,1 +1,11 @@
-ant.importBuild 'build.xml'
+plugins {
+    id "com.github.dkorotych.gradle-maven-exec" version "1.0"
+}
+
+task repackage(type: MavenExec) {
+    goals 'clean', 'package'
+}
+
+task wrapper(type: Wrapper) {
+   gradleVersion = '2.11' //version required
+}
