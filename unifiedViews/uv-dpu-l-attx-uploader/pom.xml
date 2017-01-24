@@ -13,7 +13,13 @@
     <packaging>bundle</packaging>
     <name>uv-dpu-l-attx-uploader</name>
     <description></description>
-
+	<repositories>
+		<repository>
+			<id>maven.eea.sk</id>
+			<name>maven.eea.sk-public</name>
+			<url>http://maven.eea.sk/artifactory/public/</url>
+		</repository>
+	</repositories>
     <properties>
         <dpu.package>org.uh.hulib.attx.uv.dpu.l.attx.uploader</dpu.package>
         <dpu.mainClass>Uploader</dpu.mainClass>
