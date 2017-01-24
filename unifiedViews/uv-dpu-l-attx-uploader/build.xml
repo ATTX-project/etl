@@ -1,8 +1,0 @@
-<project>
-    <target name="repackage">
-        <exec dir="." executable="sh">
-            <arg line="-c 'mvn clean package'" />
-        </exec>
-    </target>
-
-</project>
