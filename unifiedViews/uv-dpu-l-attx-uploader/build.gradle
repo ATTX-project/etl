@@ -1,7 +1,1 @@
-plugins {
-    id "com.github.dkorotych.gradle-maven-exec" version "1.0"
-}
-
-task repackage(type: MavenExec) {
-    goals 'clean', 'package'
-}
+ant.importBuild 'build.xml'
