@@ -54,6 +54,11 @@ repositories {
 }
 
 
+// in case we want have a ./gradlw command.
+task wrapper(type: Wrapper) {
+   gradleVersion = '3.3'
+}
+
 // Succesfully running the tests requires a logs folder existing.
 task creatLogsFolder {
   description = "Create logs folder."
@@ -68,11 +73,6 @@ task addConfigs(type: Copy) {
     from '.'
     into 'build/deployable'
     include 'database.conf'
-}
-
-// in case we want have a ./gradlw command.
-task wrapper(type: Wrapper) {
-   gradleVersion = '3.3'
 }
 
 // generate Tests report via a script.
