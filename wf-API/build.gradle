@@ -11,6 +11,8 @@ python {
 project.tasks.findByName('installPythonRequirements').sorted = false
 
 dependencies {
+    python 'pypi:appdirs:1.4.0'
+    python 'pypi:packaging:16.8'
     python 'pypi:pathlib:1.0.1'
     python 'pypi:connexion:1.0.129'
     python 'pypi:lxml:3.6.4'
@@ -87,5 +89,6 @@ task runTests(type:Exec) {
 }
 
 // the pytest taks depends on the logs folder and this specifies that.
+buildPex.dependsOn creatLogsFolder
 pytest.dependsOn creatLogsFolder
 packageDeployable.dependsOn addConfigs
