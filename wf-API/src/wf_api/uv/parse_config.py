@@ -1,103 +1,102 @@
 from rdflib import URIRef, Literal, Namespace
 from rdflib.namespace import DC, DCTERMS, RDF
-from bs4 import BeautifulSoup
+import xmltodict
 from wf_api.utils.logs import app_logger
-
-metadata_transformer = 'org.uh.attx.etl.uv.dpu.transformer.metadata.Transformer\
-ATTXMetadataConfig__V1'
 
 
 def parse_metadata_config(config, activityId, namespace, graph):
     """Parse metadata specific configuration."""
-    soup = BeautifulSoup(config, 'lxml-xml')
+    metadata_transformer = 'org.uh.attx.etl.uv.dpu.transformer.metadata.Transformer\
+ATTXMetadataConfig__V1'
+    soup = xmltodict.parse(config)
+    data = soup["object-stream"]["MasterConfigObject"]["configurations"]["entry"]["string"][1]["object-stream"][metadata_transformer]
     # If the date in the input and ouput graphs will be empty
     # it will not return any dataset information.
-    if soup.find(metadata_transformer):
-        input_graph(graph, soup, namespace, activityId)
-        output_graph(graph, soup, namespace, activityId)
-        if soup.inputGraphURI.get_text() and soup.outputGraphURI.get_text():
+    if data:
+        input_graph(graph, data, namespace, activityId)
+        output_graph(graph, data, namespace, activityId)
+        if data['inputGraphURI'] and data['outputGraphURI']:
             app_logger.info('Construct config metadata for InputGraph: {0}.'
                             'and OutputGraph: {1}'
-                            .format(soup.inputGraphURI.get_text(),
-                                    soup.outputGraphURI.get_text()))
+                            .format(data['inputGraphURI'], data['outputGraphURI']))
         else:
             app_logger.info('Construct config metadata missing information.')
     return graph
 
 
-def input_graph(graph, soup, namespace, activityId):
+def input_graph(graph, data, namespace, activityId):
     """Input graph is formed."""
     PROV = Namespace('http://www.w3.org/ns/prov#')
     SD = Namespace('http://www.w3.org/ns/sparql-service-description#')
 
-    if soup.inputGraphURI.get_text():
-        graph.add((URIRef(soup.inputGraphURI.get_text()),
+    if data['inputGraphURI']:
+        graph.add((URIRef(data['inputGraphURI']),
                   RDF.type,
                   namespace.Dataset))
-        graph.add((URIRef(soup.inputGraphURI.get_text()),
+        graph.add((URIRef(data['inputGraphURI']),
                   RDF.type,
                   SD.Dataset))
         graph.add((URIRef("{0}activity{1}".format(namespace,
                                                   activityId)),
                   PROV.used,
-                  URIRef(soup.inputGraphURI.get_text())))
-        if soup.inputGraphTitle.get_text():
-            graph.add((URIRef(soup.inputGraphURI.get_text()),
+                  URIRef(data['inputGraphURI'])))
+        if data['inputGraphTitle']:
+            graph.add((URIRef(data['inputGraphURI']),
                       DC.title,
-                      Literal(soup.inputGraphTitle.get_text())))
-        if soup.inputGraphDescription.get_text():
-            graph.add((URIRef(soup.inputGraphURI.get_text()),
+                      Literal(data['inputGraphTitle'])))
+        if data['inputGraphDescription']:
+            graph.add((URIRef(data['inputGraphURI']),
                       DC.description,
-                      Literal(soup.inputGraphDescription.get_text())))
-        if soup.inputGraphPublisher.get_text():
-            graph.add((URIRef(soup.inputGraphURI.get_text()),
+                      Literal(data['inputGraphDescription'])))
+        if data['inputGraphPublisher']:
+            graph.add((URIRef(data['inputGraphURI']),
                       DC.publisher,
-                      Literal(soup.inputGraphPublisher.get_text())))
-        if soup.inputGraphSource.get_text():
-            graph.add((URIRef(soup.inputGraphURI.get_text()),
+                      Literal(data['inputGraphPublisher'])))
+        if data['inputGraphSource']:
+            graph.add((URIRef(data['inputGraphURI']),
                       DC.source,
-                      Literal(soup.inputGraphSource.get_text())))
-        if soup.inputGraphLicence.get_text():
-            graph.add((URIRef(soup.inputGraphURI.get_text()),
+                      Literal(data['inputGraphSource'])))
+        if data['inputGraphLicence']:
+            graph.add((URIRef(data['inputGraphURI']),
                       DCTERMS.license,
-                      Literal(soup.inputGraphLicence.get_text())))
+                      Literal(data['inputGraphLicence'])))
     return graph
 
 
-def output_graph(graph, soup, namespace, activityId):
+def output_graph(graph, data, namespace, activityId):
     """Output graph is formed."""
     PROV = Namespace('http://www.w3.org/ns/prov#')
     SD = Namespace('http://www.w3.org/ns/sparql-service-description#')
 
-    if soup.outputGraphURI.get_text():
-        graph.add((URIRef(soup.outputGraphURI.get_text()),
+    if data['outputGraphURI']:
+        graph.add((URIRef(data['outputGraphURI']),
                   RDF.type,
                   namespace.Dataset))
-        graph.add((URIRef(soup.outputGraphURI.get_text()),
+        graph.add((URIRef(data['outputGraphURI']),
                   RDF.type,
                   SD.Dataset))
         graph.add((URIRef("{0}activity{1}".format(namespace,
                                                   activityId)),
                   PROV.generated,
-                  URIRef(soup.outputGraphURI.get_text())))
-        if soup.outputGraphTitle.get_text():
-            graph.add((URIRef(soup.outputGraphURI.get_text()),
+                  URIRef(data['outputGraphURI'])))
+        if data['outputGraphTitle']:
+            graph.add((URIRef(data['outputGraphURI']),
                       DC.title,
-                      Literal(soup.outputGraphTitle.get_text())))
-        if soup.outputGraphDescription.get_text():
-            graph.add((URIRef(soup.outputGraphURI.get_text()),
+                      Literal(data['outputGraphTitle'])))
+        if data['outputGraphDescription']:
+            graph.add((URIRef(data['outputGraphURI']),
                       DC.description,
-                      Literal(soup.outputGraphDescription.get_text())))
-        if soup.outputGraphPublisher.get_text():
-            graph.add((URIRef(soup.outputGraphURI.get_text()),
+                      Literal(data['outputGraphDescription'])))
+        if data['outputGraphPublisher']:
+            graph.add((URIRef(data['outputGraphURI']),
                       DC.publisher,
-                      Literal(soup.outputGraphPublisher.get_text())))
-        if soup.outputGraphSource.get_text():
-            graph.add((URIRef(soup.outputGraphURI.get_text()),
+                      Literal(data['outputGraphPublisher'])))
+        if data['outputGraphSource']:
+            graph.add((URIRef(data['outputGraphURI']),
                       DC.source,
-                      Literal(soup.outputGraphSource.get_text())))
-        if soup.outputGraphLicence.get_text():
-            graph.add((URIRef(soup.outputGraphURI.get_text()),
+                      Literal(data['outputGraphSource'])))
+        if data['outputGraphLicence']:
+            graph.add((URIRef(data['outputGraphURI']),
                       DCTERMS.license,
-                      Literal(soup.outputGraphLicence.get_text())))
+                      Literal(data['outputGraphLicence'])))
     return graph

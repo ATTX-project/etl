@@ -9,11 +9,12 @@ RUN apk add --update --repository http://dl-cdn.alpinelinux.org/alpine/edge/comm
     && apk add --no-cache py-setuptools
 
 EXPOSE 4301
+ENV version="0.1"
 
 WORKDIR /app
 
-COPY build/distributions/wf-API-0.1.tar.gz /app
-RUN tar -xf wf-API-0.1.tar.gz
+COPY build/distributions/wf-API-${version}.tar.gz /app
+RUN tar -xf wf-API-${version}.tar.gz
 
 RUN mkdir logs
 

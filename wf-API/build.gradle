@@ -1,6 +1,13 @@
-plugins {
-  id "com.linkedin.python-cli" version "0.3.36"
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath group: 'com.linkedin.pygradle', name: 'pygradle-plugin', version: '0.4.1'
+    }
 }
+
+apply plugin: 'com.linkedin.python-cli'
 
 version=0.1
 
@@ -11,11 +18,12 @@ python {
 project.tasks.findByName('installPythonRequirements').sorted = false
 
 dependencies {
+    python 'pypi:appdirs:1.4.0'
+    python 'pypi:packaging:16.8'
     python 'pypi:pathlib:1.0.1'
     python 'pypi:connexion:1.0.129'
-    python 'pypi:lxml:3.6.4'
-    python 'pypi:beautifulsoup4:4.5.1'
-    python 'pypi:rdflib:4.2.1'
+    python 'pypi:xmltodict:0.10.2'
+    python 'pypi:rdflib:4.2.2'
     python 'pypi:rdflib-jsonld:0.4.0'
     python 'pypi:PyMySQL:0.7.9'
     python 'pypi:gunicorn:19.6.0'
@@ -36,7 +44,7 @@ repositories {
     // using a web repository
     ivy{
       name 'pypi-attx'
-  		url "http://attx-dev.hulib.helsinki.fi:5039/pivy/"
+  		url "http://attx-dev.hulib.helsinki.fi:5039/"
   		layout 'pattern' , {
   			artifact '[organisation]/[module]/[revision]/[artifact]-[revision](-[classifier]).[ext]'
   			ivy '[organisation]/[module]/[revision]/[module]-[revision].ivy'
@@ -45,7 +53,7 @@ repositories {
     // setting the repository for jenkins use
     ivy{
       name 'pypi-jenkins'
-  		url "http://pivyrepo:5039/pivy/"
+  		url "http://pypirepo:5039/"
   		layout 'pattern' , {
   			artifact '[organisation]/[module]/[revision]/[artifact]-[revision](-[classifier]).[ext]'
   			ivy '[organisation]/[module]/[revision]/[module]-[revision].ivy'
@@ -53,6 +61,11 @@ repositories {
     }
 }
 
+
+// in case we want have a ./gradlw command.
+task wrapper(type: Wrapper) {
+   gradleVersion = '3.3'
+}
 
 // Succesfully running the tests requires a logs folder existing.
 task creatLogsFolder {
@@ -70,11 +83,6 @@ task addConfigs(type: Copy) {
     include 'database.conf'
 }
 
-// in case we want have a ./gradlw command.
-task wrapper(type: Wrapper) {
-   gradleVersion = '3.3'
-}
-
 // generate Tests report via a script.
 task runTests(type:Exec) {
   description = "generate Tests report via a script."
@@ -87,5 +95,6 @@ task runTests(type:Exec) {
 }
 
 // the pytest taks depends on the logs folder and this specifies that.
+buildPex.dependsOn creatLogsFolder
 pytest.dependsOn creatLogsFolder
 packageDeployable.dependsOn addConfigs
