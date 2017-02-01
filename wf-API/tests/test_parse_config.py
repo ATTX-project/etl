@@ -13,7 +13,7 @@ class ParseConfigTest(unittest.TestCase):
         self.graph = Graph()
         self.test_graph = Graph()
         self.activityId = '1'
-        self.graph.namespace = Namespace('http://helsinki.fi/library/onto#')
+        self.graph.namespace = Namespace('http://data.hulib.helsinki.fi/attx/')
         self.graph.bind('kaisa', 'http://helsinki.fi/library/onto#')
         self.graph.bind('dc', 'http://purl.org/dc/elements/1.1/')
         self.graph.bind('schema', 'http://schema.org/')

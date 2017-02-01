@@ -1,5 +1,5 @@
-@base <http://helsinki.fi/library/> .
-@prefix kaisa: <http://helsinki.fi/library/onto#> .
+@base <http://data.hulib.helsinki.fi/attx/> .
+@prefix kaisa: <http://data.hulib.helsinki.fi/attx/> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix xml: <http://www.w3.org/XML/1998/namespace> .
