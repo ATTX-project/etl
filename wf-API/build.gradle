@@ -1,6 +1,13 @@
-plugins {
-  id "com.linkedin.python-cli" version "0.3.36"
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath group: 'com.linkedin.pygradle', name: 'pygradle-plugin', version: '0.4.1'
+    }
 }
+
+apply plugin: 'com.linkedin.python-cli'
 
 version=0.1
 
@@ -15,9 +22,8 @@ dependencies {
     python 'pypi:packaging:16.8'
     python 'pypi:pathlib:1.0.1'
     python 'pypi:connexion:1.0.129'
-    python 'pypi:lxml:3.6.4'
-    python 'pypi:beautifulsoup4:4.5.1'
-    python 'pypi:rdflib:4.2.1'
+    python 'pypi:xmltodict:0.10.2'
+    python 'pypi:rdflib:4.2.2'
     python 'pypi:rdflib-jsonld:0.4.0'
     python 'pypi:PyMySQL:0.7.9'
     python 'pypi:gunicorn:19.6.0'
