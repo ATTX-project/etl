@@ -79,6 +79,8 @@ public class Infras2InternalTest {
     public void execute() throws Exception {
         
         Infras2InternalConfig_V1 config = new Infras2InternalConfig_V1();
+        config.setBaseName(baseName);
+        
         Infras2Internal plugin = new Infras2Internal();
         plugin.configure((new ConfigurationBuilder()).setDpuConfiguration(config).toString());
 
@@ -106,11 +108,11 @@ public class Infras2InternalTest {
                 Model m = Rio.parse(in, documentURI.toString(), RDFFormat.TURTLE);
 
                 String existingURN = "urn:nbn:fi:research-infras-201607251";
-                String existingNameFI = "Eurooppalainen sosiaalitutkimus";
-                Resource r = f.createURI(baseName + "infra/" + URLEncoder.encode(existingURN));
-                assertTrue(m.contains(r, RDF.TYPE, f.createURI(baseName + "types/infrastructure")));
-                assertTrue(m.contains(r, DCTERMS.IDENTIFIER, f.createLiteral(existingURN)));
-                assertTrue(m.contains(r, DCTERMS.TITLE, f.createLiteral(existingNameFI)));
+                String existingNameEN = "European Social Survey";
+                //Resource r = f.createURI(baseName + "infra/" + URLEncoder.encode(existingURN));
+                                
+                assertTrue(m.contains(null, DCTERMS.IDENTIFIER, f.createURI(existingURN)));
+                assertTrue(m.contains(null, DCTERMS.TITLE, f.createLiteral(existingNameEN)));
 
 
                 in.close();
