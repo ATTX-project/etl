@@ -9,10 +9,11 @@ def parse_metadata_config(config, activityId, namespace, graph):
     metadata_transformer = 'org.uh.attx.etl.uv.dpu.transformer.metadata.Transformer\
 ATTXMetadataConfig__V1'
     soup = xmltodict.parse(config)
-    data = soup["object-stream"]["MasterConfigObject"]["configurations"]["entry"]["string"][1]["object-stream"][metadata_transformer]
     # If the date in the input and ouput graphs will be empty
     # it will not return any dataset information.
-    if data:
+    if metadata_transformer in soup["object-stream"]["MasterConfigObject"]["configurations"]["entry"]["string"][1]["object-stream"].keys():
+        data = soup["object-stream"]["MasterConfigObject"]["configurations"]["entry"]["string"][1]["object-stream"][metadata_transformer]
+
         input_graph(graph, data, namespace, activityId)
         output_graph(graph, data, namespace, activityId)
         if data['inputGraphURI'] and data['outputGraphURI']:
