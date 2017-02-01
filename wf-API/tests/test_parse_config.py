@@ -3,6 +3,7 @@ from rdflib import Graph, Namespace
 from rdflib.compare import similar
 from nose.tools import eq_, ok_
 import unittest
+import HTMLParser
 
 
 class ParseConfigTest(unittest.TestCase):
@@ -12,9 +13,10 @@ class ParseConfigTest(unittest.TestCase):
         """Set up test fixtures."""
         self.graph = Graph()
         self.test_graph = Graph()
+        self.blank_graph = Graph()
         self.activityId = '1'
         self.graph.namespace = Namespace('http://data.hulib.helsinki.fi/attx/')
-        self.graph.bind('kaisa', 'http://helsinki.fi/library/onto#')
+        self.graph.bind('kaisa', 'http://data.hulib.helsinki.fi/attx/')
         self.graph.bind('dc', 'http://purl.org/dc/elements/1.1/')
         self.graph.bind('schema', 'http://schema.org/')
         self.graph.bind('pwo', 'http://purl.org/spar/pwo/')
@@ -25,7 +27,12 @@ class ParseConfigTest(unittest.TestCase):
 
         # Tests are run from top directory
         self.config = open('tests/examples/config.xml', 'r')
+        with open('tests/examples/config_sparql.xml', 'r') as sparqlfile:
+            self.config_sparql = sparqlfile.read().replace('\n', '')
+        with open('tests/examples/config_other.xml', 'r') as oytherfile:
+            self.config_other = oytherfile.read().replace('\n', '')
         self.test_graph.parse('tests/examples/dataset.ttl', format='turtle')
+        self.blank_graph.parse('tests/examples/blank.ttl', format='turtle')
 
     def tearDown(self):
         """Tear down test fixtures."""
@@ -40,6 +47,29 @@ class ParseConfigTest(unittest.TestCase):
         # Considering blank nodes we need to check if the graphs are similar
         eq_(similar(result, self.test_graph), True,
             "Test to if the resulting graph corresponds to test graph.")
+
+    def test_parse_metadata_config_sparql(self):
+        """Test if input output encoding is peformed correctly."""
+        result = Graph()
+        parsed = HTMLParser.HTMLParser().unescape(self.config_sparql)
+        print parsed
+        result = parse_metadata_config(parsed, self.activityId,
+                                       self.graph.namespace, self.graph)
+
+        # Considering blank nodes we need to check if the graphs are similar
+        eq_(similar(result, self.blank_graph), True,
+            "Test to if the resulting graph corresponds is blank.")
+
+    def test_parse_metadata_config_other(self):
+        """Test if input output encoding is peformed correctly."""
+        result = Graph()
+        parsed = HTMLParser.HTMLParser().unescape(self.config_other)
+        result = parse_metadata_config(parsed, self.activityId,
+                                       self.graph.namespace, self.graph)
+
+        # Considering blank nodes we need to check if the graphs are similar
+        eq_(similar(result, self.blank_graph), True,
+            "Test to if the resulting graph corresponds is blank.")
 
     def test_namespaces(self):
         """Test for Namespaces."""
