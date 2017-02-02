@@ -24,7 +24,7 @@ def activity_get(modifiedSince=None, format=None):
 
 def activity_post():
     """Operation cannot be perfomed."""
-    app_logger.info('Response from the Activity API is: POST not allowed.')
+    app_logger.warning('Response from the Activity API is: POST not allowed.')
     response = Response(
         response='Operation Not Allowed.',
         status=405,

@@ -24,7 +24,7 @@ def workflow_get(modifiedSince=None, format=None):
 
 def workflow_post():
     """Operation cannot be perfomed."""
-    app_logger.info('Reponse from the Workflow API is: POST not allowed.')
+    app_logger.warning('Reponse from the Workflow API is: POST not allowed.')
     response = Response(
         response='Operation Not Allowed.',
         status=405,

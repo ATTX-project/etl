@@ -23,7 +23,7 @@ ATTXMetadataConfig__V1'
         app_logger.info('Construct config metadata missing information.')
     except Exception as error:
         return error
-        app_logger.info('Something is wrong: {0}'.format(error))
+        app_logger.error('Something is wrong: {0}'.format(error))
 
 
 def input_graph(graph, data, namespace, activityId):
