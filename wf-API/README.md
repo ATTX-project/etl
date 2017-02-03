@@ -27,7 +27,6 @@ and the specific [ATTX metadata plugin](https://github.com/ATTX-project/etl/tree
 characteristic to the ETL process. Such information can be consumed in order to be integrated in a graph database.
 
 The WF API requires python 2.7.6 installed.
-To run the server, please execute the following (preferably in a virtual environment):
 
 ### Build with Gradle
 
@@ -42,8 +41,8 @@ Install [gradle](https://gradle.org/gradle-download/?_ga=1.226518941.1083404848.
 * see tasks: `./gradlew tasks` and depenencies `./gradlew depenencies`
 * see test coverage `./gradlew :wf-API:pytest coverage` it will generate a html report in `build/coverage/htmlcov`
 
-### Build without Gradle
-
+### Run without Gradle
+To run the server, please execute the following (preferably in a virtual environment):
 ```
 pip install -r requirements
 python app.py
