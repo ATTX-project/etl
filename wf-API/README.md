@@ -22,8 +22,8 @@ This container will be part of the docker-compose run together with the unifiedv
 # WF API server
 
 ## Overview
-The WF exposes information from the ETL component (intial use case is the [UnifiedViews](https://github.com/ATTX-project/etl/tree/feature-uv-docker/unifiedViews)
-and the specific [ATTX metadata plugin](https://github.com/ATTX-project/etl/tree/feature-uv-docker/unifiedViews/dpu-t-attx-metadata) ) in order to exposes Workflow and Activity related information
+The WF exposes information from the ETL component (intial use case is the UnifiedViews
+and the specific ATTX metadata plugin) in order to exposes Workflow and Activity related information
 characteristic to the ETL process. Such information can be consumed in order to be integrated in a graph database.
 
 The WF API requires python 2.7 installed.
