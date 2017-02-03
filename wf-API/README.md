@@ -22,11 +22,11 @@ This container will be part of the docker-compose run together with the unifiedv
 # WF API server
 
 ## Overview
-The WF exposes information fromthe ETL component (intial use case is the [UnifiedViews](https://github.com/ATTX-project/etl/tree/feature-uv-docker/unifiedViews)
+The WF exposes information from the ETL component (intial use case is the [UnifiedViews](https://github.com/ATTX-project/etl/tree/feature-uv-docker/unifiedViews)
 and the specific [ATTX metadata plugin](https://github.com/ATTX-project/etl/tree/feature-uv-docker/unifiedViews/dpu-t-attx-metadata) ) in order to exposes Workflow and Activity related information
 characteristic to the ETL process. Such information can be consumed in order to be integrated in a graph database.
 
-The WF API requires python 2.7.6 installed.
+The WF API requires python 2.7 installed.
 
 ### Build with Gradle
 
@@ -42,6 +42,7 @@ Install [gradle](https://gradle.org/gradle-download/?_ga=1.226518941.1083404848.
 * see test coverage `./gradlew :wf-API:pytest coverage` it will generate a html report in `build/coverage/htmlcov`
 
 ### Run without Gradle
+
 To run the server, please execute the following (preferably in a virtual environment):
 ```
 pip install -r requirements
@@ -63,8 +64,7 @@ http://localhost:4301/v$versionNb/swagger.json
 
 Where `$versionNb` is the version number specified under `app.py` in `version` variable (used in the URL), but also in the `build.gradle` (same variable but used for the build).
 
-for the database configuration see `database.conf` file.
-
+For the database configuration see `database.conf` file.
 
 ## Running Tests
 
