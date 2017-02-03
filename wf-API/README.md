@@ -36,8 +36,8 @@ Install [gradle](https://gradle.org/gradle-download/?_ga=1.226518941.1083404848.
 * build: `./gradlew build`
 * other tasks: `./gradlew :runTests` or `./gradlew :wf-API:pytest`
 * exclude tasks: `./gradlew build -x :wf-API:pytest`
-* debugging: `./gradlew :wf-API:testsReport --stacktrace`
-* do all: `./gradlew clean build -x :wf-API:pytest -x :wf-API:testsReport`
+* debugging: `./gradlew :wf-API:runTests --stacktrace`
+* do all: `./gradlew clean build -x :wf-API:pytest -x :wf-API:runTests`
 * see tasks: `./gradlew tasks` and depenencies `./gradlew depenencies`
 * see test coverage `./gradlew :wf-API:pytest coverage` it will generate a html report in `build/coverage/htmlcov`
 
