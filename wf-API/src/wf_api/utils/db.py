@@ -8,7 +8,7 @@ def connect_DB(db_conf=None):
     parser = SafeConfigParser()
 
     if db_conf is None:
-        parser.read('database.conf')
+        parser.read('connections.conf')
     else:
         parser.read(db_conf)
 
@@ -29,3 +29,19 @@ def connect_DB(db_conf=None):
             \nError Code is {0};\
             \nError Content is {1};'.format(error.args[0], error.args[1]))
         return error
+
+
+def empty_workflows_DB():
+    """Check if the DB is empty."""
+    db_cursor = connect_DB()
+    db_cursor.execute("""SELECT EXISTS(SELECT 1 FROM ppl_model) as 'count'""")
+    result = db_cursor.fetchone()
+    return result['count']
+
+
+def empty_activities_DB():
+    """Check if the DB is empty."""
+    db_cursor = connect_DB()
+    db_cursor.execute("""SELECT EXISTS(SELECT 1 FROM exec_pipeline) as 'count'""")
+    result = db_cursor.fetchone()
+    return result['count']

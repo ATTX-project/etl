@@ -26,13 +26,13 @@ class ParseConfigTest(unittest.TestCase):
                         'http://www.w3.org/ns/sparql-service-description#')
 
         # Tests are run from top directory
-        self.config = open('tests/examples/config.xml', 'r')
-        with open('tests/examples/config_sparql.xml', 'r') as sparqlfile:
+        self.config = open('tests/resources/config.xml', 'r')
+        with open('tests/resources/config_sparql.xml', 'r') as sparqlfile:
             self.config_sparql = sparqlfile.read().replace('\n', '')
-        with open('tests/examples/config_other.xml', 'r') as oytherfile:
+        with open('tests/resources/config_other.xml', 'r') as oytherfile:
             self.config_other = oytherfile.read().replace('\n', '')
-        self.test_graph.parse('tests/examples/dataset.ttl', format='turtle')
-        self.blank_graph.parse('tests/examples/blank.ttl', format='turtle')
+        self.test_graph.parse('tests/resources/dataset.ttl', format='turtle')
+        self.blank_graph.parse('tests/resources/blank.ttl', format='turtle')
 
     def tearDown(self):
         """Tear down test fixtures."""

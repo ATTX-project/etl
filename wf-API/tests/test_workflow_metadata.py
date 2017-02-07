@@ -1,5 +1,5 @@
 from wf_api.uv.workflow_metadata import workflow_get_output, WorkflowGraph
-from nose.tools import eq_, assert_is_instance
+from nose.tools import assert_is_instance
 import unittest
 from rdflib import Graph
 
@@ -21,9 +21,7 @@ class WorkflowGraphTest(unittest.TestCase):
 
     def test_workflow_get_output(self):
         """Test Workflow processing output is Graph."""
-        if workflow_get_output('turtle', None) is None:
-            eq_(workflow_get_output('turtle', None), None)
-        else:
+        if workflow_get_output('turtle', None) is not (None or 'Empty'):
             data_turtle = self.graph.parse(data=str(workflow_get_output(self.format_turtle,
                                                                         None))
                                            .encode('utf-8'),

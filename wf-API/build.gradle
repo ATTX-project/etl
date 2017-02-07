@@ -28,6 +28,7 @@ dependencies {
     python 'pypi:PyMySQL:0.7.9'
     python 'pypi:gunicorn:19.6.0'
     python 'pypi:pytest-html:1.12.0'
+    python 'pypi:python-dateutil:2.6.0'
     test 'pypi:nose:1.3.7'
 }
 

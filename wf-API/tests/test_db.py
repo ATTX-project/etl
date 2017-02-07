@@ -11,7 +11,7 @@ class DBTestCase(unittest.TestCase):
 
     def test_connection(self):
         """Test connection."""
-        cursor = connect_DB('database.conf')
+        cursor = connect_DB('connections.conf')
         if isinstance(cursor, mysql.cursors.DictCursor):
             self.assertRaises(Exception)
         else:

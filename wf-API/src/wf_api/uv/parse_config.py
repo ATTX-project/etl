@@ -32,36 +32,19 @@ def input_graph(graph, data, namespace, activityId):
     SD = Namespace('http://www.w3.org/ns/sparql-service-description#')
 
     if data['inputGraphURI']:
-        graph.add((URIRef(data['inputGraphURI']),
-                  RDF.type,
-                  namespace.Dataset))
-        graph.add((URIRef(data['inputGraphURI']),
-                  RDF.type,
-                  SD.Dataset))
-        graph.add((URIRef("{0}activity{1}".format(namespace,
-                                                  activityId)),
-                  PROV.used,
-                  URIRef(data['inputGraphURI'])))
+        graph.add((URIRef(data['inputGraphURI']), RDF.type, namespace.Dataset))
+        graph.add((URIRef(data['inputGraphURI']), RDF.type, SD.Dataset))
+        graph.add((URIRef("{0}activity{1}".format(namespace, activityId)), PROV.used, URIRef(data['inputGraphURI'])))
         if data['inputGraphTitle']:
-            graph.add((URIRef(data['inputGraphURI']),
-                      DC.title,
-                      Literal(data['inputGraphTitle'])))
+            graph.add((URIRef(data['inputGraphURI']), DC.title, Literal(data['inputGraphTitle'])))
         if data['inputGraphDescription']:
-            graph.add((URIRef(data['inputGraphURI']),
-                      DC.description,
-                      Literal(data['inputGraphDescription'])))
+            graph.add((URIRef(data['inputGraphURI']), DC.description, Literal(data['inputGraphDescription'])))
         if data['inputGraphPublisher']:
-            graph.add((URIRef(data['inputGraphURI']),
-                      DC.publisher,
-                      Literal(data['inputGraphPublisher'])))
+            graph.add((URIRef(data['inputGraphURI']), DC.publisher, Literal(data['inputGraphPublisher'])))
         if data['inputGraphSource']:
-            graph.add((URIRef(data['inputGraphURI']),
-                      DC.source,
-                      Literal(data['inputGraphSource'])))
+            graph.add((URIRef(data['inputGraphURI']), DC.source, Literal(data['inputGraphSource'])))
         if data['inputGraphLicence']:
-            graph.add((URIRef(data['inputGraphURI']),
-                      DCTERMS.license,
-                      Literal(data['inputGraphLicence'])))
+            graph.add((URIRef(data['inputGraphURI']), DCTERMS.license, Literal(data['inputGraphLicence'])))
     return graph
 
 
@@ -71,34 +54,17 @@ def output_graph(graph, data, namespace, activityId):
     SD = Namespace('http://www.w3.org/ns/sparql-service-description#')
 
     if data['outputGraphURI']:
-        graph.add((URIRef(data['outputGraphURI']),
-                  RDF.type,
-                  namespace.Dataset))
-        graph.add((URIRef(data['outputGraphURI']),
-                  RDF.type,
-                  SD.Dataset))
-        graph.add((URIRef("{0}activity{1}".format(namespace,
-                                                  activityId)),
-                  PROV.generated,
-                  URIRef(data['outputGraphURI'])))
+        graph.add((URIRef(data['outputGraphURI']), RDF.type, namespace.Dataset))
+        graph.add((URIRef(data['outputGraphURI']), RDF.type, SD.Dataset))
+        graph.add((URIRef("{0}activity{1}".format(namespace, activityId)), PROV.generated, URIRef(data['outputGraphURI'])))
         if data['outputGraphTitle']:
-            graph.add((URIRef(data['outputGraphURI']),
-                      DC.title,
-                      Literal(data['outputGraphTitle'])))
+            graph.add((URIRef(data['outputGraphURI']), DC.title, Literal(data['outputGraphTitle'])))
         if data['outputGraphDescription']:
-            graph.add((URIRef(data['outputGraphURI']),
-                      DC.description,
-                      Literal(data['outputGraphDescription'])))
+            graph.add((URIRef(data['outputGraphURI']), DC.description, Literal(data['outputGraphDescription'])))
         if data['outputGraphPublisher']:
-            graph.add((URIRef(data['outputGraphURI']),
-                      DC.publisher,
-                      Literal(data['outputGraphPublisher'])))
+            graph.add((URIRef(data['outputGraphURI']), DC.publisher, Literal(data['outputGraphPublisher'])))
         if data['outputGraphSource']:
-            graph.add((URIRef(data['outputGraphURI']),
-                      DC.source,
-                      Literal(data['outputGraphSource'])))
+            graph.add((URIRef(data['outputGraphURI']), DC.source, Literal(data['outputGraphSource'])))
         if data['outputGraphLicence']:
-            graph.add((URIRef(data['outputGraphURI']),
-                      DCTERMS.license,
-                      Literal(data['outputGraphLicence'])))
+            graph.add((URIRef(data['outputGraphURI']), DCTERMS.license, Literal(data['outputGraphLicence'])))
     return graph

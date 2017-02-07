@@ -1,6 +1,6 @@
 from wf_api.uv.activity_metadata import activity_get_output, ActivityGraph
 from rdflib import Graph
-from nose.tools import eq_, assert_is_instance
+from nose.tools import assert_is_instance
 import unittest
 
 
@@ -21,9 +21,7 @@ class ActivityGraphTest(unittest.TestCase):
 
     def test_activity_get_output(self):
         """Test Activity processing output is Graph."""
-        if activity_get_output('turtle', None) is None:
-            eq_(activity_get_output('turtle', None), None)
-        else:
+        if activity_get_output('turtle', None) is not (None or 'Empty'):
             data_turtle = self.graph.parse(data=str(activity_get_output(self.format_turtle, None))
                                            .encode('utf-8'),
                                            format=self.format_turtle)

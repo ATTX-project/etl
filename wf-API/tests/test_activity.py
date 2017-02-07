@@ -33,10 +33,7 @@ class ActivityResponseTest(unittest.TestCase):
         result = self.app.get('/v{0}/activity'.format(version))
 
         # assert the status code of the response
-        if result.data is not None:
-            eq_(result.status_code, 200)
-        else:
-            eq_(result.status_code, 304)
+        self.assertIn(result.status_code, [200, 204, 304, 405])
 
     def test_activity_post_data(self):
         """Test Activity POST Endpoint data response."""
@@ -53,6 +50,8 @@ class ActivityResponseTest(unittest.TestCase):
             data = self.graph.parse(data=str(result.data).encode('utf-8'),
                                     format='json-ld')
             assert_is_instance(data, type(Graph()))
+        elif result.status_code == 204:
+            eq_(result.data, '')
         elif result.status_code == 304:
             eq_(result.data, None)
 
@@ -65,6 +64,8 @@ class ActivityResponseTest(unittest.TestCase):
             data = self.graph.parse(data=str(result.data).encode('utf-8'),
                                     format='turtle')
             assert_is_instance(data, type(Graph()))
+        elif result.status_code == 204:
+            eq_(result.data, '')
         elif result.status_code == 304:
             eq_(result.data, None)
 
@@ -77,6 +78,8 @@ class ActivityResponseTest(unittest.TestCase):
             data = self.graph.parse(data=str(result.data).encode('utf-8'),
                                     format='json-ld')
             assert_is_instance(data, type(Graph()))
+        elif result.status_code == 204:
+            eq_(result.data, '')
         elif result.status_code == 304:
             eq_(result.data, None)
 
@@ -88,6 +91,8 @@ class ActivityResponseTest(unittest.TestCase):
             data = self.graph.parse(data=str(result.data).encode('utf-8'),
                                     format='turtle')
             assert_is_instance(data, type(Graph()))
+        elif result.status_code == 204:
+            eq_(result.data, '')
         elif result.status_code == 304:
             eq_(result.data, None)
 

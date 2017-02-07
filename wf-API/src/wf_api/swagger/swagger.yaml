@@ -48,8 +48,10 @@ paths:
       responses:
         200:
           description: "Successful response."
+        204:
+          description: "No Content."
         304:
-          description: "No Change."
+          description: "Not Changed."
       x-tags:
       - tag: "wfAPI"
     post:
@@ -90,8 +92,10 @@ paths:
       responses:
         200:
           description: "Successful response."
+        204:
+          description: "No Content."
         304:
-          description: "No Change."
+          description: "Not Changed."
       x-tags:
       - tag: "wfAPI"
     post:
