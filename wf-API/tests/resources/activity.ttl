@@ -1,5 +1,6 @@
 @base <http://data.hulib.helsinki.fi/attx/> .
-@prefix kaisa: <http://data.hulib.helsinki.fi/attx/> .
+@prefix attx: <http://data.hulib.helsinki.fi/attx/> .
+@prefix attxonto: <http://data.hulib.helsinki.fi/attx/onto#> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix xml: <http://www.w3.org/XML/1998/namespace> .
@@ -10,37 +11,37 @@
 @prefix sd: <http://www.w3.org/ns/sparql-service-description#> .
 @prefix pwo: <http://purl.org/spar/pwo/> .
 
-kaisa:wf2_dataset1
-  a kaisa:Dataset, sd:Dataset ;
+attx:wf2_dataset1
+  a attxonto:Dataset, sd:Dataset ;
   dcterms:title "VIRTA Publication Dataset" ;
   dcterms:description "National list of publication that are part of the official VIRTA collection."@en;
   dcterms:publisher "Ministry of Culture and Education" ;
   dcterms:source <http://virta.fi/data_dump.csv> ; # actual source is a CSV file.
   dcterms:license <http://creativecommons.org/licenses/by/4.0/> .
 
-kaisa:wf2_dataset2
-  a kaisa:Dataset, sd:Dataset ;
+attx:wf2_dataset2
+  a attxonto:Dataset, sd:Dataset ;
   dcterms:title "CRIS Publication Dataset" ;
   dcterms:description "National list of publication that are part of the official CRIS collection."@en;
   dcterms:publisher "Ministry of Culture and Education" ;
   dcterms:source <http://cris.fi/data_dump.csv> ; # actual source is a CSV file.
   dcterms:license <http://creativecommons.org/licenses/by/4.0/> .
 
-kaisa:wf2_dataset3
-  a kaisa:Dataset, sd:Dataset ;
+attx:wf2_dataset3
+  a attxonto:Dataset, sd:Dataset ;
   dcterms:title "Selected VIRTA Publication Data in RDF" ;
   dcterms:description "Dataset includes titles and external identifiers for every publication and research fields, see mapping steps for details"@en;
   dcterms:license <http://creativecommons.org/licenses/by/4.0/> . # license should be the same as original data
 
-kaisa:activity2
-  a prov:Activity , kaisa:WorkflowExecution ;
+attx:activity2
+  a prov:Activity , attxonto:WorkflowExecution ;
   prov:startedAtTime  "2016-11-17T13:02:10+02:00"^^xsd:dateTime ;
   prov:endedAtTime "2016-11-17T13:40:47+02:00"^^xsd:dateTime ;
   prov:qualifiedAssociation [
     a prov:Assocation ;
-    prov:agent kaisa:ETL ;
-    prov:hadPlan kaisa:wf2 ;
+    prov:agent attx:ETL ;
+    prov:hadPlan attx:wf2 ;
   ] ;
-  prov:used kaisa:wf2_dataset1 ;
-  prov:used kaisa:wf2_dataset2 ;
-  prov:generated kaisa:wf2_dataset3 .
+  prov:used attx:wf2_dataset1 ;
+  prov:used attx:wf2_dataset2 ;
+  prov:generated attx:wf2_dataset3 .

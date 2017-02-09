@@ -1,7 +1,7 @@
 import connexion
 from wf_api.utils.logs import main_logger
 
-version = "0.1"
+api_version = "0.1"
 
 wfm_app = connexion.App(__name__, specification_dir='./swagger/')
 wfm_app.add_api(
@@ -9,7 +9,7 @@ wfm_app.add_api(
     arguments={
         'title': 'ATTX wf internal API for communication between\
          WF Management component and Graph Manager component.'},
-    base_path='/v{}'.format(version))
+    base_path='/{0}'.format(api_version))
 
 if __name__ == '__main__':
     wfm_app.run(port=4301, host="0.0.0.0")

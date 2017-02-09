@@ -1,6 +1,6 @@
 import pymysql as mysql
-from ConfigParser import SafeConfigParser
 from wf_api.utils.logs import app_logger
+from ConfigParser import SafeConfigParser
 
 
 def connect_DB(db_conf=None):

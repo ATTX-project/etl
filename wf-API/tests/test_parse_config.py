@@ -16,14 +16,14 @@ class ParseConfigTest(unittest.TestCase):
         self.blank_graph = Graph()
         self.activityId = '1'
         self.graph.namespace = Namespace('http://data.hulib.helsinki.fi/attx/')
-        self.graph.bind('kaisa', 'http://data.hulib.helsinki.fi/attx/')
+        self.graph.bind('attx', 'http://data.hulib.helsinki.fi/attx/')
+        self.graph.bind('attxonto', 'http://data.hulib.helsinki.fi/attx/onto#')
         self.graph.bind('dc', 'http://purl.org/dc/elements/1.1/')
         self.graph.bind('schema', 'http://schema.org/')
         self.graph.bind('pwo', 'http://purl.org/spar/pwo/')
         self.graph.bind('prov', 'http://www.w3.org/ns/prov#')
         self.graph.bind('dcterms', 'http://purl.org/dc/terms/')
-        self.graph.bind('sd',
-                        'http://www.w3.org/ns/sparql-service-description#')
+        self.graph.bind('sd', 'http://www.w3.org/ns/sparql-service-description#')
 
         # Tests are run from top directory
         self.config = open('tests/resources/config.xml', 'r')
@@ -41,10 +41,11 @@ class ParseConfigTest(unittest.TestCase):
     def test_parse_metadata_config(self):
         """Test if input output encoding is peformed correctly."""
         result = Graph()
-        result = parse_metadata_config(self.config, self.activityId,
-                                       self.graph.namespace, self.graph)
+        result = parse_metadata_config(self.config, self.activityId, self.graph)
 
         # Considering blank nodes we need to check if the graphs are similar
+        print result.serialize(format='turtle')
+        print self.test_graph.serialize(format='turtle')
         eq_(similar(result, self.test_graph), True,
             "Test to if the resulting graph corresponds to test graph.")
 
@@ -53,8 +54,7 @@ class ParseConfigTest(unittest.TestCase):
         result = Graph()
         parsed = HTMLParser.HTMLParser().unescape(self.config_sparql)
         print parsed
-        result = parse_metadata_config(parsed, self.activityId,
-                                       self.graph.namespace, self.graph)
+        result = parse_metadata_config(parsed, self.activityId, self.graph)
 
         # Considering blank nodes we need to check if the graphs are similar
         eq_(similar(result, self.blank_graph), True,
@@ -64,8 +64,7 @@ class ParseConfigTest(unittest.TestCase):
         """Test if input output encoding is peformed correctly."""
         result = Graph()
         parsed = HTMLParser.HTMLParser().unescape(self.config_other)
-        result = parse_metadata_config(parsed, self.activityId,
-                                       self.graph.namespace, self.graph)
+        result = parse_metadata_config(parsed, self.activityId, self.graph)
 
         # Considering blank nodes we need to check if the graphs are similar
         eq_(similar(result, self.blank_graph), True,

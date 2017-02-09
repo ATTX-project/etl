@@ -1,6 +1,6 @@
-from wf_api.utils.db import connect_DB
 import unittest
 import pymysql as mysql
+from wf_api.utils.db import connect_DB
 
 
 class DBTestCase(unittest.TestCase):

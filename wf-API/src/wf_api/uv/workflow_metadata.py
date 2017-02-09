@@ -1,9 +1,9 @@
-import dateutil.parser
-from rdflib import Graph, URIRef, Literal, Namespace
+from datetime import datetime
 from rdflib.namespace import DC, RDF
 from wf_api.utils.logs import app_logger
+from rdflib import Graph, URIRef, Literal, Namespace
 from wf_api.utils.db import connect_DB, empty_workflows_DB
-from wf_api.utils.prefixes import bind_prefix
+from wf_api.utils.prefixes import bind_prefix, ATTXBase, ATTXOnto
 
 
 class WorkflowGraph(object):
@@ -16,22 +16,21 @@ class WorkflowGraph(object):
 
         # bind prefixes
         bind_prefix(workflow_graph)
-        KAISA = Namespace('http://helsinki.fi/library/onto#')
 
         db_cursor = connect_DB()
 
-        test_workflows = cls.fetch_workflows(db_cursor, workflow_graph, KAISA, modifiedSince)
+        test_workflows = cls.fetch_workflows(db_cursor, workflow_graph, modifiedSince)
         if test_workflows == "No workflows":
             db_cursor.connection.close()
             return workflow_graph
         else:
-            cls.fetch_steps(db_cursor, workflow_graph, KAISA)
-            cls.fetch_steps_sequence(db_cursor, workflow_graph, KAISA)
+            cls.fetch_steps(db_cursor, workflow_graph)
+            cls.fetch_steps_sequence(db_cursor, workflow_graph)
             db_cursor.connection.close()
             return workflow_graph
 
     @staticmethod
-    def fetch_workflows(db_cursor, graph, namespace, modifiedSince):
+    def fetch_workflows(db_cursor, graph, modifiedSince):
         """Create Workflow ID and description."""
         # Get general workflow information on the last executed workflow
         # Get only public workflows
@@ -49,28 +48,28 @@ class WorkflowGraph(object):
 
         result_set = db_cursor.fetchall()
         if db_cursor.rowcount > 0:
-            return WorkflowGraph.construct_wf_graph(graph, result_set, namespace, modifiedSince)
+            return WorkflowGraph.construct_wf_graph(graph, result_set, modifiedSince)
         else:
             return "No workflows"
 
     @staticmethod
-    def construct_wf_graph(graph, data_row, namespace, modifiedSince):
+    def construct_wf_graph(graph, data_row, modifiedSince):
         """Test to see if record has been modifed."""
         for row in data_row:
             last_date = row['lastChange']
             if modifiedSince is None:
                 compare_date = None
             else:
-                compare_date = dateutil.parser.parse(modifiedSince)
+                compare_date = datetime.strptime(modifiedSince, '%Y-%m-%dT%H:%M:%SZ')
             if modifiedSince is None or (modifiedSince and last_date >= compare_date):
-                graph.add((URIRef("{0}workflow{1}".format(namespace, row['workflowId'])), RDF.type, namespace.Workflow))
-                graph.add((URIRef("{0}workflow{1}".format(namespace, row['workflowId'])), DC.title, Literal(row['workflowTitle'])))
-                graph.add((URIRef("{0}workflow{1}".format(namespace, row['workflowId'])), DC.description, Literal(row['description'])))
+                graph.add((URIRef("{0}workflow{1}".format(ATTXBase, row['workflowId'])), RDF.type, ATTXOnto.Workflow))
+                graph.add((URIRef("{0}workflow{1}".format(ATTXBase, row['workflowId'])), DC.title, Literal(row['workflowTitle'])))
+                graph.add((URIRef("{0}workflow{1}".format(ATTXBase, row['workflowId'])), DC.description, Literal(row['description'])))
             else:
                 return "No workflows"
 
     @staticmethod
-    def fetch_steps(db_cursor, graph, namespace):
+    def fetch_steps(db_cursor, graph):
         """Create Steps ID and description."""
         # Get steps information
         db_cursor.execute("""
@@ -91,15 +90,15 @@ class WorkflowGraph(object):
         PWO = Namespace('http://purl.org/spar/pwo/')
 
         for row in result_set:
-            graph.add((URIRef("{0}step{1}".format(namespace, row['stepId'])), RDF.type, namespace.Step))
-            graph.add((URIRef("{0}step{1}".format(namespace, row['stepId'])), DC.title, Literal(row['stepTitle'])))
-            graph.add((URIRef("{0}step{1}".format(namespace, row['stepId'])), DC.description, Literal(row['description'])))
-            graph.add((URIRef("{0}workflow{1}".format(namespace, row['workflowId'])), PWO.hasStep, URIRef("{0}step{1}".format(namespace, row['stepId']))))
+            graph.add((URIRef("{0}step{1}".format(ATTXBase, row['stepId'])), RDF.type, ATTXOnto.Step))
+            graph.add((URIRef("{0}step{1}".format(ATTXBase, row['stepId'])), DC.title, Literal(row['stepTitle'])))
+            graph.add((URIRef("{0}step{1}".format(ATTXBase, row['stepId'])), DC.description, Literal(row['description'])))
+            graph.add((URIRef("{0}workflow{1}".format(ATTXBase, row['workflowId'])), PWO.hasStep, URIRef("{0}step{1}".format(ATTXBase, row['stepId']))))
             app_logger.info('Construct step metadata for Step{0}.' .format(row['stepId']))
         return graph
 
     @staticmethod
-    def fetch_steps_sequence(db_cursor, graph, namespace):
+    def fetch_steps_sequence(db_cursor, graph):
         """Create Steps sequence."""
         # Get steps linkage
         db_cursor.execute("""
@@ -118,7 +117,7 @@ class WorkflowGraph(object):
         PWO = Namespace('http://purl.org/spar/pwo/')
 
         for row in result_set:
-            graph.add((URIRef("{0}step{1}".format(namespace, row['fromStep'])), PWO.hasNextStep, URIRef("{0}step{1}".format(namespace, row['toStep']))))
+            graph.add((URIRef("{0}step{1}".format(ATTXBase, row['fromStep'])), PWO.hasNextStep, URIRef("{0}step{1}".format(ATTXBase, row['toStep']))))
             app_logger.info('Fetch steps sequence between steps Step{0} and Step{1}.'.format(row['fromStep'], row['toStep']))
         return graph
 
