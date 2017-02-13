@@ -1,6 +1,8 @@
+@base <http://data.hulib.helsinki.fi/attx/> .
 @prefix dc: <http://purl.org/dc/elements/1.1/> .
 @prefix dcterms: <http://purl.org/dc/terms/> .
-@prefix kaisa: <http://data.hulib.helsinki.fi/attx/> .
+@prefix attx: <http://data.hulib.helsinki.fi/attx/> .
+@prefix attxonto: <http://data.hulib.helsinki.fi/attx/onto#> .
 @prefix prov: <http://www.w3.org/ns/prov#> .
 @prefix pwo: <http://purl.org/spar/pwo/> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
@@ -10,11 +12,11 @@
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 @prefix schema: <http://schema.org/> .
 
-kaisa:activity1
-    prov:generated kaisa:dataset2 ;
-    prov:used kaisa:dataset1 .
+attx:activity1
+    prov:generated attx:dataset2 ;
+    prov:used attx:dataset1 .
 
-kaisa:dataset1 a kaisa:Dataset,
+attx:dataset1 a attxonto:Dataset,
         sd:Dataset ;
     dc:description "Sparql Endpoint Dbpedia specific query" ;
     dc:publisher "Dbpedia" ;
@@ -22,7 +24,7 @@ kaisa:dataset1 a kaisa:Dataset,
     dc:title "Dbpedia" ;
     dcterms:license "http://creativecommons.org/licenses/by-sa/3.0/" .
 
-kaisa:dataset2 a kaisa:Dataset,
+attx:dataset2 a attxonto:Dataset,
         sd:Dataset ;
     dc:description "Test Data" ;
     dc:publisher "http://helsinki.fi/library" ;

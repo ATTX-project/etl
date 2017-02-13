@@ -1,58 +1,45 @@
-from flask import Response
-from wf_api.uv.workflow_metadata import workflow_get_output
 import datetime
+import falcon
 from wf_api.utils.logs import app_logger
+from wf_api.uv.workflow_metadata import workflow_get_output
 
 
-def workflow_get(modifiedSince=None, format=None):
-    """List the latest workflow and associated steps."""
-    workflow = ''
-    if format is None:
-        data = workflow_get_output('turtle', modifiedSince)
-        workflow = format_response(data, 'turtle')
-    elif format == 'json-ld':
-        data = workflow_get_output('json-ld', modifiedSince)
-        workflow = format_response(data, format)
-    else:
-        workflow = Response(
-            response='Operation Not Allowed.',
-            status=405,
-            mimetype='text/plain')
-    app_logger.info('Reponse from the workflow API was issued.')
-    return workflow
+class Workflow(object):
+    """Retrieve the latest activity and associated datasets."""
 
+    def on_get(self, req, resp):
+        """Respond on GET request to map endpoint."""
+        modifiedSince = req.get_param('modifiedSince')
+        output_format = req.get_param('format')
 
-def workflow_post():
-    """Operation cannot be perfomed."""
-    app_logger.warning('Reponse from the Workflow API is: POST not allowed.')
-    response = Response(
-        response='Operation Not Allowed.',
-        status=405,
-        mimetype='text/plain')
-    return response
+        if output_format is None:
+            data = workflow_get_output('turtle', modifiedSince)
+            result = self.format_response(data)
+            if result["data"] is not None:
+                resp.data = result['data']
+                resp.content_type = 'text/turtle'
+            else:
+                resp.last_modifed = lambda x: result['modified'] if result['modified'] is not None else None
+            resp.status = result["status"]
+        elif output_format == 'json-ld':
+            data = workflow_get_output('json-ld', modifiedSince)
+            result = self.format_response(data)
+            if 'data' in result:
+                resp.data = result['data']
+                resp.content_type = 'application/json+ld'
+            else:
+                resp.last_modifed = lambda x: result['modified'] if result['modified'] is not None else None
+            resp.status = result["status"]
+        else:
+            resp.content_type = 'text/plain'
+            resp.status = falcon.HTTP_405
+        app_logger.info('Finished operations on /activity GET Request.')
 
-
-def not_modified():
-    """Response for 304: Not Modified."""
-    now = datetime.datetime.now()
-    response = Response(status=304)
-    response.headers['Last-Modified'] = now
-    app_logger.info('workflow Reponse is 304 Not Modified.')
-    return response
-
-
-def format_response(data, resp_format):
-    """Create proper response based on format."""
-    formats = {
-        'turtle': 'text/turtle',
-        'json-ld': 'application/json+ld'
-    }
-    if data is not None:
-        workflow = Response(
-            response=data,
-            status=200,
-            mimetype=formats[resp_format])
-        app_logger.info('workflow Reponse is 200 OK.')
-        return workflow
-    else:
-        return not_modified()
+    def format_response(self, data):
+        """Create proper response based on format."""
+        if data is 'Empty':
+            return {"status": falcon.HTTP_204}
+        elif data is not None:
+            return {"status": falcon.HTTP_200, "data": data}
+        else:
+            return {"status": falcon.HTTP_304, "modified": datetime.datetime.now()}

@@ -1,9 +1,8 @@
-from wf_api.wfapi import WFApplication, number_of_workers, cli
-from wf_api.app import wfm_app
-import unittest
 import click
+import unittest
+from wf_api.app import create
 from click.testing import CliRunner
-from nose.tools import eq_
+from wf_api.wfapi import WFApplication, number_of_workers
 
 
 class TestAPIStart(unittest.TestCase):
@@ -12,7 +11,7 @@ class TestAPIStart(unittest.TestCase):
     def setUp(self):
         """Set up test fixtures."""
         self.host = '127.0.0.1'
-        self.workers = 2
+        self.workers = number_of_workers()
         self.port = 4301
         self.log = 'logs/server.log'
         options = {
@@ -21,7 +20,7 @@ class TestAPIStart(unittest.TestCase):
             'daemon': 'True',
             'errorlog': self.log
         }
-        self.app = WFApplication(wfm_app, options).application.app.test_client()
+        self.app = WFApplication(create(), options)
         # propagate the exceptions to the test client
         self.app.testing = True
 
@@ -43,17 +42,7 @@ class TestAPIStart(unittest.TestCase):
     def running_app(self):
         """Test running app."""
         response = self.app.get('/')
-        eq_(response.status_code, 404)
-
-    def nb_workers(self):
-        """Test running app."""
-        number_of_workers()
-        pass
-
-    def start_cli(self):
-        """Start cli process."""
-        cli()
-        pass
+        self.assertEqual(response.status_code, 404)
 
 
 if __name__ == "__main__":

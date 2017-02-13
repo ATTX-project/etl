@@ -1,58 +1,45 @@
-from flask import Response
-from wf_api.uv.activity_metadata import activity_get_output
 import datetime
+import falcon
 from wf_api.utils.logs import app_logger
+from wf_api.uv.activity_metadata import activity_get_output
 
 
-def activity_get(modifiedSince=None, format=None):
+class Activity(object):
     """Retrieve the latest activity and associated datasets."""
-    activity = ''
-    if format is None:
-        data = activity_get_output('turtle', modifiedSince)
-        activity = format_response(data, 'turtle')
-    elif format == 'json-ld':
-        data = activity_get_output('json-ld', modifiedSince)
-        activity = format_response(data, format)
-    else:
-        activity = Response(
-            response='Operation Not Allowed.',
-            status=405,
-            mimetype='text/plain')
-    app_logger.info('Reponse from the Activity API was issued.')
-    return activity
 
+    def on_get(self, req, resp):
+        """Respond on GET request to map endpoint."""
+        modifiedSince = req.get_param('modifiedSince')
+        output_format = req.get_param('format')
 
-def activity_post():
-    """Operation cannot be perfomed."""
-    app_logger.warning('Response from the Activity API is: POST not allowed.')
-    response = Response(
-        response='Operation Not Allowed.',
-        status=405,
-        mimetype='text/plain')
-    return response
+        if output_format is None:
+            data = activity_get_output('turtle', modifiedSince)
+            result = self.format_response(data)
+            if 'data' in result:
+                resp.data = result['data']
+                resp.content_type = 'text/turtle'
+            else:
+                resp.last_modifed = lambda x: result['modified'] if result['modified'] is not None else None
+            resp.status = result["status"]
+        elif output_format == 'json-ld':
+            data = activity_get_output('json-ld', modifiedSince)
+            result = self.format_response(data)
+            if 'data' in result:
+                resp.data = result['data']
+                resp.content_type = 'application/json+ld'
+            else:
+                resp.last_modifed = lambda x: result['modified'] if result['modified'] is not None else None
+            resp.status = result["status"]
+        else:
+            resp.content_type = 'text/plain'
+            resp.status = falcon.HTTP_405
+        app_logger.info('Finished operations on /activity GET Request.')
 
-
-def not_modified():
-    """Response for 304: Not Modified."""
-    now = datetime.datetime.now()
-    response = Response(status=304)
-    response.headers['Last-Modified'] = now
-    app_logger.info('Activity Reponse is 304 Not Modified.')
-    return response
-
-
-def format_response(data, resp_format):
-    """Create proper response based on format."""
-    formats = {
-        'turtle': 'text/turtle',
-        'json-ld': 'application/json+ld'
-    }
-    if data is not None:
-        activity = Response(
-            response=data,
-            status=200,
-            mimetype=formats[resp_format])
-        app_logger.info('Activity Reponse is 200 OK.')
-        return activity
-    else:
-        return not_modified()
+    def format_response(self, data):
+        """Create proper response based on format."""
+        if data is 'Empty':
+            return {"status": falcon.HTTP_204}
+        elif data is not None:
+            return {"status": falcon.HTTP_200, "data": data}
+        else:
+            return {"status": falcon.HTTP_304, "modified": datetime.datetime.now()}

@@ -1,6 +1,6 @@
-from wf_api.utils.db import connect_DB
 import unittest
 import pymysql as mysql
+from wf_api.utils.db import connect_DB
 
 
 class DBTestCase(unittest.TestCase):
@@ -11,7 +11,7 @@ class DBTestCase(unittest.TestCase):
 
     def test_connection(self):
         """Test connection."""
-        cursor = connect_DB('database.conf')
+        cursor = connect_DB('connections.conf')
         if isinstance(cursor, mysql.cursors.DictCursor):
             self.assertRaises(Exception)
         else:
