@@ -1,4 +1,4 @@
-from wf_api.app import wfm_app
+from wf_api.app import create
 import click
 import multiprocessing
 import gunicorn.app.base
@@ -18,7 +18,7 @@ def cli(host, port, log, workers):
         'daemon': 'True',
         'errorlog': log
     }
-    WFApplication(wfm_app, options).run()
+    WFApplication(create(), options).run()
 
 
 class WFApplication(gunicorn.app.base.BaseApplication):

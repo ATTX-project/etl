@@ -1,5 +1,4 @@
 from wf_api.uv.workflow_metadata import workflow_get_output, WorkflowGraph
-from nose.tools import assert_is_instance
 import unittest
 from rdflib import Graph
 
@@ -30,8 +29,8 @@ class WorkflowGraphTest(unittest.TestCase):
                                                                       None))
                                          .encode('utf-8'),
                                          format=self.format_jsonld)
-            assert_is_instance(data_turtle, type(Graph()))
-            assert_is_instance(data_json, type(Graph()))
+            self.assertIsInstance(data_turtle, type(Graph()))
+            self.assertIsInstance(data_json, type(Graph()))
 
     def test_activity_no_output(self):
         """Test Activity processing output is empty graph."""

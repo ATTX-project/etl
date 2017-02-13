@@ -28,7 +28,7 @@ class ActivityGraph(object):
             db_cursor.connection.close()
             return activity_graph
         else:
-            cls.fetch_metadata(db_cursor, activity_graph)
+            cls.fetch_metadata(db_cursor, activity_graph, modifiedSince)
             db_cursor.connection.close()
             return activity_graph
 
@@ -88,12 +88,13 @@ class ActivityGraph(object):
                 return "No activities"
 
     @staticmethod
-    def fetch_metadata(db_cursor, graph):
+    def fetch_metadata(db_cursor, graph, modifiedSince):
         """Create Datasets ID and description."""
         # Get steps configuration
         db_cursor.execute("""
         SELECT dpu_instance.configuration AS 'config',
-        exec_pipeline.id AS 'activityId'
+        exec_pipeline.id AS 'activityId',
+        exec_pipeline.t_end AS 'lastChange'
         FROM exec_pipeline, dpu_instance INNER JOIN
         ppl_node ON ppl_node.instance_id=dpu_instance.id
              WHERE ppl_node.graph_id = (
@@ -105,9 +106,17 @@ class ActivityGraph(object):
         result_set = db_cursor.fetchall()
 
         for row in result_set:
-            parse_metadata_config(HTMLParser.HTMLParser().unescape(str(row['config'])), row['activityId'], graph)
-            app_logger.info('Construct config metadata for Activity{0}.' .format(row['activityId']))
-        return graph
+            old_date = row['lastChange']
+            if modifiedSince is None:
+                new_date = None
+            else:
+                new_date = datetime.strptime(modifiedSince, '%Y-%m-%dT%H:%M:%SZ')
+            if modifiedSince is None or (modifiedSince and old_date >= new_date):
+                parse_metadata_config(HTMLParser.HTMLParser().unescape(str(row['config'])), row['activityId'], graph)
+                app_logger.info('Construct config metadata for Activity{0}.' .format(row['activityId']))
+                return graph
+            else:
+                return
 
 
 def activity_get_output(serialization, modifiedSince):

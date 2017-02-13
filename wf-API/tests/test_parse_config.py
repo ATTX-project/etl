@@ -1,7 +1,6 @@
 from wf_api.uv.parse_config import parse_metadata_config
 from rdflib import Graph, Namespace
 from rdflib.compare import similar
-from nose.tools import eq_, ok_
 import unittest
 import HTMLParser
 
@@ -46,8 +45,7 @@ class ParseConfigTest(unittest.TestCase):
         # Considering blank nodes we need to check if the graphs are similar
         print result.serialize(format='turtle')
         print self.test_graph.serialize(format='turtle')
-        eq_(similar(result, self.test_graph), True,
-            "Test to if the resulting graph corresponds to test graph.")
+        assert(similar(result, self.test_graph) is True)
 
     def test_parse_metadata_config_sparql(self):
         """Test if input output encoding is peformed correctly."""
@@ -57,8 +55,7 @@ class ParseConfigTest(unittest.TestCase):
         result = parse_metadata_config(parsed, self.activityId, self.graph)
 
         # Considering blank nodes we need to check if the graphs are similar
-        eq_(similar(result, self.blank_graph), True,
-            "Test to if the resulting graph corresponds is blank.")
+        assert(similar(result, self.blank_graph) is True)
 
     def test_parse_metadata_config_other(self):
         """Test if input output encoding is peformed correctly."""
@@ -67,13 +64,11 @@ class ParseConfigTest(unittest.TestCase):
         result = parse_metadata_config(parsed, self.activityId, self.graph)
 
         # Considering blank nodes we need to check if the graphs are similar
-        eq_(similar(result, self.blank_graph), True,
-            "Test to if the resulting graph corresponds is blank.")
+        assert(similar(result, self.blank_graph) is True)
 
     def test_namespaces(self):
         """Test for Namespaces."""
-        ok_(list(self.graph.namespaces()) != [],
-            "Test if there are namespaces.")
+        self.assertTrue(list(self.graph.namespaces()) != [])
 
 
 if __name__ == "__main__":

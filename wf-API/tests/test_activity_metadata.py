@@ -1,6 +1,5 @@
 from wf_api.uv.activity_metadata import activity_get_output, ActivityGraph
 from rdflib import Graph
-from nose.tools import assert_is_instance
 import unittest
 
 
@@ -28,8 +27,8 @@ class ActivityGraphTest(unittest.TestCase):
             data_json = self.graph.parse(data=str(activity_get_output(self.format_jsonld, None))
                                          .encode('utf-8'),
                                          format=self.format_jsonld)
-            assert_is_instance(data_turtle, type(Graph()))
-            assert_is_instance(data_json, type(Graph()))
+            self.assertIsInstance(data_turtle, type(Graph()))
+            self.assertIsInstance(data_json, type(Graph()))
 
     def test_activity_no_output(self):
         """Test Activity processing output is empty graph."""
