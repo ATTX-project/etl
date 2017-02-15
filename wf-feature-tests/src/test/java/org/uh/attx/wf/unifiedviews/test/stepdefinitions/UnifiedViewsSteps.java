@@ -30,6 +30,9 @@ import static org.junit.Assert.assertTrue;
  * @author stefanne
  */
 public class UnifiedViewsSteps implements En {
+    PlatformServices s = new PlatformServices(false);
+    
+    
     private final String API_USERNAME = "master";
     private final String API_PASSWORD = "commander";
     private int workflow_id = 3;
@@ -47,7 +50,7 @@ public class UnifiedViewsSteps implements En {
     public UnifiedViewsSteps() {
         Given("^the UnifiedViews is running$", () -> {
             try {
-                GetRequest get = Unirest.get("http://localhost:8080/master/api/1/pipelines/visible?userExternalId=organization_ext_id").basicAuth(API_USERNAME, API_PASSWORD).header("accept", "application/json");
+                GetRequest get = Unirest.get(s.getUV() + "/master/api/1/pipelines/visible?userExternalId=organization_ext_id").basicAuth(API_USERNAME, API_PASSWORD).header("accept", "application/json");
                 HttpResponse<JsonNode> response = get.asJson();
                 int result = response.getStatus();
                 assertEquals(result, 200);
@@ -71,12 +74,16 @@ public class UnifiedViewsSteps implements En {
 //                JSONObject myObj = postResponse.getBody().getObject();
 //                pipeline_id = myObj.getString("id");
 
-                String URL = String.format("http://localhost:8080/master/api/1/pipelines/%s", workflow_id);
+/*
+                String URL = String.format(s.getUV() + "/master/api/1/pipelines/%s", workflow_id);
                 GetRequest get = Unirest.get(URL).basicAuth(API_USERNAME, API_PASSWORD).header("accept", "application/json");
                 HttpResponse<JsonNode> response = get.asJson();
                 JSONObject myObj = response.getBody().getObject();
+                
                 int the_id = myObj.getInt("id");
                 assertEquals(the_id, 3);
+*/
+                
 
             } catch (Exception ex) {
                 Logger.getLogger(UnifiedViewsSteps.class.getName()).log(Level.SEVERE, null, ex);
@@ -86,7 +93,7 @@ public class UnifiedViewsSteps implements En {
 
         When("^we run a pipeline", () -> {
             try {
-                String URL = String.format("http://localhost:8080/master/api/1/pipelines/%s/executions", workflow_id);
+                String URL = String.format(s.getUV() + "/master/api/1/pipelines/%s/executions", workflow_id);
                 HttpResponse<JsonNode> postResponse = Unirest.post(URL)
                         .header("accept", "application/json")
                         .header("Content-Type", "application/json")
@@ -133,7 +140,7 @@ public class UnifiedViewsSteps implements En {
             try {
                 String the_query = (arg1 == "activity") ? activity_query : workflow_query;
                 String endpoint = (arg1 == "activity") ? "activity" : "workflow";
-                String URL = String.format("http://localhost:4301/v0.1/%s", endpoint);
+                String URL = String.format(s.getWfapi() + "/0.1/%s", endpoint);
                 HttpResponse<String> response = Unirest.get(URL).asString();
                 Dataset dataset = DatasetFactory.createTxnMem() ;
 

@@ -20,12 +20,13 @@ import static org.junit.Assert.assertEquals;
  * @author stefanne
  */
 public class wfAPISteps implements En {
+    PlatformServices s = new PlatformServices(false);
     private int notallowed;
 
     public wfAPISteps() {
         Given("^the wfAPI is running$", () -> {
             try {
-                GetRequest get = Unirest.get("http://localhost:4301/v0.1/workflow?format=json-ld");
+                GetRequest get = Unirest.get(s.getWfapi() + "/0.1/workflow?format=json-ld");
                 HttpResponse<JsonNode> response1 = get.asJson();
                 int result1 = response1.getStatus();
                 assertEquals(result1, 200);
@@ -39,7 +40,7 @@ public class wfAPISteps implements En {
 
         When("^I access the \"([^\"]*)\" API and try to send something$", (String arg1) -> {
             try {
-                String URL = String.format("http://localhost:4301/v0.1/%s", arg1);
+                String URL = String.format(s.getWfapi() + "/0.1/%s", arg1);
                 HttpResponse<String> postResponse = Unirest.post(URL)
                         .header("accept", "application/json")
                         .header("Content-Type", "application/json")
@@ -66,7 +67,7 @@ public class wfAPISteps implements En {
 
         When("^I access the \"([^\"]*)\" API and try to retrieve something$", (String arg1) -> {
             try {
-            String URL = String.format("http://localhost:4301/v0.1/%s", arg1);
+            String URL = String.format(s.getWfapi() + "/0.1/%s", arg1);
             GetRequest get = Unirest.get(URL);
             HttpResponse<String> response1 = get.asString();
             int result1 = response1.getStatus();
@@ -109,7 +110,7 @@ public class wfAPISteps implements En {
             try {
                 String the_query = (arg1 == "activities") ? activity_query : workflow_query;
                 String endpoint = (arg1 == "activities") ? "activity" : "workflow";
-                String URL = String.format("http://localhost:4301/v0.1/%s", endpoint);
+                String URL = String.format(s.getWfapi() + "/0.1/%s", endpoint);
 
                 Model m = RDFDataMgr.loadModel(URL);
                 Query query = QueryFactory.create(the_query);
