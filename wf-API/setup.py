@@ -89,7 +89,7 @@ class install_egg_info(_install_egg_info):  # noqa
 
 
 class GradleDistribution(Distribution, object):
-    """Get entrypoints for a distribution."""
+    """GradleDistribution wiht requirements."""
 
     PINNED_TXT = 'pinned.txt'
 
@@ -154,9 +154,27 @@ setup(
     include_package_data=True,
     name='ATTXwfAPI',
     version='0.1',
-    description='ATTX WF-API',
+    description='ATTX Workflow API',
     entry_points='''
         [console_scripts]
         wfapi=wf_api.wfapi:main
-    '''
+    ''',
+    author_email='stefan.negru@helsinki.fi',
+    url='https://www.helsinki.fi/en/projects/attx-2016',
+    long_description="ATTX Workflow API for retrieving information form the ETL/Workflow tool.",
+    license='Apache Software License',
+    platforms='Linux',
+    classifiers=[
+          'Development Status :: 3 - Alpha',
+          'Environment :: Console',
+          'Environment :: Web Environment',
+          'Intended Audience :: Developers',
+          'Intended Audience :: System Administrators',
+          'License :: OSI Approved :: Apache Software License',
+          'Operating System :: POSIX',
+          'Operating System :: POSIX :: Linux',
+          'Programming Language :: Python',
+          'Programming Language :: Python :: 2.7',
+          'Topic :: Scientific/Engineering :: Information Analysis'
+          ],
 )
