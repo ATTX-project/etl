@@ -1,1 +1,1 @@
-include "wf-feature-tests", "unifiedViews:uv-dpu-t-attx-metadata" , "unifiedViews:uv-dpu-t-attx-uc1-infras2internal", "unifiedViews:uv-dpu-l-attx-uploader", "unifiedViews:uv-dpu-l-attx-esindexer",  "wf-API"
+include "wf-feature-tests", "unifiedViews:uv-dpu-t-attx-metadata" , "unifiedViews:uv-dpu-t-attx-uc1-infras2internal", "unifiedViews:uv-dpu-l-attx-uploader", "unifiedViews:uv-dpu-l-attx-esindexer", "unifiedViews:uv-dpu-l-attx-apicaller",  "wf-API"
