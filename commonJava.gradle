@@ -66,3 +66,22 @@ task mergedJavadoc(type: Javadoc, description: 'Creates Javadoc from all the pro
         subprojects*.configurations*.compile*.copyRecursive({ !(it instanceof ProjectDependency); })*.resolve()
     }
 }
+
+publishing {
+  repositories {
+    maven {
+      // change to point to your repo, e.g. http://my.org/repo
+      url "${artifactRepoURL}"
+      credentials {
+          username "${artifactRepoUser}"
+          password "${artifactRepoPassword}"
+      }
+    }
+  }
+  publications {
+    mavenJava(MavenPublication) {
+      from components.java
+    }
+  }
+
+}
