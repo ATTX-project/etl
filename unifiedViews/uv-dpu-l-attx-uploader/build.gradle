@@ -6,6 +6,7 @@ task repackage(type: MavenExec) {
     goals 'clean', 'package'
 }
 
+// maven exec plugin does not work with the 3.x gradle.
 task wrapper(type: Wrapper) {
    gradleVersion = '2.11' //version required
 }

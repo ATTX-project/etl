@@ -2,14 +2,7 @@ apply plugin: 'java'
 apply plugin: 'com.chrisgahlert.gradle-dcompose-plugin'
 apply plugin: 'com.github.johnrengelman.shadow'
 
-
-if (!hasProperty('mainClass')) {
-    ext.mainClass = ''
-}
-
-
 dependencies {
-
     testCompile \
         'junit:junit:4.10',
         'info.cukes:cucumber-java8:1.2.5',
@@ -21,18 +14,12 @@ dependencies {
         'org.apache.jena:apache-jena:3.1.1'
 }
 
-test {
-    testLogging.showStandardStreams = true
-    systemProperties System.getProperties()
-}
-
 dcompose {
     createComposeFile.useTags = true    
-    registry ('http://attx-dev:5000') {}
-    registry ('http://attx-dev.hulib.helsinki.fi:5000') {}  
+    registry ("$registryURL") {}
      
     shared {
-        image = 'attx-dev.hulib.helsinki.fi:5000/uv-attx-shared'
+        image = "${imageRepo}:${imageRepoPort}/uv-attx-shared"
     }
     frontend {
         image = 'tenforce/unified-views-frontend:latest'
@@ -54,7 +41,7 @@ dcompose {
         dependsOn = [mysql]
     }      
     wfapi {
-        image = 'attx-dev.hulib.helsinki.fi:5000/wf-api:latest'
+        image = "${imageRepo}:${imageRepoPort}/wf-api:latest"
         exposedPorts = ['4301']
         portBindings = ['4301:4301']  
     }     
@@ -68,8 +55,6 @@ dcompose {
         dependsOn = [wfapi, frontend, backend, shared, uvdpus, mysql]
         waitForCommand = true
     }
-    
-
 }
 
 task copyReportFiles(type: DcomposeCopyFileFromContainerTask) {

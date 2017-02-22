@@ -1,17 +1,5 @@
-// Note: "common.gradle" in the root project contains additional initialization
-//   for this project. This initialization is applied in the "build.gradle"
-//   of the root project.
-
-// NetBeans will automatically add "run" and "debug" tasks relying on the
-// "mainClass" property. You may however define the property prior executing
-// tasks by passing a "-PmainClass=<QUALIFIED_CLASS_NAME>" argument.
-//
-// Note however, that you may define your own "run" and "debug" task if you
-// prefer. In this case NetBeans will not add these tasks but you may rely on
-// your own implementation.
-if (!hasProperty('mainClass')) {
-    ext.mainClass = ''
-}
+// Leaving this here for now. 
+// TODO: Change this to a maven project
 buildscript {
   repositories {
     mavenCentral()
@@ -21,20 +9,12 @@ buildscript {
     classpath 'org.dm.gradle:gradle-bundle-plugin:0.8.5'
   }
 }
-
-apply plugin: 'java'
 apply plugin: 'osgi'
 
-group = 'org.uh.attx.etl.uv.dpu'
 version = '1.0-SNAPSHOT'
-
 description = """t-attx-uc1-infras2internal"""
 
-sourceCompatibility = 1.7
-targetCompatibility = 1.8
-
-repositories {
-        
+repositories {        
      maven { url "http://repository.unifiedviews.eu/nexus/content/repositories/releases/" }
      maven { url "http://repository.unifiedviews.eu/nexus/content/repositories/snapshots/" }
      maven { url "http://maven.eea.sk/artifactory/public/" }
@@ -43,64 +23,32 @@ repositories {
 
 configurations {
     // configuration that holds jars to copy into lib
-    extraLibs
+    bundledLibs
 }
 
 dependencies {
-    // TODO: Add dependencies here
-    //   but note that JUnit should have already been added in parent.gradle.
-    //   By default, only the Maven Central Repository is specified in
-    //   parent.gradle.
-    //
-    // You can read more about how to add dependency here:
-    //   http://www.gradle.org/docs/current/userguide/dependency_management.html#sec:how_to_declare_your_dependencies
     compile group: 'eu.unifiedviews', name: 'uv-dataunit-helpers', version:'2.1.7'
     compile group: 'eu.unifiedviews', name: 'uv-dpu-helpers', version:'2.1.7'
     testCompile group: 'ch.qos.logback', name: 'logback-classic', version:'1.1.2'
     testCompile group: 'ch.qos.logback', name: 'logback-core', version:'1.1.2'
     testCompile group: 'junit', name: 'junit', version:'4.12'
     testCompile group: 'eu.unifiedviews', name: 'module-test', version:'2.3.1'
-    compile(group: 'eu.unifiedviews', name: 'uv-dpu-api', version:'2.1.7') {
-       /* This dependency was originally in the Maven provided scope, but the project was not of type war.
-       This behavior is not yet supported by Gradle, so this dependency has been converted to a compile dependency.
-       Please review and delete this closure when resolved. */
-    }
-    compile(group: 'eu.unifiedviews', name: 'uv-dpu-config-vaadin', version:'2.1.7') {
-       /* This dependency was originally in the Maven provided scope, but the project was not of type war.
-       This behavior is not yet supported by Gradle, so this dependency has been converted to a compile dependency.
-       Please review and delete this closure when resolved. */
-    }
-    compile(group: 'eu.unifiedviews', name: 'uv-dataunit-rdf', version:'2.1.7') {
-       /* This dependency was originally in the Maven provided scope, but the project was not of type war.
-       This behavior is not yet supported by Gradle, so this dependency has been converted to a compile dependency.
-       Please review and delete this closure when resolved. */
-    }
-    compile(group: 'eu.unifiedviews', name: 'uv-dataunit-files', version:'2.1.7') {
-       /* This dependency was originally in the Maven provided scope, but the project was not of type war.
-       This behavior is not yet supported by Gradle, so this dependency has been converted to a compile dependency.
-       Please review and delete this closure when resolved. */
-    }
-    compile(group: 'eu.unifiedviews', name: 'uv-dataunit-relational', version:'2.1.7') {
-       /* This dependency was originally in the Maven provided scope, but the project was not of type war.
-       This behavior is not yet supported by Gradle, so this dependency has been converted to a compile dependency.
-       Please review and delete this closure when resolved. */
-    }
-    compile(group: 'org.slf4j', name: 'slf4j-api', version:'1.7.7') {
-       /* This dependency was originally in the Maven provided scope, but the project was not of type war.
-       This behavior is not yet supported by Gradle, so this dependency has been converted to a compile dependency.
-       Please review and delete this closure when resolved. */
-    }    
+    compile(group: 'eu.unifiedviews', name: 'uv-dpu-api', version:'2.1.7')
+    compile(group: 'eu.unifiedviews', name: 'uv-dpu-config-vaadin', version:'2.1.7')
+    compile(group: 'eu.unifiedviews', name: 'uv-dataunit-rdf', version:'2.1.7')
+    compile(group: 'eu.unifiedviews', name: 'uv-dataunit-files', version:'2.1.7')
+    compile(group: 'eu.unifiedviews', name: 'uv-dataunit-relational', version:'2.1.7')
+    compile(group: 'org.slf4j', name: 'slf4j-api', version:'1.7.7')
     
-    extraLibs group: 'eu.unifiedviews', name: 'uv-dataunit-helpers', version:'2.1.7'
-    extraLibs group: 'eu.unifiedviews', name: 'uv-dpu-helpers', version:'2.1.7'
-    extraLibs group: 'org.json', name: 'json', version:'20080701'
+    
+    bundledLibs group: 'eu.unifiedviews', name: 'uv-dataunit-helpers', version:'2.1.7'
+    bundledLibs group: 'eu.unifiedviews', name: 'uv-dpu-helpers', version:'2.1.7'
+    bundledLibs group: 'org.json', name: 'json', version:'20080701'
     
 }
 
-
 jar {
-    baseName = 'Infras2Internal'
-    
+    baseName = 'Infras2Internal' 
     manifest { // the manifest of the default jar is of type OsgiManifest
         name = 'Infras2Internal'
         instruction 'DPU-MainClass', 'Infras2Internal'
@@ -114,17 +62,11 @@ jar {
         instruction 'Embedded-Artifacts', 'dependencies/uv-dataunit-helpers-2.1.7.jar;g="eu.unifiedviews";a="uv-dataunit-helpers";v="2.1.7",dependencies/uv-dpu-helpers-2.1.7.jar;g="eu.unifiedviews";a="uv-dpu-helpers";v="2.1.7"'
         instruction 'Require-Capability', 'osgi.ee; filter="(&(osgi.ee=JavaSE)(version=1.8))"'
         instruction 'Import-Package', 'com.thoughtworks.xstream;version="[1.4,2)",com.thoughtworks.xstream.io;version="[1.4,2)",com.thoughtworks.xstream.io.xml;version="[1.4,2)",com.thoughtworks.xstream.mapper;version="[1.4,2)",com.vaadin.data;version="[7.3,8)",com.vaadin.shared.ui.label;version="[7.3,8)",com.vaadin.ui;version="[7.3,8)",eu.unifiedviews.dataunit;version="[2.1,3)",eu.unifiedviews.dataunit.files;version="[2.1,3)",eu.unifiedviews.dataunit.rdf;version="[2.1,3)",eu.unifiedviews.dataunit.relational;version="[2.1,3)",eu.unifiedviews.dpu;version="[2.1,3)",eu.unifiedviews.dpu.config;version="[2.1,3)",eu.unifiedviews.dpu.config.vaadin;version="[2.1,3)",info.aduna.iteration,javax.net.ssl,org.apache.commons.io,org.openrdf,org.openrdf.model,org.openrdf.model.impl,org.openrdf.model.vocabulary,org.openrdf.query,org.openrdf.query.impl,org.openrdf.repository,org.openrdf.rio,org.slf4j;version="[1.7,2)"'
-        //instruction 'Import-Package', '*'
-
     }
     
     into('dependencies') {
         from {
-            //configurations.runtime
-          configurations.extraLibs
-          //configurations.runtime.collect { it.name.startsWith('uv-dpu-helpers') }
-
+          configurations.bundledLibs
         }
-    }
-    
+    }    
 }
