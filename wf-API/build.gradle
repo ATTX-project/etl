@@ -31,11 +31,6 @@ dependencies {
     test 'pypi:httpretty:0.8.14'
 }
 
-// in case we want have a ./gradlw command.
-task wrapper(type: Wrapper) {
-   gradleVersion = '3.3'
-}
-
 // Succesfully running the tests requires a logs folder existing.
 task creatLogsFolder {
   description = "Create logs folder."
