@@ -1,8 +1,8 @@
 import xmltodict
 from rdflib import URIRef, Literal
 from wf_api.utils.logs import app_logger
-from rdflib.namespace import DC, DCTERMS, RDF
-from wf_api.utils.prefixes import ATTXBase, ATTXOnto, PROV, SD
+from rdflib.namespace import DC, RDF
+from wf_api.utils.prefixes import ATTXBase, ATTXOnto, PROV, SD, CC
 
 
 def parse_metadata_config(config, activityId, graph):
@@ -42,7 +42,7 @@ def input_graph(graph, data, activityId):
         if data['inputGraphSource']:
             graph.add((URIRef(data['inputGraphURI']), DC.source, Literal(data['inputGraphSource'])))
         if data['inputGraphLicence']:
-            graph.add((URIRef(data['inputGraphURI']), DCTERMS.license, Literal(data['inputGraphLicence'])))
+            graph.add((URIRef(data['inputGraphURI']), CC.license, URIRef(data['inputGraphLicence'])))
     return graph
 
 
@@ -61,5 +61,5 @@ def output_graph(graph, data, activityId):
         if data['outputGraphSource']:
             graph.add((URIRef(data['outputGraphURI']), DC.source, Literal(data['outputGraphSource'])))
         if data['outputGraphLicence']:
-            graph.add((URIRef(data['outputGraphURI']), DCTERMS.license, Literal(data['outputGraphLicence'])))
+            graph.add((URIRef(data['outputGraphURI']), CC.license, URIRef(data['outputGraphLicence'])))
     return graph
