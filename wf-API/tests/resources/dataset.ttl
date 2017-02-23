@@ -11,6 +11,7 @@
 @prefix xml: <http://www.w3.org/XML/1998/namespace> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 @prefix schema: <http://schema.org/> .
+@prefix cc: <https://creativecommons.org/ns#> .
 
 attx:activity1
     prov:generated attx:dataset2 ;
@@ -22,7 +23,7 @@ attx:dataset1 a attxonto:Dataset,
     dc:publisher "Dbpedia" ;
     dc:source "http://dbpedia.org/sparql" ;
     dc:title "Dbpedia" ;
-    dcterms:license "http://creativecommons.org/licenses/by-sa/3.0/" .
+    cc:license attxonto:CC0 .
 
 attx:dataset2 a attxonto:Dataset,
         sd:Dataset ;
@@ -30,4 +31,4 @@ attx:dataset2 a attxonto:Dataset,
     dc:publisher "http://helsinki.fi/library" ;
     dc:source "http://helsinki.fi/library" ;
     dc:title "Testing specific output" ;
-    dcterms:license "http://creativecommons.org/licenses/by-sa/3.0/" .
+    cc:license attxonto:CC0 .
