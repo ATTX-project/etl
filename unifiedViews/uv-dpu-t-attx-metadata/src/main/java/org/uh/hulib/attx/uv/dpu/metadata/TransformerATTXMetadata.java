@@ -1,4 +1,4 @@
-package org.uh.attx.etl.uv.dpu.transformer.metadata;
+package org.uh.hulib.attx.uv.dpu.metadata;
 
 import eu.unifiedviews.dpu.DPU;
 import eu.unifiedviews.dpu.DPUException;

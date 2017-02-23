@@ -1,4 +1,4 @@
-package org.uh.attx.etl.uv.dpu.transformer.metadata;
+package org.uh.hulib.attx.uv.dpu.metadata;
 
 /**
  * Configuration class for t-attx-metadata.

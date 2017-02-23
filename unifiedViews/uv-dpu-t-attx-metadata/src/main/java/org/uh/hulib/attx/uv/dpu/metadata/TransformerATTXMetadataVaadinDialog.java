@@ -1,6 +1,7 @@
-package org.uh.attx.etl.uv.dpu.transformer.metadata;
+package org.uh.hulib.attx.uv.dpu.metadata;
 
-import com.vaadin.ui.Label;
+import com.vaadin.data.util.ObjectProperty;
+import com.vaadin.ui.NativeSelect;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
@@ -8,8 +9,6 @@ import eu.unifiedviews.dpu.config.DPUConfigException;
 import eu.unifiedviews.helpers.dpu.vaadin.dialog.AbstractDialog;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Vaadin configuration dialog for t-attx-metadata.
@@ -20,19 +19,20 @@ public class TransformerATTXMetadataVaadinDialog extends AbstractDialog<Transfor
 
     private VerticalLayout mainLayout;
     
-    private TextField tfInputGraphURI;
-    private TextField tfInputGraphTitle;
-    private TextField tfInputGraphDescription;
-    private TextField tfInputGraphPublisher;
-    private TextField tfInputGraphSource;
-    private TextField tfInputGraphLicence;
     
-    private TextField tfOutputGraphURI;
-    private TextField tfOutputGraphTitle;
-    private TextField tfOutputGraphDescription;
-    private TextField tfOutputGraphPublisher;
-    private TextField tfOutputGraphSource;
-    private TextField tfOutputGraphLicence;
+    private ObjectProperty<String> tfInputGraphURI = new ObjectProperty<String>("");
+    private ObjectProperty<String> tfInputGraphTitle = new ObjectProperty<String>("");
+    private ObjectProperty<String> tfInputGraphDescription = new ObjectProperty<String>("");
+    private ObjectProperty<String> tfInputGraphPublisher = new ObjectProperty<String>("");
+    private ObjectProperty<String> tfInputGraphSource = new ObjectProperty<String>("");
+    private NativeSelect inputGraphLicence = new NativeSelect();
+
+    private ObjectProperty<String> tfOutputGraphURI = new ObjectProperty<String>("");
+    private ObjectProperty<String> tfOutputGraphTitle = new ObjectProperty<String>("");
+    private ObjectProperty<String> tfOutputGraphDescription = new ObjectProperty<String>("");
+    private ObjectProperty<String> tfOutputGraphPublisher = new ObjectProperty<String>("");
+    private ObjectProperty<String> tfOutputGraphSource = new ObjectProperty<String>("");
+    private NativeSelect outputGraphLicence = new NativeSelect();
     
     
     public TransformerATTXMetadataVaadinDialog() {
@@ -46,7 +46,7 @@ public class TransformerATTXMetadataVaadinDialog extends AbstractDialog<Transfor
         tfInputGraphDescription.setValue((c.getInputGraphDescription()));
         tfInputGraphPublisher.setValue((c.getInputGraphPublisher()));
         tfInputGraphSource.setValue((c.getInputGraphSource()));
-        tfInputGraphLicence.setValue((c.getInputGraphLicence()));
+        inputGraphLicence.setValue((c.getInputGraphLicence()));
 
 
         tfOutputGraphURI.setValue((c.getOutputGraphURI()));
@@ -54,7 +54,7 @@ public class TransformerATTXMetadataVaadinDialog extends AbstractDialog<Transfor
         tfOutputGraphDescription.setValue((c.getOutputGraphDescription()));
         tfOutputGraphPublisher.setValue((c.getOutputGraphPublisher()));
         tfOutputGraphSource.setValue((c.getOutputGraphSource()));
-        tfOutputGraphLicence.setValue((c.getOutputGraphLicence()));
+        outputGraphLicence.setValue((c.getOutputGraphLicence()));
         
     }
 
@@ -68,14 +68,14 @@ public class TransformerATTXMetadataVaadinDialog extends AbstractDialog<Transfor
             c.setInputGraphDescription(tfInputGraphDescription.getValue());
             c.setInputGraphPublisher(tfInputGraphPublisher.getValue());
             c.setInputGraphSource((new URL(tfInputGraphSource.getValue())).toString());
-            c.setInputGraphLicence((new URL(tfInputGraphLicence.getValue())).toString());
+            c.setInputGraphLicence((new URL(inputGraphLicence.getValue().toString())).toString());
 
             c.setOutputGraphURI((new URL(tfOutputGraphURI.getValue())).toString());
             c.setOutputGraphTitle(tfOutputGraphTitle.getValue());
             c.setOutputGraphDescription(tfOutputGraphDescription.getValue());
             c.setOutputGraphPublisher(tfOutputGraphPublisher.getValue());
             c.setOutputGraphSource((new URL(tfOutputGraphSource.getValue())).toString());
-            c.setOutputGraphLicence((new URL(tfOutputGraphLicence.getValue())).toString());
+            c.setOutputGraphLicence((new URL(outputGraphLicence.getValue().toString())).toString());
             
             
         } catch (MalformedURLException ex) {
@@ -100,65 +100,70 @@ public class TransformerATTXMetadataVaadinDialog extends AbstractDialog<Transfor
         setHeight("100%");
         
         
-        tfInputGraphURI = new TextField();
+        final TextField tfInputGraphURI = new TextField(this.tfInputGraphURI);
         tfInputGraphURI.setCaption("Input graph URI:");
         tfInputGraphURI.setWidth("100%");
         mainLayout.addComponent(tfInputGraphURI);
         
-        tfInputGraphTitle = new TextField();
+        final TextField tfInputGraphTitle = new TextField(this.tfInputGraphTitle);
         tfInputGraphTitle.setCaption("Input graph title:");
         tfInputGraphTitle.setWidth("100%");
         mainLayout.addComponent(tfInputGraphTitle);
 
-        tfInputGraphDescription = new TextField();
+        final TextField tfInputGraphDescription = new TextField(this.tfInputGraphDescription);
         tfInputGraphDescription.setCaption("Input graph description:");
         tfInputGraphDescription.setWidth("100%");
         mainLayout.addComponent(tfInputGraphDescription);
         
-        tfInputGraphPublisher = new TextField();
+        final TextField tfInputGraphPublisher = new TextField(this.tfInputGraphPublisher);
         tfInputGraphPublisher.setCaption("Input graph publisher:");
         tfInputGraphPublisher.setWidth("100%");
         mainLayout.addComponent(tfInputGraphPublisher);
 
-        tfInputGraphSource = new TextField();
+        final TextField tfInputGraphSource = new TextField(this.tfInputGraphSource);
         tfInputGraphSource.setCaption("Input graph source:");
         tfInputGraphSource.setWidth("100%");
         mainLayout.addComponent(tfInputGraphSource);
         
-        tfInputGraphLicence = new TextField();
-        tfInputGraphLicence.setCaption("Input graph license:");
-        tfInputGraphLicence.setWidth("100%");
-        mainLayout.addComponent(tfInputGraphLicence);
+        inputGraphLicence.setCaption("Input graph license:");
+        inputGraphLicence.setWidth("100%");
+        inputGraphLicence.addItem("http://data.hulib.helsinki.fi/attx/onto#Unknown");
+        inputGraphLicence.addItem("http://data.hulib.helsinki.fi/attx/onto#CC0");
+        inputGraphLicence.setValue("http://data.hulib.helsinki.fi/attx/onto#Unknown");
+        mainLayout.addComponent(inputGraphLicence);
 
-        tfOutputGraphURI = new TextField();
+        final TextField tfOutputGraphURI = new TextField(this.tfOutputGraphURI);
         tfOutputGraphURI.setCaption("Output graph URI:");
         tfOutputGraphURI.setWidth("100%");
         mainLayout.addComponent(tfOutputGraphURI);
         
-        tfOutputGraphTitle = new TextField();
+        final TextField tfOutputGraphTitle = new TextField(this.tfOutputGraphTitle);
         tfOutputGraphTitle.setCaption("Output graph title:");
         tfOutputGraphTitle.setWidth("100%");
         mainLayout.addComponent(tfOutputGraphTitle);
 
-        tfOutputGraphDescription = new TextField();
+        final TextField tfOutputGraphDescription = new TextField(this.tfOutputGraphDescription);
         tfOutputGraphDescription.setCaption("Output graph description:");
         tfOutputGraphDescription.setWidth("100%");
         mainLayout.addComponent(tfOutputGraphDescription);
         
-        tfOutputGraphPublisher = new TextField();
+        final TextField tfOutputGraphPublisher = new TextField(this.tfOutputGraphPublisher);
         tfOutputGraphPublisher.setCaption("Output graph publisher:");
         tfOutputGraphPublisher.setWidth("100%");
         mainLayout.addComponent(tfOutputGraphPublisher);
 
-        tfOutputGraphSource = new TextField();
+        final TextField tfOutputGraphSource = new TextField(this.tfOutputGraphSource);
         tfOutputGraphSource.setCaption("Output graph source:");
         tfOutputGraphSource.setWidth("100%");
         mainLayout.addComponent(tfOutputGraphSource);
         
-        tfOutputGraphLicence = new TextField();
-        tfOutputGraphLicence.setCaption("Output graph license:");
-        tfOutputGraphLicence.setWidth("100%");
-        mainLayout.addComponent(tfOutputGraphLicence);
+        
+        outputGraphLicence.setCaption("Output graph license:");
+        outputGraphLicence.setWidth("100%");
+        outputGraphLicence.addItem("http://data.hulib.helsinki.fi/attx/onto#Unknown");
+        outputGraphLicence.addItem("http://data.hulib.helsinki.fi/attx/onto#CC0");        
+        outputGraphLicence.setValue("http://data.hulib.helsinki.fi/attx/onto#Unknown");
+        mainLayout.addComponent(outputGraphLicence);
 
         
         setCompositionRoot(mainLayout);
