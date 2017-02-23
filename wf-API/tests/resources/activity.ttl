@@ -10,6 +10,7 @@
 @prefix dcterms: <http://purl.org/dc/terms/> .
 @prefix sd: <http://www.w3.org/ns/sparql-service-description#> .
 @prefix pwo: <http://purl.org/spar/pwo/> .
+@prefix cc: <https://creativecommons.org/ns#> .
 
 attx:wf2_dataset1
   a attxonto:Dataset, sd:Dataset ;
@@ -17,7 +18,7 @@ attx:wf2_dataset1
   dcterms:description "National list of publication that are part of the official VIRTA collection."@en;
   dcterms:publisher "Ministry of Culture and Education" ;
   dcterms:source <http://virta.fi/data_dump.csv> ; # actual source is a CSV file.
-  dcterms:license <http://creativecommons.org/licenses/by/4.0/> .
+  cc:license attxonto:CC0  .
 
 attx:wf2_dataset2
   a attxonto:Dataset, sd:Dataset ;
@@ -25,13 +26,13 @@ attx:wf2_dataset2
   dcterms:description "National list of publication that are part of the official CRIS collection."@en;
   dcterms:publisher "Ministry of Culture and Education" ;
   dcterms:source <http://cris.fi/data_dump.csv> ; # actual source is a CSV file.
-  dcterms:license <http://creativecommons.org/licenses/by/4.0/> .
+  cc:license attxonto:CC0 .
 
 attx:wf2_dataset3
   a attxonto:Dataset, sd:Dataset ;
   dcterms:title "Selected VIRTA Publication Data in RDF" ;
   dcterms:description "Dataset includes titles and external identifiers for every publication and research fields, see mapping steps for details"@en;
-  dcterms:license <http://creativecommons.org/licenses/by/4.0/> . # license should be the same as original data
+  cc:license attxonto:CC0 . # license should be the same as original data
 
 attx:activity2
   a prov:Activity , attxonto:WorkflowExecution ;
