@@ -13,7 +13,13 @@
     <packaging>bundle</packaging>
     <name>uv-dpu-t-attx-metadata</name>
     <description></description>
-
+    <repositories>
+        <repository>
+	    <id>repository.unifiedviews.eu</id>
+            <name>repository.unifiedviews.eu-public</name>
+            <url>http://repository.unifiedviews.eu/nexus/content/repositories/public/</url>
+        </repository>
+    </repositories>
     <properties>
         <dpu.package>org.uh.hulib.attx.uv.dpu.metadata</dpu.package>
         <dpu.mainClass>TransformerATTXMetadata</dpu.mainClass>
