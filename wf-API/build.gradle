@@ -12,7 +12,7 @@ apply plugin: 'com.linkedin.python-web-app'
 version=0.1
 
 python {
-  testDir = file('tests')
+    testDir = file('tests')
 }
 // define an explicit installation sequence for the dependencies.
 project.tasks.findByName('installPythonRequirements').sorted = false
@@ -31,48 +31,12 @@ dependencies {
     test 'pypi:httpretty:0.8.14'
 }
 
-repositories {
-    // using a local repository
-    ivy{
-      name 'pypi-local'
-  		url "/home/user/pivy"
-  		layout 'pattern' , {
-  			artifact '[organisation]/[module]/[revision]/[artifact]-[revision](-[classifier]).[ext]'
-  			ivy '[organisation]/[module]/[revision]/[module]-[revision].ivy'
-  		}
-  	}
-    // using a web repository
-    ivy{
-      name 'pypi-attx'
-  		url "http://attx-dev.hulib.helsinki.fi:5039/"
-  		layout 'pattern' , {
-  			artifact '[organisation]/[module]/[revision]/[artifact]-[revision](-[classifier]).[ext]'
-  			ivy '[organisation]/[module]/[revision]/[module]-[revision].ivy'
-  		}
-    }
-    // setting the repository for jenkins use
-    ivy{
-      name 'pypi-jenkins'
-  		url "http://pypirepo:5039/"
-  		layout 'pattern' , {
-  			artifact '[organisation]/[module]/[revision]/[artifact]-[revision](-[classifier]).[ext]'
-  			ivy '[organisation]/[module]/[revision]/[module]-[revision].ivy'
-  		}
-    }
-}
-
-
-// in case we want have a ./gradlw command.
-task wrapper(type: Wrapper) {
-   gradleVersion = '3.3'
-}
-
 // Succesfully running the tests requires a logs folder existing.
 task creatLogsFolder {
-  description = "Create logs folder."
-  doFirst {
-      mkdir('logs')
-  }
+    description = "Create logs folder."
+    doFirst {
+        mkdir('logs')
+    }
 }
 
 // adding the database.conf to the distribution
@@ -85,13 +49,13 @@ task addConfigs(type: Copy) {
 
 // generate Tests report via a script.
 task runTests(type:Exec) {
-  description = "generate Tests report via a script."
-  workingDir '.'
-  // Create the output folder
-  doFirst {
-    mkdir('build/test-report')
-  }
-  commandLine './runTests.sh'
+    description = "generate Tests report via a script."
+    workingDir '.'
+    // Create the output folder
+    doFirst {
+        mkdir('build/test-report')
+    }
+    commandLine './runTests.sh'
 }
 
 // the pytest taks depends on the logs folder and this specifies that.

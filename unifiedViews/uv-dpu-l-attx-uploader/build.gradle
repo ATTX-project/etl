@@ -1,11 +1,11 @@
-plugins {
-    id "com.github.dkorotych.gradle-maven-exec" version "1.0"
+task changePermission(type:Exec) {
+    workingDir '.'
+    commandLine 'chmod', '700', '../mvn.sh'    
 }
 
-task repackage(type: MavenExec) {
-    goals 'clean', 'package'
+task repackage(type: Exec) {
+    workingDir '.'
+    commandLine '../mvn.sh'
 }
 
-task wrapper(type: Wrapper) {
-   gradleVersion = '2.11' //version required
-}
+repackage.dependsOn changePermission
