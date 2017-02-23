@@ -4,5 +4,5 @@ plugins {
 
 dependencies {
     testRuntime  \
-        fileTree(dir: 'build/libs', include: ['*.jar'])      
+    fileTree(dir: 'build/libs', include: ['*.jar'])      
 }

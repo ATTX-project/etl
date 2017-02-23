@@ -1,13 +1,13 @@
 // Leaving this here for now. 
 // TODO: Change this to a maven project
 buildscript {
-  repositories {
-    mavenCentral()
-    jcenter()
-  }
-  dependencies {
-    classpath 'org.dm.gradle:gradle-bundle-plugin:0.8.5'
-  }
+    repositories {
+        mavenCentral()
+        jcenter()
+    }
+    dependencies {
+        classpath 'org.dm.gradle:gradle-bundle-plugin:0.8.5'
+    }
 }
 apply plugin: 'osgi'
 
@@ -15,10 +15,10 @@ version = '1.0-SNAPSHOT'
 description = """t-attx-uc1-infras2internal"""
 
 repositories {        
-     maven { url "http://repository.unifiedviews.eu/nexus/content/repositories/releases/" }
-     maven { url "http://repository.unifiedviews.eu/nexus/content/repositories/snapshots/" }
-     maven { url "http://maven.eea.sk/artifactory/public/" }
-     maven { url "http://repo.maven.apache.org/maven2" }
+    maven { url "http://repository.unifiedviews.eu/nexus/content/repositories/releases/" }
+    maven { url "http://repository.unifiedviews.eu/nexus/content/repositories/snapshots/" }
+    maven { url "http://maven.eea.sk/artifactory/public/" }
+    maven { url "http://repo.maven.apache.org/maven2" }
 }
 
 configurations {
@@ -66,7 +66,7 @@ jar {
     
     into('dependencies') {
         from {
-          configurations.bundledLibs
+            configurations.bundledLibs
         }
     }    
 }

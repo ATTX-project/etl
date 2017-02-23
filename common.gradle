@@ -1,9 +1,9 @@
 ext {
-  imageRepo = "attx-dev"
-  imageRepoPort = "5000"
-  artifactRepoPort = "8081"
-  jenkinsPort = "49001"
-  pypiRepoPort = "5039"
+    imageRepo = "attx-dev"
+    imageRepoPort = "5000"
+    artifactRepoPort = "8081"
+    jenkinsPort = "49001"
+    pypiRepoPort = "5039"
 }
 
 if (!project.hasProperty("registryURL")) {

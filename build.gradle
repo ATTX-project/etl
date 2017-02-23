@@ -6,14 +6,14 @@ plugins {
 }
 
 ext {
-  javaProjectList = ['wf-feature-tests', 
+    javaProjectList = ['wf-feature-tests', 
     'uv-dpu-t-attx-uc1-infras2internal', 
     'uv-dpu-t-attx-metadata',
     'uv-dpu-l-attx-uploader', 
     'uv-dpu-l-attx-apicaller', 
     'uv-dpu-l-attx-uploader',
     'uv-dpu-l-attx-esindexer']
-  pythonProjectList = ['wf-API']
+    pythonProjectList = ['wf-API']
 }
 
 subprojects {
