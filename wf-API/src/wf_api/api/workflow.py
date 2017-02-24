@@ -5,7 +5,7 @@ from wf_api.uv.workflow_metadata import workflow_get_output
 
 
 class Workflow(object):
-    """Retrieve the latest activity and associated datasets."""
+    """Retrieve the latest workflow and associated datasets."""
 
     def on_get(self, req, resp):
         """Respond on GET request to map endpoint."""
@@ -15,7 +15,7 @@ class Workflow(object):
         if output_format is None:
             data = workflow_get_output('turtle', modifiedSince)
             result = self.format_response(data)
-            if result["data"] is not None:
+            if 'data' in result:
                 resp.data = result['data']
                 resp.content_type = 'text/turtle'
             else:
@@ -33,7 +33,7 @@ class Workflow(object):
         else:
             resp.content_type = 'text/plain'
             resp.status = falcon.HTTP_405
-        app_logger.info('Finished operations on /activity GET Request.')
+        app_logger.info('Finished operations on /workflow GET Request.')
 
     def format_response(self, data):
         """Create proper response based on format."""
