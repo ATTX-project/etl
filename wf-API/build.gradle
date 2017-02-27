@@ -13,14 +13,12 @@ version=0.1
 
 python {
     testDir = file('tests')
-    forceVersion('pypi', 'appdirs', '1.4.1')
+    forceVersion('pypi', 'appdirs', '1.4.2')
 }
 // define an explicit installation sequence for the dependencies.
 project.tasks.findByName('installPythonRequirements').sorted = false
 
 dependencies {
-    python 'pypi:appdirs:1.4.1'
-    python 'pypi:packaging:16.8'
     python 'pypi:pathlib:1.0.1'
     python 'pypi:falcon:1.1.0'
     python 'pypi:xmltodict:0.10.2'
