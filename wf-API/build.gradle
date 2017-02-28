@@ -45,7 +45,7 @@ task addConfigs(type: Copy) {
     description = "adding the database.conf to the distribution."
     from '.'
     into 'build/deployable'
-    include 'database.conf'
+    include 'connections.conf'
 }
 
 // generate Tests report via a script.
