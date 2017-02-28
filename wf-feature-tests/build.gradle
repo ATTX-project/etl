@@ -23,20 +23,11 @@ dcompose {
         forceRemoveImage = true
         image = "${imageRepo}:${imageRepoPort}/uv-attx-shared"
     }
-
-    frontend {
-        forcePull = true
-        forceRemoveImage = true
-        image = 'tenforce/unified-views-frontend:latest'
-        volumesFrom = [shared]
-        exposedPorts = ['8080']
-        portBindings = ['8080:8080']
-    }
-
+    
     mysql {
         forcePull = true
         forceRemoveImage = true
-        image = 'tenforce/unified-views-mariadb:latest'
+        image = 'tenforce/unified-views-mariadb:feat-compact-modular'
         env = ['MYSQL_ROOT_PASSWORD=iamroot!']
         portBindings = ['3306:3306']
     }
@@ -46,6 +37,7 @@ dcompose {
         forceRemoveImage = true
         image = 'tenforce/unified-views-backend:latest'
         volumesFrom =  [shared]
+        dependsOn = [mysql, shared]
     }
 
     uvdpus {
@@ -53,6 +45,16 @@ dcompose {
         forceRemoveImage = true
         image = 'tenforce/unified-views-add-dpus'
         dependsOn = [mysql]
+    }
+
+    frontend {
+        forcePull = true
+        forceRemoveImage = true
+        image = 'tenforce/unified-views-frontend:latest'
+        volumesFrom = [shared]
+        exposedPorts = ['8080']
+        portBindings = ['8080:8080']
+        dependsOn = [backend, shared]
     }
 
     wfapi {

@@ -7,7 +7,8 @@ wait_for() {
   while ! nc -z $1 $2; do echo sleeping >> /tmp/log ; sleep $SLEEP_LENGTH; done
 }
 
+wait_for "mysql" "3306"
+wait_for "frontend" "8080"
 wait_for "wfapi" "4301"
-wait for "frontend" "8080"
 
 gradle -b build.gradle --offline test
