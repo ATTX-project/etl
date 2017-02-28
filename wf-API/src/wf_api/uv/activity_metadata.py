@@ -45,7 +45,6 @@ class ActivityGraph(object):
             exec_pipeline.t_end AS 'lastChange'
             FROM exec_pipeline, ppl_model
             WHERE exec_pipeline.pipeline_id = ppl_model.id AND\
-            (ppl_model.visibility = 1 OR ppl_model.visibility = 2) AND\
             exec_pipeline.status = 5
             ORDER BY ppl_model.id
         """)

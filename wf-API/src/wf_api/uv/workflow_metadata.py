@@ -38,9 +38,9 @@ class WorkflowGraph(object):
              SELECT ppl_model.id AS 'workflowId',
              ppl_model.description AS 'description',
              ppl_model.name AS 'workflowTitle',
-             ppl_model.last_change AS 'lastChange'
-             FROM ppl_model
-             WHERE (ppl_model.visibility = 1 OR ppl_model.visibility = 2)
+             ppl_model.last_change AS 'lastChange',
+             ppl_model.visibility AS 'visibility'
+             FROM ppl_model             
              ORDER BY ppl_model.id
         """)
         # replace last line above with one below if only latest result required
@@ -64,7 +64,7 @@ class WorkflowGraph(object):
             if modifiedSince is None or (modifiedSince and last_date >= compare_date):
                 graph.add((URIRef("{0}workflow{1}".format(ATTXBase, row['workflowId'])), RDF.type, ATTXOnto.Workflow))
                 graph.add((URIRef("{0}workflow{1}".format(ATTXBase, row['workflowId'])), DC.title, Literal(row['workflowTitle'])))
-                graph.add((URIRef("{0}workflow{1}".format(ATTXBase, row['workflowId'])), DC.description, Literal(row['description'])))
+                graph.add((URIRef("{0}workflow{1}".format(ATTXBase, row['workflowId'])), DC.description, Literal(row['description'])))                
             else:
                 return "No workflows"
 
