@@ -81,7 +81,7 @@ public class PlatformServices {
 
     public String getWfapi() {
         if (isLocalhost) {
-            return "http://localhost:" + WFAPI;
+            return "http://localhost:" + WFAPI_PORT;
         } else {
             return WFAPI + ":" + WFAPI_PORT;
         }
