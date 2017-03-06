@@ -1,9 +1,9 @@
 from datetime import datetime
 from rdflib.namespace import DC, RDF
 from wf_api.utils.logs import app_logger
-from rdflib import Graph, URIRef, Literal, Namespace
+from rdflib import Graph, URIRef, Literal
 from wf_api.utils.db import connect_DB, empty_workflows_DB
-from wf_api.utils.prefixes import bind_prefix, ATTXBase, ATTXOnto
+from wf_api.utils.prefixes import bind_prefix, ATTXBase, ATTXOnto, PWO
 
 
 class WorkflowGraph(object):
@@ -87,8 +87,6 @@ class WorkflowGraph(object):
 
         result_set = db_cursor.fetchall()
 
-        PWO = Namespace('http://purl.org/spar/pwo/')
-
         for row in result_set:
             graph.add((URIRef("{0}step{1}".format(ATTXBase, row['stepId'])), RDF.type, ATTXOnto.Step))
             graph.add((URIRef("{0}step{1}".format(ATTXBase, row['stepId'])), DC.title, Literal(row['stepTitle'])))
@@ -113,8 +111,6 @@ class WorkflowGraph(object):
         """)
 
         result_set = db_cursor.fetchall()
-
-        PWO = Namespace('http://purl.org/spar/pwo/')
 
         for row in result_set:
             graph.add((URIRef("{0}step{1}".format(ATTXBase, row['fromStep'])), PWO.hasNextStep, URIRef("{0}step{1}".format(ATTXBase, row['toStep']))))

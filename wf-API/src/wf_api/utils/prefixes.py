@@ -6,6 +6,7 @@ ATTXBase = Namespace('http://data.hulib.helsinki.fi/attx/')
 ATTXOnto = Namespace('http://data.hulib.helsinki.fi/attx/onto#')
 SD = Namespace('http://www.w3.org/ns/sparql-service-description#')
 CC = Namespace('https://creativecommons.org/ns#')
+PWO = Namespace('http://purl.org/spar/pwo/')
 
 
 def bind_prefix(graph):
