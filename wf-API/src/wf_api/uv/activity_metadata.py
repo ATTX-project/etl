@@ -94,14 +94,14 @@ class ActivityGraph(object):
         SELECT dpu_instance.configuration AS 'config',
         exec_pipeline.id AS 'activityId',
         exec_pipeline.t_end AS 'lastChange'
-        FROM exec_pipeline, dpu_instance INNER JOIN
-        ppl_node ON ppl_node.instance_id=dpu_instance.id
-             WHERE ppl_node.graph_id IN( (
-                SELECT exec_pipeline.id
-                    FROM exec_pipeline, ppl_model
-                    WHERE exec_pipeline.pipeline_id = ppl_model.id AND\
-                    exec_pipeline.status = 5
-                ))
+        FROM dpu_instance, ppl_node, ppl_model, ppl_graph, exec_pipeline
+        WHERE
+        dpu_instance.id = ppl_node.instance_id AND
+        ppl_node.graph_id = ppl_graph.id AND
+        ppl_graph.pipeline_id = ppl_model.id AND
+        ppl_model.id = exec_pipeline.pipeline_id AND
+        exec_pipeline.status = 5
+        ORDER BY exec_pipeline.id desc
         """)
 
         result_set = db_cursor.fetchall()
