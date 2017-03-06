@@ -113,7 +113,7 @@ class ActivityGraph(object):
             if modifiedSince is None or (modifiedSince and old_date >= new_date):
                 parse_metadata_config(HTMLParser.HTMLParser().unescape(str(row['config'])), row['activityId'], graph)
                 app_logger.info('Construct config metadata for Activity{0}.' .format(row['activityId']))
-                return graph
+                
             else:
                 return
 
