@@ -20,7 +20,8 @@ ATTXMetadataConfig__V1'
             data = base["string"][1]["object-stream"][metadata_transformer]
             input_graph(graph, data, activityId)
             output_graph(graph, data, activityId)
-        app_logger.info('Construct config metadata missing information.')
+        else:
+            app_logger.info('Construct config metadata missing information.')
         return graph
     except Exception as error:
         app_logger.error('Something is wrong: {0}'.format(error))
