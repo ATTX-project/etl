@@ -76,13 +76,12 @@ class WorkflowGraph(object):
         SELECT dpu_instance.id AS 'stepId', dpu_instance.name AS 'stepTitle',
         dpu_instance.description AS 'description',
         dpu_template.name AS 'templateName', ppl_model.id AS 'workflowId'
-        FROM ppl_model, dpu_template, dpu_instance INNER JOIN
-        ppl_node ON ppl_node.instance_id=dpu_instance.id
-             WHERE ppl_node.graph_id = (
-                SELECT id
-                FROM ppl_model
-                ORDER BY ppl_model.id DESC LIMIT 1)
-            AND dpu_instance.dpu_id = dpu_template.id
+        FROM ppl_model, dpu_template, dpu_instance, ppl_node,ppl_graph
+        WHERE ppl_node.instance_id=dpu_instance.id AND
+        ppl_node.graph_id = ppl_graph.id AND
+        ppl_graph.pipeline_id = ppl_model.id AND
+        dpu_instance.dpu_id = dpu_template.id
+        ORDER BY dpu_instance.id desc
         """)
 
         result_set = db_cursor.fetchall()
