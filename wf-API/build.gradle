@@ -9,11 +9,11 @@ buildscript {
 
 apply plugin: 'com.linkedin.python-web-app'
 
-version=0.1
+version="0.1"
 
 python {
     testDir = file('tests')
-    forceVersion('pypi', 'appdirs', '1.4.2')
+    forceVersion('pypi', 'appdirs', '1.4.3')
 }
 // define an explicit installation sequence for the dependencies.
 project.tasks.findByName('installPythonRequirements').sorted = false
@@ -63,3 +63,18 @@ task runTests(type:Exec) {
 buildPex.dependsOn creatLogsFolder
 pytest.dependsOn creatLogsFolder
 packageDeployable.dependsOn addConfigs
+
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            repository(url: "${artifactRepoURL}") {
+                  authentication(userName: "${artifactRepoUser}", password: "${artifactRepoPassword}")
+            }
+            pom.project {
+                groupId = "${wfGroupID}"
+                description "Workflows API."
+            }
+        }
+    }
+}
