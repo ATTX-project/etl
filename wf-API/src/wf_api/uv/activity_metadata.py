@@ -89,17 +89,19 @@ class ActivityGraph(object):
     @staticmethod
     def fetch_metadata(db_cursor, graph, modifiedSince):
         """Create Datasets ID and description."""
-        # Get steps configuration
+        # Get configurations for activities that have successful executions.
         db_cursor.execute("""
         SELECT dpu_instance.configuration AS 'config',
         exec_pipeline.id AS 'activityId',
         exec_pipeline.t_end AS 'lastChange'
-        FROM exec_pipeline, dpu_instance INNER JOIN
-        ppl_node ON ppl_node.instance_id=dpu_instance.id
-             WHERE ppl_node.graph_id = (
-                SELECT id
-                FROM ppl_model
-                ORDER BY ppl_model.id DESC LIMIT 1)
+        FROM dpu_instance, ppl_node, ppl_model, ppl_graph, exec_pipeline
+        WHERE
+        dpu_instance.id = ppl_node.instance_id AND
+        ppl_node.graph_id = ppl_graph.id AND
+        ppl_graph.pipeline_id = ppl_model.id AND
+        ppl_model.id = exec_pipeline.pipeline_id AND
+        exec_pipeline.status = 5
+        ORDER BY exec_pipeline.id desc
         """)
 
         result_set = db_cursor.fetchall()
@@ -113,7 +115,6 @@ class ActivityGraph(object):
             if modifiedSince is None or (modifiedSince and old_date >= new_date):
                 parse_metadata_config(HTMLParser.HTMLParser().unescape(str(row['config'])), row['activityId'], graph)
                 app_logger.info('Construct config metadata for Activity{0}.' .format(row['activityId']))
-                return graph
             else:
                 return
 

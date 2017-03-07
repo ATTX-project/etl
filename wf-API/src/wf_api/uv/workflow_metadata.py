@@ -1,9 +1,9 @@
 from datetime import datetime
 from rdflib.namespace import DC, RDF
 from wf_api.utils.logs import app_logger
-from rdflib import Graph, URIRef, Literal, Namespace
+from rdflib import Graph, URIRef, Literal
 from wf_api.utils.db import connect_DB, empty_workflows_DB
-from wf_api.utils.prefixes import bind_prefix, ATTXBase, ATTXOnto
+from wf_api.utils.prefixes import bind_prefix, ATTXBase, ATTXOnto, PWO
 
 
 class WorkflowGraph(object):
@@ -76,18 +76,15 @@ class WorkflowGraph(object):
         SELECT dpu_instance.id AS 'stepId', dpu_instance.name AS 'stepTitle',
         dpu_instance.description AS 'description',
         dpu_template.name AS 'templateName', ppl_model.id AS 'workflowId'
-        FROM ppl_model, dpu_template, dpu_instance INNER JOIN
-        ppl_node ON ppl_node.instance_id=dpu_instance.id
-             WHERE ppl_node.graph_id = (
-                SELECT id
-                FROM ppl_model
-                ORDER BY ppl_model.id DESC LIMIT 1)
-            AND dpu_instance.dpu_id = dpu_template.id
+        FROM ppl_model, dpu_template, dpu_instance, ppl_node,ppl_graph
+        WHERE ppl_node.instance_id=dpu_instance.id AND
+        ppl_node.graph_id = ppl_graph.id AND
+        ppl_graph.pipeline_id = ppl_model.id AND
+        dpu_instance.dpu_id = dpu_template.id
+        ORDER BY dpu_instance.id desc
         """)
 
         result_set = db_cursor.fetchall()
-
-        PWO = Namespace('http://purl.org/spar/pwo/')
 
         for row in result_set:
             graph.add((URIRef("{0}step{1}".format(ATTXBase, row['stepId'])), RDF.type, ATTXOnto.Step))
@@ -113,8 +110,6 @@ class WorkflowGraph(object):
         """)
 
         result_set = db_cursor.fetchall()
-
-        PWO = Namespace('http://purl.org/spar/pwo/')
 
         for row in result_set:
             graph.add((URIRef("{0}step{1}".format(ATTXBase, row['fromStep'])), PWO.hasNextStep, URIRef("{0}step{1}".format(ATTXBase, row['toStep']))))
