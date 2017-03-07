@@ -1,72 +1,11 @@
-// Leaving this here for now. 
-// TODO: Change this to a maven project
-buildscript {
-    repositories {
-        mavenCentral()
-        jcenter()
-    }
-    dependencies {
-        classpath 'org.dm.gradle:gradle-bundle-plugin:0.8.5'
-    }
-}
-apply plugin: 'osgi'
-
-version = '1.0-SNAPSHOT'
-description = """t-attx-uc1-infras2internal"""
-
-repositories {        
-    maven { url "http://repository.unifiedviews.eu/nexus/content/repositories/releases/" }
-    maven { url "http://repository.unifiedviews.eu/nexus/content/repositories/snapshots/" }
-    maven { url "http://maven.eea.sk/artifactory/public/" }
-    maven { url "http://repo.maven.apache.org/maven2" }
+task changePermission(type:Exec) {
+    workingDir '.'
+    commandLine 'chmod', '700', '../mvn.sh'    
 }
 
-configurations {
-    // configuration that holds jars to copy into lib
-    bundledLibs
+task repackage(type: Exec) {
+    workingDir '.'
+    commandLine '../mvn.sh'
 }
 
-dependencies {
-    compile group: 'eu.unifiedviews', name: 'uv-dataunit-helpers', version:'2.1.7'
-    compile group: 'eu.unifiedviews', name: 'uv-dpu-helpers', version:'2.1.7'
-    testCompile group: 'ch.qos.logback', name: 'logback-classic', version:'1.1.2'
-    testCompile group: 'ch.qos.logback', name: 'logback-core', version:'1.1.2'
-    testCompile group: 'junit', name: 'junit', version:'4.12'
-    testCompile group: 'eu.unifiedviews', name: 'module-test', version:'2.3.1'
-    compile(group: 'eu.unifiedviews', name: 'uv-dpu-api', version:'2.1.7')
-    compile(group: 'eu.unifiedviews', name: 'uv-dpu-config-vaadin', version:'2.1.7')
-    compile(group: 'eu.unifiedviews', name: 'uv-dataunit-rdf', version:'2.1.7')
-    compile(group: 'eu.unifiedviews', name: 'uv-dataunit-files', version:'2.1.7')
-    compile(group: 'eu.unifiedviews', name: 'uv-dataunit-relational', version:'2.1.7')
-    compile(group: 'org.slf4j', name: 'slf4j-api', version:'1.7.7')
-    
-    
-    bundledLibs group: 'eu.unifiedviews', name: 'uv-dataunit-helpers', version:'2.1.7'
-    bundledLibs group: 'eu.unifiedviews', name: 'uv-dpu-helpers', version:'2.1.7'
-    bundledLibs group: 'org.json', name: 'json', version:'20080701'
-    
-}
-
-jar {
-    baseName = 'Infras2Internal' 
-    manifest { // the manifest of the default jar is of type OsgiManifest
-        name = 'Infras2Internal'
-        instruction 'DPU-MainClass', 'Infras2Internal'
-        instruction 'DPU-Package', 'org.uh.attx.etl.uv.dpu.transformer.uc1'
-        instruction 'Bundle-SymbolicName', 'org.uh.attx.etl.uv.dpu.transformer.uc1.Infras2Internal'
-        instruction 'Bundle-ClassPath', '.,dependencies/uv-dataunit-helpers-2.1.7.jar,dependencies/uv-dpu-helpers-2.1.7.jar,dependencies/json-20080701.jar'
-        instruction 'Embed-Dependency', '*;scope=compile|system'
-        instruction 'Embed-Directory', 'dependencies'
-        instruction 'Embed-StripGroup', 'false'
-        instruction 'Embed-Transitive', 'false'
-        instruction 'Embedded-Artifacts', 'dependencies/uv-dataunit-helpers-2.1.7.jar;g="eu.unifiedviews";a="uv-dataunit-helpers";v="2.1.7",dependencies/uv-dpu-helpers-2.1.7.jar;g="eu.unifiedviews";a="uv-dpu-helpers";v="2.1.7"'
-        instruction 'Require-Capability', 'osgi.ee; filter="(&(osgi.ee=JavaSE)(version=1.8))"'
-        instruction 'Import-Package', 'com.thoughtworks.xstream;version="[1.4,2)",com.thoughtworks.xstream.io;version="[1.4,2)",com.thoughtworks.xstream.io.xml;version="[1.4,2)",com.thoughtworks.xstream.mapper;version="[1.4,2)",com.vaadin.data;version="[7.3,8)",com.vaadin.shared.ui.label;version="[7.3,8)",com.vaadin.ui;version="[7.3,8)",eu.unifiedviews.dataunit;version="[2.1,3)",eu.unifiedviews.dataunit.files;version="[2.1,3)",eu.unifiedviews.dataunit.rdf;version="[2.1,3)",eu.unifiedviews.dataunit.relational;version="[2.1,3)",eu.unifiedviews.dpu;version="[2.1,3)",eu.unifiedviews.dpu.config;version="[2.1,3)",eu.unifiedviews.dpu.config.vaadin;version="[2.1,3)",info.aduna.iteration,javax.net.ssl,org.apache.commons.io,org.openrdf,org.openrdf.model,org.openrdf.model.impl,org.openrdf.model.vocabulary,org.openrdf.query,org.openrdf.query.impl,org.openrdf.repository,org.openrdf.rio,org.slf4j;version="[1.7,2)"'
-    }
-    
-    into('dependencies') {
-        from {
-            configurations.bundledLibs
-        }
-    }    
-}
+repackage.dependsOn changePermission

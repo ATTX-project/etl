@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.uh.attx.etl.uv.dpu.transformer.uc1;
+package org.uh.hulib.attx.wc.uv.dpu.uc1;
 
 import cz.cuni.mff.xrg.odcs.dpu.test.TestEnvironment;
 import eu.unifiedviews.dataunit.files.FilesDataUnit;
@@ -37,8 +37,6 @@ import org.openrdf.rio.RDFFormat;
 import org.openrdf.rio.RDFParser;
 import org.openrdf.rio.Rio;
 import org.openrdf.rio.turtle.TurtleParser;
-import org.uh.attx.etl.uv.dpu.transformer.uc1.Infras2Internal;
-import org.uh.attx.etl.uv.dpu.transformer.uc1.Infras2InternalConfig_V1;
 
 /**
  *
@@ -90,7 +88,7 @@ public class Infras2InternalTest {
         WritableFilesDataUnit filesOutput = environment.createFilesOutput("output");
 
         try {
-            URL url = getClass().getClassLoader().getResource("infras.json");
+            URL url = Infras2Internal.class.getResource("/infras.json");
             FilesHelper.addFile(filesInput, new File(url.toURI()));
 
             environment.run(plugin);
