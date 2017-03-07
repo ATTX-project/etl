@@ -9,7 +9,7 @@ buildscript {
 
 apply plugin: 'com.linkedin.python-web-app'
 
-version=0.1
+version="0.1"
 
 python {
     testDir = file('tests')
@@ -63,3 +63,18 @@ task runTests(type:Exec) {
 buildPex.dependsOn creatLogsFolder
 pytest.dependsOn creatLogsFolder
 packageDeployable.dependsOn addConfigs
+
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            repository(url: "${artifactRepoURL}") {
+                  authentication(userName: "${artifactRepoUser}", password: "${artifactRepoPassword}")
+            }
+            pom.project {
+                groupId = "org.uh.hulib.attx"
+                description "Workflows API."
+            }
+        }
+    }
+}
