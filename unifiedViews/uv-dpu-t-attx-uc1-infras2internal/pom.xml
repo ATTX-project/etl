@@ -13,7 +13,13 @@
     <packaging>bundle</packaging>
     <name>uv-dpu-t-attx-uc1-infras2internal</name>
     <description></description>
-
+	<repositories>
+		<repository>
+			<id>repository.unifiedviews.eu</id>
+			<name>repository.unifiedviews.eu-public</name>
+			<url>http://repository.unifiedviews.eu/nexus/content/repositories/public/</url>
+		</repository>
+	</repositories>
     <properties>
         <dpu.package>org.uh.hulib.attx.wc.uv.dpu.uc1</dpu.package>
         <dpu.mainClass>Infras2Internal</dpu.mainClass>
