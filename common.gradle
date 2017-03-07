@@ -6,7 +6,7 @@ ext {
     artifactRepoPort = "8081"
     jenkinsPort = "49001"
     pypiRepoPort = "5039"
-    wfGroupID = "org.uh.hulib.attx"
+    wfGroupID = "org.uh.hulib.attx.wc"
 }
 
 if (!project.hasProperty("registryURL")) {
