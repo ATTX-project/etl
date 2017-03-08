@@ -18,7 +18,7 @@ uploadArchives {
             }
             pom.project {
                 groupId = "${wfGroupID}"
-                description "APIcaller UV DPU."
+                description "UC1 Infras2Internal UV DPU."
             }
         }
     }
