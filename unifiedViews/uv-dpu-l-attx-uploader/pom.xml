@@ -13,6 +13,7 @@
     <packaging>bundle</packaging>
     <name>uv-dpu-l-attx-uploader</name>
     <description></description>
+    
 	<repositories>
 		<repository>
 			<id>repository.unifiedviews.eu</id>
@@ -20,10 +21,15 @@
 			<url>http://repository.unifiedviews.eu/nexus/content/repositories/public/</url>
 		</repository>
 	</repositories>
+
     <properties>
         <dpu.package>org.uh.hulib.attx.uv.dpu.l.attx.uploader</dpu.package>
         <dpu.mainClass>Uploader</dpu.mainClass>
     </properties>
+
+    <build>
+        <directory>build/libs</directory>
+    </build>
 
     <dependencies>
         <!-- UnifiedViews helpers. -->
@@ -58,7 +64,7 @@
 			<artifactId>httpcore-osgi</artifactId>
 			<version>4.4.5</version>
 			<scope>provided</scope>
-		</dependency>	
+		</dependency>
     </dependencies>
-                
+
 </project>

@@ -5,7 +5,7 @@
         <groupId>eu.unifiedviews</groupId>
         <artifactId>uv-pom-dpu</artifactId>
         <version>2.1.7</version>
-	<relativePath />
+        <relativePath/>
     </parent>
     <groupId>org.uh.hulib.attx</groupId>
     <artifactId>uv-dpu-l-attx-apicaller</artifactId>
@@ -13,17 +13,21 @@
     <packaging>bundle</packaging>
     <name>uv-dpu-l-attx-apicaller</name>
     <description></description>
-	<repositories>
-		<repository>
-			<id>repository.unifiedviews.eu</id>
-			<name>repository.unifiedviews.eu-public</name>
-			<url>http://repository.unifiedviews.eu/nexus/content/repositories/public/</url>
-		</repository>
-	</repositories>
+    <repositories>
+        <repository>
+            <id>repository.unifiedviews.eu</id>
+            <name>repository.unifiedviews.eu-public</name>
+            <url>http://repository.unifiedviews.eu/nexus/content/repositories/public/</url>
+        </repository>
+    </repositories>
     <properties>
         <dpu.package>org.uh.hulib.attx.uv.dpu.apicaller</dpu.package>
         <dpu.mainClass>APICaller</dpu.mainClass>
     </properties>
+
+    <build>
+        <directory>build/libs</directory>
+    </build>
 
     <dependencies>
         <!-- UnifiedViews helpers. -->
@@ -37,33 +41,32 @@
             <artifactId>uv-dpu-helpers</artifactId>
             <scope>compile</scope>
         </dependency>
-        
+
         <dependency>
             <groupId>com.mashape.unirest</groupId>
             <artifactId>unirest-java</artifactId>
-            <version>1.4.9</version>            
+            <version>1.4.9</version>
         </dependency>
         <dependency>
-          <groupId>org.apache.httpcomponents</groupId>
-          <artifactId>httpclient</artifactId>
-          <version>4.3.6</version>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.3.6</version>
         </dependency>
         <dependency>
-          <groupId>org.apache.httpcomponents</groupId>
-          <artifactId>httpasyncclient</artifactId>
-          <version>4.0.2</version>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpasyncclient</artifactId>
+            <version>4.0.2</version>
         </dependency>
         <dependency>
-          <groupId>org.apache.httpcomponents</groupId>
-          <artifactId>httpmime</artifactId>
-          <version>4.3.6</version>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpmime</artifactId>
+            <version>4.3.6</version>
         </dependency>
         <dependency>
-          <groupId>org.json</groupId>
-          <artifactId>json</artifactId>
-          <version>20140107</version>
-        </dependency>        
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20140107</version>
+        </dependency>
     </dependencies>
-	
-       
+
 </project>

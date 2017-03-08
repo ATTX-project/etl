@@ -1,6 +1,6 @@
 task changePermission(type:Exec) {
     workingDir '.'
-    commandLine 'chmod', '700', '../mvn.sh'    
+    commandLine 'chmod', '700', '../mvn.sh'
 }
 
 task repackage(type: Exec) {
@@ -9,3 +9,17 @@ task repackage(type: Exec) {
 }
 
 repackage.dependsOn changePermission
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            repository(url: "${artifactRepoURL}") {
+                  authentication(userName: "${artifactRepoUser}", password: "${artifactRepoPassword}")
+            }
+            pom.project {
+                groupId = "${wfGroupID}"
+                description "APIcaller UV DPU."
+            }
+        }
+    }
+}
