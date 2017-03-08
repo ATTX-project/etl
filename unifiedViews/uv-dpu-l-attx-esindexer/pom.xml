@@ -19,6 +19,10 @@
         <dpu.mainClass>ESIndexer</dpu.mainClass>
     </properties>
 
+    <build>
+        <directory>build/libs</directory>
+    </build>
+
     <dependencies>
         <!-- UnifiedViews helpers. -->
         <dependency>
@@ -31,11 +35,11 @@
             <artifactId>uv-dpu-helpers</artifactId>
             <scope>compile</scope>
         </dependency>
-        
+
         <dependency>
             <groupId>com.mashape.unirest</groupId>
             <artifactId>unirest-java</artifactId>
-            <version>1.4.9</version>            
+            <version>1.4.9</version>
         </dependency>
         <dependency>
           <groupId>org.apache.httpcomponents</groupId>
@@ -56,8 +60,7 @@
           <groupId>org.json</groupId>
           <artifactId>json</artifactId>
           <version>20140107</version>
-        </dependency>        
+        </dependency>
     </dependencies>
-	
-       
+
 </project>

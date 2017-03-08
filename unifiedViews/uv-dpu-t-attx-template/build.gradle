@@ -33,7 +33,7 @@ sourceCompatibility = 1.7
 targetCompatibility = 1.8
 
 repositories {
-        
+
      maven { url "http://repository.unifiedviews.eu/nexus/content/repositories/releases/" }
      maven { url "http://repository.unifiedviews.eu/nexus/content/repositories/snapshots/" }
      maven { url "http://maven.eea.sk/artifactory/public/" }
@@ -88,17 +88,17 @@ dependencies {
        /* This dependency was originally in the Maven provided scope, but the project was not of type war.
        This behavior is not yet supported by Gradle, so this dependency has been converted to a compile dependency.
        Please review and delete this closure when resolved. */
-    }  
-    
+    }
+
     extraLibs group: 'eu.unifiedviews', name: 'uv-dataunit-helpers', version:'2.1.7'
     extraLibs group: 'eu.unifiedviews', name: 'uv-dpu-helpers', version:'2.1.7'
-    
+
 }
 
 
 jar {
     baseName = 'ChangeMe'
-    
+
     manifest { // the manifest of the default jar is of type OsgiManifest
         name = 'ChangeMe'
         instruction 'DPU-MainClass', 'ChangeMe'
@@ -115,7 +115,7 @@ jar {
         //instruction 'Import-Package', '*'
 
     }
-    
+
     into('dependencies') {
         from {
             //configurations.runtime
@@ -124,5 +124,5 @@ jar {
 
         }
     }
-    
+
 }
