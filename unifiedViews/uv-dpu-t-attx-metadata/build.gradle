@@ -1,3 +1,11 @@
+ext.version_nb = "1.0"
+
+if (!project.hasProperty("env")) {
+    ext.artifactVersion = "${version_nb}-SNAPSHOT"
+} else if (project.env == "release"){
+    ext.artifactVersion = "${version_nb}"
+}
+
 task changePermission(type:Exec) {
     workingDir '.'
     commandLine 'chmod', '700', '../mvn.sh'
@@ -17,6 +25,7 @@ uploadArchives {
                   authentication(userName: "${artifactRepoUser}", password: "${artifactRepoPassword}")
             }
             pom.project {
+                version = "${artifactVersion}"
                 groupId = "${wfGroupID}"
                 description "Metadata UV DPU."
             }
