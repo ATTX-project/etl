@@ -1,4 +1,4 @@
-package org.uh.hulib.attx.uv.dpu.l.attx.uploader;
+package org.uh.hulib.attx.wc.uv.dpu.uploader;
 
 
 import com.vaadin.data.Property;

@@ -23,7 +23,7 @@
 	</repositories>
 
     <properties>
-        <dpu.package>org.uh.hulib.attx.uv.dpu.l.attx.uploader</dpu.package>
+        <dpu.package>org.uh.hulib.attx.wc.uv.dpu.uploader</dpu.package>
         <dpu.mainClass>Uploader</dpu.mainClass>
     </properties>
 
