@@ -1,4 +1,4 @@
-package org.uh.hulib.attx.uv.dpu.apicaller;
+package org.uh.hulib.attx.wc.uv.dpu.apicaller;
 
 /**
  * Configuration class for ESIndexer.

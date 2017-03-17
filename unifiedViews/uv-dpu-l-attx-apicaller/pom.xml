@@ -21,7 +21,7 @@
         </repository>
     </repositories>
     <properties>
-        <dpu.package>org.uh.hulib.attx.uv.dpu.apicaller</dpu.package>
+        <dpu.package>org.uh.hulib.attx.wc.uv.dpu.apicaller</dpu.package>
         <dpu.mainClass>APICaller</dpu.mainClass>
     </properties>
 
