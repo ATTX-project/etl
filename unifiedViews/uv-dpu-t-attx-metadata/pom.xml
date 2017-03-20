@@ -23,7 +23,7 @@
     </repositories>
 
     <properties>
-        <dpu.package>org.uh.hulib.attx.uv.dpu.metadata</dpu.package>
+        <dpu.package>org.uh.hulib.attx.wc.uv.dpu.metadata</dpu.package>
         <dpu.mainClass>TransformerATTXMetadata</dpu.mainClass>
     </properties>
 

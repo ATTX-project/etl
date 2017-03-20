@@ -1,4 +1,4 @@
-package org.uh.hulib.attx.uv.dpu.metadata;
+package org.uh.hulib.attx.wc.uv.dpu.metadata;
 
 import com.vaadin.data.util.ObjectProperty;
 import com.vaadin.ui.NativeSelect;

@@ -1,4 +1,4 @@
-package org.uh.hulib.attx.uv.dpu.l.attx.uploader;
+package org.uh.hulib.attx.wc.uv.dpu.uploader;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;

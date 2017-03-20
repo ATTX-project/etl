@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.uh.attx.wf.unifiedviews.test.stepdefinitions;
+package org.uh.hulib.attx.wc.test;
 
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;

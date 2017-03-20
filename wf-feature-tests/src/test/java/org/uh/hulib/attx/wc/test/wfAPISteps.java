@@ -1,4 +1,4 @@
-package org.uh.attx.wf.unifiedviews.test.stepdefinitions;
+package org.uh.hulib.attx.wc.test;
 
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
