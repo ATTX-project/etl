@@ -7,7 +7,7 @@ from wf_api.utils.prefixes import ATTXBase, ATTXOnto, PROV, SD, CC
 
 def parse_metadata_config(config, activityId, graph):
     """Parse metadata specific configuration."""
-    metadata_transformer = 'org.uh.hulib.attx.uv.dpu.metadata.Transformer\
+    metadata_transformer = 'org.uh.hulib.attx.wc.uv.dpu.metadata.Transformer\
 ATTXMetadataConfig__V1'
     soup = xmltodict.parse(config)
     base = soup["object-stream"]["MasterConfigObject"]["configurations"]["entry"]
