@@ -1,6 +1,6 @@
 from wf_api.uv.parse_config import parse_metadata_config
 from rdflib import Graph, Namespace
-from rdflib.compare import similar
+from rdflib.compare import similar, isomorphic
 import unittest
 import HTMLParser
 
@@ -39,19 +39,15 @@ class ParseConfigTest(unittest.TestCase):
 
     def test_parse_metadata_config(self):
         """Test if input output encoding is peformed correctly."""
-        result = Graph()
         result = parse_metadata_config(self.config, self.activityId, self.graph)
 
         # Considering blank nodes we need to check if the graphs are similar
-        print result.serialize(format='turtle')
-        print self.test_graph.serialize(format='turtle')
-        assert(similar(result, self.test_graph) is True)
+        assert(isomorphic(result, self.test_graph) is True)
 
     def test_parse_metadata_config_sparql(self):
         """Test if input output encoding is peformed correctly."""
         result = Graph()
         parsed = HTMLParser.HTMLParser().unescape(self.config_sparql)
-        print parsed
         result = parse_metadata_config(parsed, self.activityId, self.graph)
 
         # Considering blank nodes we need to check if the graphs are similar
