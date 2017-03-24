@@ -118,4 +118,6 @@ task runTestsAgainstSomething(type: Test) {
         systemProperties.remove 'wfapi.port'
         systemProperties.remove 'wfapi.host'
     }
+
+    finalizedBy removeImages
 }
