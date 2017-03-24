@@ -27,7 +27,7 @@ public class PlatformServices {
 
 
     public String getUV() {
-        return new ServerAddress(System.getProperty("mongo.host"), Integer.parseInt(System.getProperty("mongo.port")));
+        return "http://" + System.getProperty("frontend.host") + ":" + Integer.parseInt(System.getProperty("frontend.port"));
 //        if (isLocalhost) {
 //            return "http://localhost:" + UV_PORT;
 //        } else {
@@ -36,6 +36,7 @@ public class PlatformServices {
     }
 
     public String getWfapi() {
+        return "http://" + System.getProperty("wfapi.host") + ":" + Integer.parseInt(System.getProperty("wfapi.port"));
 //        if (isLocalhost) {
 //            return "http://localhost:" + WFAPI_PORT;
 //        } else {

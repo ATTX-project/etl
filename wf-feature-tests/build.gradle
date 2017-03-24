@@ -103,15 +103,19 @@ task integTest {
     finalizedBy removeImages
 }
 
-task runTestsAgainstDatabase(type: Test) {
+task runTestsAgainstSomething(type: Test) {
     dependsOn startSharedContainer, startMysqlContainer, startBackendContainer, startFrontendContainer, startWfapiContainer, startUvdpusContainer
 
     doFirst {
-        systemProperty 'mysql.port', dcompose.database.findHostPort(3306)
-        systemProperty 'mysql.host', dcompose.database.dockerHost
+        systemProperty 'frontend.port', dcompose.frontend.findHostPort(8080)
+        systemProperty 'frontend.host', dcompose.frontend.dockerHost
+        systemProperty 'wfapi.port', dcompose.wfapi.findHostPort(4301)
+        systemProperty 'wfapi.host', dcompose.wfapi.dockerHost
     }
     doLast {
-        systemProperties.remove 'mysql.port'
-        systemProperties.remove 'mysql.host'
+        systemProperties.remove 'frontend.port'
+        systemProperties.remove 'frontend.host'
+        systemProperties.remove 'wfapi.port'
+        systemProperties.remove 'wfapi.host'
     }
 }

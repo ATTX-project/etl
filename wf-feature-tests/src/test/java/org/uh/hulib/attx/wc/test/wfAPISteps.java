@@ -24,7 +24,7 @@ import static org.junit.Assert.*;
  * @author stefanne
  */
 public class wfAPISteps implements En {
-//    PlatformServices s = new PlatformServices(false);
+    PlatformServices s = new PlatformServices(false);
     private final String API_USERNAME = "master";
     private final String API_PASSWORD = "commander";
 
