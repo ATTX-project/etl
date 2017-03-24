@@ -1,14 +1,7 @@
 #!/bin/sh
 
-: ${SLEEP_LENGTH:=2}
-
-wait_for() {
-  echo Waiting for $1 to listen on $2... >> /tmp/log
-  while ! nc -z $1 $2; do echo sleeping >> /tmp/log ; sleep $SLEEP_LENGTH; done
-}
-
-wait_for "mysql" "3306"
-wait_for "frontend" "8080"
-wait_for "wfapi" "4301"
+dockerize -wait tcp://mysql:3306 -timeout 120s
+dockerize -wait http://frontend:8080 -timeout 120s
+dockerize -wait http://wfapi:4301/health -timeout 60s
 
 gradle -b build.gradle --offline test
