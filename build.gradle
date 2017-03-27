@@ -12,7 +12,8 @@ ext {
     'uv-dpu-l-attx-uploader', 
     'uv-dpu-l-attx-apicaller', 
     'uv-dpu-l-attx-uploader',
-    'uv-dpu-l-attx-esindexer']
+    'uv-dpu-l-attx-esindexer',
+    'uv-dpu-l-attx-linker']
     pythonProjectList = ['wf-API']
 }
 
