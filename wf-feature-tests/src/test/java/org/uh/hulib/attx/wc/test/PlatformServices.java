@@ -10,38 +10,27 @@ package org.uh.hulib.attx.wc.test;
  */
 public class PlatformServices {
 
-    private final String UV = "http://frontend";
-    private final int UV_PORT = 8080;
-
-    private final String WFAPI = "http://wfapi";
-    private final int WFAPI_PORT = 4301;
-
-    private boolean isLocalhost = false;
-
-    public PlatformServices() {
+    public String getESSiren() {
+        return "http://" + System.getProperty("essiren.host") + ":" + Integer.parseInt(System.getProperty("essiren.port"));
     }
 
-    public PlatformServices(boolean isLocalhost) {
-        this.isLocalhost = isLocalhost;
+    public String getES5() {
+        return "http://" + System.getProperty("es5.host") + ":" + Integer.parseInt(System.getProperty("es5.port"));
     }
 
+    public String getFuseki() {
+        return "http://" + System.getProperty("fuseki.host") + ":" + Integer.parseInt(System.getProperty("fuseki.port"));
+    }
 
     public String getUV() {
         return "http://" + System.getProperty("frontend.host") + ":" + Integer.parseInt(System.getProperty("frontend.port"));
-//        if (isLocalhost) {
-//            return "http://localhost:" + UV_PORT;
-//        } else {
-//            return UV + ":" + UV_PORT;
-//        }
+    }
+
+    public String getGmapi() {
+        return "http://" + System.getProperty("gmapi.host") + ":" + Integer.parseInt(System.getProperty("gmapi.port"));
     }
 
     public String getWfapi() {
         return "http://" + System.getProperty("wfapi.host") + ":" + Integer.parseInt(System.getProperty("wfapi.port"));
-//        if (isLocalhost) {
-//            return "http://localhost:" + WFAPI_PORT;
-//        } else {
-//            return WFAPI + ":" + WFAPI_PORT;
-//        }
     }
-
 }

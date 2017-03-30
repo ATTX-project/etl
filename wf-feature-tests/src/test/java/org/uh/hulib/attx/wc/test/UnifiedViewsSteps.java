@@ -34,18 +34,14 @@ import static org.junit.Assert.*;
  * @author stefanne
  */
 public class UnifiedViewsSteps implements En {
-    PlatformServices s = new PlatformServices(false);
-
-
-    private final String API_USERNAME = "master";
-    private final String API_PASSWORD = "commander";
+    PlatformServices s = new PlatformServices();
 
     private static int pipeline_id = -1;
     private static int execution_id = -1;
-    private final String ACTIVITY = "{\n" +
-            "    \"debugging\": false,\n" +
-            "     \"userExternalId\": \"admin\"\n" +
-            "}";
+
+    private final String API_USERNAME = "master";
+    private final String API_PASSWORD = "commander";
+    private final String ACTIVITY = "{ \"debugging\" : \"false\", \"userExternalId\" : \"admin\" }";
 
     public UnifiedViewsSteps() {
 
