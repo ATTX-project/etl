@@ -12,7 +12,7 @@ dependencies {
         'org.skyscreamer:jsonassert:1.4.0',
         'net.javacrumbs.json-unit:json-unit:1.16.0',
         'net.javacrumbs.json-unit:json-unit-fluent:1.16.0',
-        'org.apache.jena:apache-jena:3.2.0'
+        'org.apache.jena:apache-jena:3.2.0',
         'org.awaitility:awaitility-groovy:2.0.0'
 }
 
