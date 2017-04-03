@@ -10,26 +10,19 @@ import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.request.GetRequest;
 import cucumber.api.java8.En;
+
 import java.io.File;
 import java.io.StringReader;
-import java.net.URI;
 import java.net.URL;
-import java.nio.file.Paths;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.concurrent.CountDownLatch;
+
 import junit.framework.TestCase;
-import org.apache.jena.query.*;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
-import org.apache.jena.riot.RDFDataMgr;
-import org.apache.jena.query.Dataset ;
 import org.json.JSONObject;
-import static org.apache.jena.riot.RDFLanguages.TURTLE ;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.apache.commons.io.IOUtils;
+
 import org.apache.jena.rdf.model.Property;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.ResourceFactory;
@@ -38,27 +31,21 @@ import static org.junit.Assert.*;
 
 
 /**
- *
  * @author stefanne
  */
 public class UnifiedViewsSteps implements En {
-    PlatformServices s = new PlatformServices(false);
-    
-    
-    private final String API_USERNAME = "master";
-    private final String API_PASSWORD = "commander";
-    
+    PlatformServices s = new PlatformServices();
+
     private static int pipeline_id = -1;
     private static int execution_id = -1;
-    private final String ACTIVITY = "{\n" +
-            "    \"debugging\": false,\n" +
-            "     \"userExternalId\": \"admin\"\n" +
-            "}";
+
+    private final String API_USERNAME = "master";
+    private final String API_PASSWORD = "commander";
+    private final String ACTIVITY = "{ \"debugging\" : \"false\", \"userExternalId\" : \"admin\" }";
 
     public UnifiedViewsSteps() {
-        
-        
-        
+
+
         Given("^the UnifiedViews is running$", () -> {
             try {
                 GetRequest get = Unirest.get(s.getUV() + "/master/api/1/pipelines/visible?userExternalId=organization_ext_id").basicAuth(API_USERNAME, API_PASSWORD).header("accept", "application/json");
@@ -74,15 +61,15 @@ public class UnifiedViewsSteps implements En {
 
         When("^we add a new pipeline", () -> {
             try {
-                
+
                 URL resource = UnifiedViewsSteps.class.getResource("/testPipeline1.zip");
                 HttpResponse<JsonNode> postResponse = Unirest.post(s.getUV() + "/master/api/1/pipelines/import")
-                        .header("accept", "application/json")                        
+                        .header("accept", "application/json")
                         .basicAuth(API_USERNAME, API_PASSWORD)
                         .field("importUserData", false)
                         .field("importSchedule", false)
                         .field("file", new File(resource.toURI()))
-                        
+
                         .asJson();
                 /*
                 {
@@ -94,10 +81,10 @@ public class UnifiedViewsSteps implements En {
 }
                 */
 
-                JSONObject myObj = postResponse.getBody().getObject();    
+                JSONObject myObj = postResponse.getBody().getObject();
                 pipeline_id = myObj.getInt("id");
                 assertTrue(pipeline_id > 0);
-          
+
 
             } catch (Exception ex) {
                 Logger.getLogger(UnifiedViewsSteps.class.getName()).log(Level.SEVERE, null, ex);
@@ -107,7 +94,7 @@ public class UnifiedViewsSteps implements En {
 
         When("^we run a pipeline", () -> {
             try {
-                
+
                 System.out.println("PipelineID: " + this.pipeline_id);
                 String URL = String.format(s.getUV() + "/master/api/1/pipelines/%s/executions", this.pipeline_id);
                 HttpResponse<JsonNode> postResponse = Unirest.post(URL)
@@ -135,7 +122,7 @@ public class UnifiedViewsSteps implements En {
                 JSONObject myObj = postResponse.getBody().getObject();
                 execution_id = myObj.getInt("id");
                 assertTrue(execution_id > 0);
-                
+
 
             } catch (Exception ex) {
                 Logger.getLogger(UnifiedViewsSteps.class.getName()).log(Level.SEVERE, null, ex);
@@ -147,7 +134,7 @@ public class UnifiedViewsSteps implements En {
             try {
                 // wait for success
                 Thread.sleep(2000);
-                
+
                 String URL = s.getWfapi() + "/0.1/workflow";
                 HttpResponse<String> response = Unirest.get(URL)
                         .asString();
@@ -156,20 +143,19 @@ public class UnifiedViewsSteps implements En {
                 model.read(new StringReader(rdf), "http://data.hulib.helsinki.fi/attx/", "TURTLE");
                 Property prop = ResourceFactory.createProperty("http://www.w3.org/1999/02/22-rdf-syntax-ns#");
                 Resource obs = ResourceFactory.createResource("http://data.hulib.helsinki.fi/attx/onto#Workflow");
-                
+
                 assertTrue(!model.isEmpty());
-                
-                
+
 
             } catch (Exception ex) {
                 ex.printStackTrace();
                 Logger.getLogger(UnifiedViewsSteps.class.getName()).log(Level.SEVERE, null, ex);
                 TestCase.fail(ex.getMessage());
-            }            
+            }
         });
 
 
     }
-     
-    
+
+
 }

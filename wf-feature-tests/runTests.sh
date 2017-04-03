@@ -1,14 +1,7 @@
 #!/bin/sh
 
-: ${SLEEP_LENGTH:=2}
+# Wait for MySQL, the big number is because CI is slow.
+dockerize -wait tcp://mysql:3306 -timeout 240s
+dockerize -wait http://wfapi:4301/health -timeout 60s
 
-wait_for() {
-  echo Waiting for $1 to listen on $2... >> /tmp/log
-  while ! nc -z $1 $2; do echo sleeping >> /tmp/log ; sleep $SLEEP_LENGTH; done
-}
-
-wait_for "mysql" "3306"
-wait_for "frontend" "8080"
-wait_for "wfapi" "4301"
-
-gradle -b build.gradle --offline test
+gradle -b build.gradle --offline integTest

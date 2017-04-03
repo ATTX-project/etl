@@ -5,15 +5,17 @@ import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.request.GetRequest;
 import cucumber.api.java8.En;
+
 import java.io.File;
 import java.net.URL;
+
 import junit.framework.TestCase;
-import org.apache.jena.query.*;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.riot.RDFDataMgr;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import org.json.JSONObject;
 
 import static org.junit.Assert.*;
@@ -22,13 +24,13 @@ import static org.junit.Assert.*;
  * @author stefanne
  */
 public class wfAPISteps implements En {
-    PlatformServices s = new PlatformServices(false);
-        private final String API_USERNAME = "master";
+    PlatformServices s = new PlatformServices();
+    private final String API_USERNAME = "master";
     private final String API_PASSWORD = "commander";
 
     private static int notallowed;
-    
-        private final String ACTIVITY = "{\n" +
+
+    private final String ACTIVITY = "{\n" +
             "    \"debugging\": false,\n" +
             "     \"userExternalId\": \"admin\"\n" +
             "}";
@@ -40,7 +42,7 @@ public class wfAPISteps implements En {
                 HttpResponse<JsonNode> response1 = get.asJson();
                 int result1 = response1.getStatus();
                 assertTrue(result1 >= 200);
-                
+
 
             } catch (Exception ex) {
                 Logger.getLogger(wfAPISteps.class.getName()).log(Level.SEVERE, null, ex);
@@ -78,11 +80,11 @@ public class wfAPISteps implements En {
 
         When("^I access the \"([^\"]*)\" API and try to retrieve something$", (String arg1) -> {
             try {
-            String URL = String.format(s.getWfapi() + "/0.1/%s", arg1);
-            GetRequest get = Unirest.get(URL);
-            HttpResponse<String> response1 = get.asString();
-            int result1 = response1.getStatus();
-            assertTrue(result1 >= 200);
+                String URL = String.format(s.getWfapi() + "/0.1/%s", arg1);
+                GetRequest get = Unirest.get(URL);
+                HttpResponse<String> response1 = get.asString();
+                int result1 = response1.getStatus();
+                assertTrue(result1 >= 200);
 
             } catch (Exception ex) {
                 Logger.getLogger(wfAPISteps.class.getName()).log(Level.SEVERE, null, ex);
@@ -92,16 +94,16 @@ public class wfAPISteps implements En {
 
 //        This Assumes there is at least one pipeline exists and it has at least one execution and it is public
         Then("^I should get a response with \"([^\"]*)\"\\.$", (String arg1) -> {
-            
+
             // add pipeline and execution -- might fail, but it doesn' matter
             try {
                 URL resource = UnifiedViewsSteps.class.getResource("/testPipeline2.zip");
                 HttpResponse<JsonNode> postResponse = Unirest.post(s.getUV() + "/master/api/1/pipelines/import")
-                        .header("accept", "application/json")                        
+                        .header("accept", "application/json")
                         .basicAuth(API_USERNAME, API_PASSWORD)
                         .field("importUserData", false)
                         .field("importSchedule", false)
-                        .field("file", new File(resource.toURI()))                        
+                        .field("file", new File(resource.toURI()))
                         .asJson();
                 JSONObject myObj = postResponse.getBody().getObject();
                 int pipeline_id = myObj.getInt("id");
@@ -112,19 +114,19 @@ public class wfAPISteps implements En {
                         .basicAuth(API_USERNAME, API_PASSWORD)
                         .body(ACTIVITY)
                         .asJson();
-                
+
                 Thread.sleep(2000);
-                        
-            }catch(Exception ex ) {}
-            
-            
- 
+
+            } catch (Exception ex) {
+            }
+
+
             try {
-                String endpoint = (arg1.equals( "activities")) ? "activity" : "workflow";
+                String endpoint = (arg1.equals("activities")) ? "activity" : "workflow";
                 String URL = String.format(s.getWfapi() + "/0.1/%s", endpoint);
 
                 Model m = RDFDataMgr.loadModel(URL);
-                
+
                 assertTrue(!m.isEmpty());
 
             } catch (Exception ex) {
