@@ -6,14 +6,13 @@ import com.bmuschko.gradle.docker.tasks.container.DockerWaitContainer
 dependencies {
     testCompile \
         'junit:junit:4.10',
-        'info.cukes:cucumber-java8:1.2.5',
-        'info.cukes:cucumber-junit:1.2.5',
         'com.mashape.unirest:unirest-java:1.4.9',
         'org.skyscreamer:jsonassert:1.4.0',
         'net.javacrumbs.json-unit:json-unit:1.16.0',
         'net.javacrumbs.json-unit:json-unit-fluent:1.16.0',
         'org.apache.jena:apache-jena:3.2.0',
-        'org.awaitility:awaitility-groovy:2.0.0'
+        'org.awaitility:awaitility-groovy:2.0.0',
+        'org.uh.hulib.attx.dev:dev-test-helper:1.4'
 }
 
 if (!project.hasProperty("testEnv") || project.testEnv == "dev") {
