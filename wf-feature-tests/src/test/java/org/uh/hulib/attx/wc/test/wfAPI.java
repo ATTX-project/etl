@@ -18,6 +18,7 @@ import java.util.logging.Logger;
 
 
 import static org.awaitility.Awaitility.await;
+import org.awaitility.core.ConditionTimeoutException;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.*;
 
@@ -90,6 +91,8 @@ public class wfAPI {
 
             assertTrue(!m2.isEmpty());
 
+        } catch (ConditionTimeoutException cex) {
+                fail("Timeout exceeded. UV exceeded time limit.");
         } catch (Exception ex) {
             Logger.getLogger(wfAPI.class.getName()).log(Level.SEVERE, null, ex);
             TestCase.fail(ex.getMessage());
