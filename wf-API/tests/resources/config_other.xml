@@ -1,0 +1,27 @@
+<object-stream>
+ <MasterConfigObject>
+   <configurations>
+     <entry>
+       <string>dpu_config</string>
+       <string>&lt;object-stream&gt;
+ &lt;eu.unifiedviews.plugins.transformer.rdftofiles.RdfToFilesConfig__V2&gt;
+   &lt;outFileName&gt;output&lt;/outFileName&gt;
+   &lt;rdfFileFormat&gt;Turtle&lt;/rdfFileFormat&gt;
+   &lt;genGraphFile&gt;false&lt;/genGraphFile&gt;
+   &lt;outGraphName&gt;&lt;/outGraphName&gt;
+ &lt;/eu.unifiedviews.plugins.transformer.rdftofiles.RdfToFilesConfig__V2&gt;
+&lt;/object-stream&gt;</string>
+     </entry>
+     <entry>
+       <string>addon/faultToleranceWrap</string>
+       <string>&lt;object-stream&gt;
+ &lt;eu.unifiedviews.helpers.dpu.extension.faulttolerance.FaultTolerance_-Configuration__V1&gt;
+   &lt;enabled&gt;false&lt;/enabled&gt;
+   &lt;exceptionNames class=&quot;linked-list&quot;/&gt;
+   &lt;maxRetryCount&gt;-1&lt;/maxRetryCount&gt;
+ &lt;/eu.unifiedviews.helpers.dpu.extension.faulttolerance.FaultTolerance_-Configuration__V1&gt;
+&lt;/object-stream&gt;</string>
+     </entry>
+   </configurations>
+ </MasterConfigObject>
+</object-stream>

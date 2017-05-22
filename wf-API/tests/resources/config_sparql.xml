@@ -1,0 +1,31 @@
+<object-stream>
+ <MasterConfigObject>
+   <configurations>
+     <entry>
+       <string>dpu_config</string>
+       <string>&lt;object-stream&gt;
+ &lt;cz.cuni.mff.xrg.uv.transformer.sparql.construct.SparqlConstructConfig__V1&gt;
+   &lt;query&gt;prefix tuhat: &amp;lt;http://data.hulib.helsinki.fi/tuhat/&amp;gt;
+CONSTRUCT { ?subject &amp;lt;http://data.hulib.helsinki.fi/attx/urn&amp;gt; ?urn }
+WHERE {
+ ?subject tuhat:link ?object .
+ filter(strstarts(str(?object), &amp;apos;http://urn.fi/&amp;apos;))
+ bind(uri(strafter(str(?object), &amp;apos;http://urn.fi/&amp;apos;)) as ?urn)
+}&lt;/query&gt;
+   &lt;perGraph&gt;true&lt;/perGraph&gt;
+ &lt;/cz.cuni.mff.xrg.uv.transformer.sparql.construct.SparqlConstructConfig__V1&gt;
+&lt;/object-stream&gt;</string>
+     </entry>
+     <entry>
+       <string>addon/faultToleranceWrap</string>
+       <string>&lt;object-stream&gt;
+ &lt;eu.unifiedviews.helpers.dpu.extension.faulttolerance.FaultTolerance_-Configuration__V1&gt;
+   &lt;enabled&gt;false&lt;/enabled&gt;
+   &lt;exceptionNames class=&quot;linked-list&quot;/&gt;
+   &lt;maxRetryCount&gt;-1&lt;/maxRetryCount&gt;
+ &lt;/eu.unifiedviews.helpers.dpu.extension.faulttolerance.FaultTolerance_-Configuration__V1&gt;
+&lt;/object-stream&gt;</string>
+     </entry>
+   </configurations>
+ </MasterConfigObject>
+</object-stream>

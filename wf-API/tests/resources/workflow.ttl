@@ -1,0 +1,46 @@
+@base <http://helsinki.fi/library/> .
+@prefix attx: <http://data.hulib.helsinki.fi/attx/> .
+@prefix attxonto: <http://data.hulib.helsinki.fi/attx/onto#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix sd: <http://www.w3.org/ns/sparql-service-description#> .
+@prefix pwo: <http://purl.org/spar/pwo/> .
+
+attx:wf1
+  a attxonto:Workflow ;
+  dcterms:title "Acquisition and Mapping the VIRTA pubs data." ;
+  dcterms:description "Workflow that uses VIRTA publication data in order to map titles and external identifiers for every publication and research fields."@en ;
+  pwo:hasFirstStep attx:wf1_step1 ;
+  pwo:hasStep
+    attx:wf1_step2 ,
+    attx:wf1_step1 ,
+    attx:wf1_step3 ,
+    attx:wf1_step4 .
+
+attx:wf1_step1
+  a attxonto:Step ;
+  dcterms:title "VIRTA Publication Input Step" ;
+  dcterms:description "DPU that gets the latest publication from VIRTA using the API."@en ;
+  pwo:hasNextStep attx:wf1_step2 .
+
+attx:wf1_step2
+  a attxonto:Step ;
+  dcterms:title "VIRTA Transformation Step" ;
+  dcterms:description "DPU that transforms the VIRTA data into RDF format. At the same time it maps titles and external identifiers."@en ;
+  pwo:hasNextStep attx:wf1_step3 .
+
+attx:wf1_step3
+  a attxonto:Step ;
+  dcterms:title "Adding wf1 Metadata Step" ;
+  dcterms:description "DPU that add necessary Metadata, to the specify provenance information."@en ;
+  pwo:hasNextStep attx:wf1_step4 .
+
+attx:wf1_step4
+  a attxonto:Step ;
+  dcterms:title "VIRTA Publication Output Step" ;
+  dcterms:description "DPU that that contains the mapped data and writes it to the a file."@en .
