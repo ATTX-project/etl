@@ -70,7 +70,10 @@ public class Linker extends AbstractDpu<LinkerConfig_V1> {
             JSONArray graphs = new JSONArray();
             for(OptionValue inputGraph : config.getInputGraphs())
                 graphs.put(inputGraph.getValue());
-            graphStore.put("graphs", graphs);
+                
+            if(graphs.length() > 0) {
+                graphStore.put("graphs", graphs);
+            }
             
             payload.put("strategy", strategy);
             payload.put("graphStore", graphStore);
