@@ -17,7 +17,7 @@
         <repository>
             <id>repository.unifiedviews.eu</id>
             <name>repository.unifiedviews.eu-public</name>
-            <url>http://repository.unifiedviews.eu/nexus/content/groups/public/</url>
+            <url>http://repository.unifiedviews.eu/nexus/content/repositories/public/</url>
         </repository>
     </repositories>
     <properties>
