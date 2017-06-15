@@ -19,6 +19,11 @@
             <name>repository.unifiedviews.eu-public</name>
             <url>http://repository.unifiedviews.eu/nexus/content/repositories/public/</url>
         </repository>
+        <repository>
+			<id>maven.eea.sk</id>
+			<name>maven.eea.sk-public</name>
+			<url>http://maven.eea.sk/artifactory/public/</url>
+		</repository>        
     </repositories>
     <properties>
         <dpu.package>org.uh.hulib.attx.wc.uv.dpu.linker</dpu.package>
