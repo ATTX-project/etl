@@ -1,2 +1,2 @@
 #!/bin/bash
-mvn clean package
+mvn -Dmaven.repository=http://archiva:8080/repository/internal clean package
