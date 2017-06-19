@@ -42,7 +42,7 @@ dcompose {
         forcePull = true
         forceRemoveImage = true
         image = 'attxproject/unified-views-shared:1.1'
-        networks = [gcTest]
+        networks = [wfTest]
     }
 
     mysql {
@@ -50,7 +50,7 @@ dcompose {
         forceRemoveImage = true
         image = 'attxproject/unified-views-mariadb:1.1'
         env = ['MYSQL_ROOT_PASSWORD=iamroot!']
-        networks = [gcTest]
+        networks = [wfTest]
         hostName = 'mysql'
         if (testSet == "localhost") {
             portBindings = ['3306:3306']
@@ -62,7 +62,7 @@ dcompose {
         image = 'attxproject/unified-views-backend:1.1'
         volumesFrom =  [shared]
         dependsOn = [mysql, shared]
-        networks = [gcTest]
+        networks = [wfTest]
     }
 
     frontend {
@@ -71,7 +71,7 @@ dcompose {
         image = 'attxproject/unified-views-frontend:1.1'
         volumesFrom = [shared]
         dependsOn = [backend, shared]
-        networks = [gcTest]
+        networks = [wfTest]
         hostName = 'frontend'
         if (testSet == "localhost") {
             portBindings = ['8080:8080']
