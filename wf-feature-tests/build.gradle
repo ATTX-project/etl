@@ -41,38 +41,37 @@ dcompose {
     shared {
         forcePull = true
         forceRemoveImage = true
-        image = "${imageRepo}:${imageRepoPort}/uv-attx-shared:${testImageUVShared}"
-        networks = [wfTest]
+        image = 'attxproject/unified-views-shared:1.1'
+        networks = [gcTest]
     }
 
     mysql {
         forcePull = true
         forceRemoveImage = true
-        image = 'tenforce/unified-views-mariadb:feat-compact-modular'
+        image = 'attxproject/unified-views-mariadb:1.1'
         env = ['MYSQL_ROOT_PASSWORD=iamroot!']
-        networks = [wfTest]
+        networks = [gcTest]
         hostName = 'mysql'
         if (testSet == "localhost") {
             portBindings = ['3306:3306']
         }
     }
-
     backend {
         forcePull = true
         forceRemoveImage = true
-        image = 'tenforce/unified-views-backend:latest'
+        image = 'attxproject/unified-views-backend:1.1'
         volumesFrom =  [shared]
         dependsOn = [mysql, shared]
-        networks = [wfTest]
+        networks = [gcTest]
     }
 
     frontend {
         forcePull = true
         forceRemoveImage = true
-        image = 'tenforce/unified-views-frontend:latest'
+        image = 'attxproject/unified-views-frontend:1.1'
         volumesFrom = [shared]
         dependsOn = [backend, shared]
-        networks = [wfTest]
+        networks = [gcTest]
         hostName = 'frontend'
         if (testSet == "localhost") {
             portBindings = ['8080:8080']
@@ -193,4 +192,3 @@ task runIntegTests(type: Test) {
     }
     finalizedBy removeImages
 }
-
