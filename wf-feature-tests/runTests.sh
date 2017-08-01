@@ -4,4 +4,6 @@
 dockerize -wait tcp://mysql:3306 -timeout 240s
 dockerize -wait http://wfapi:4301/health -timeout 60s
 
-gradle -b build.gradle --offline integTest
+echo  "Archiva repository URL: $REPO"
+
+gradle -PartifactRepoURL=$REPO integTest

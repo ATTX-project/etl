@@ -70,34 +70,34 @@ public class wfAPI {
         }
     }
 
-    @Test
-    public void endpointsData() {
-        try {
-            URL resource = wfAPI.class.getResource("/testPipeline.zip");
-            int pipelineID = TestUtils.importPipeline(resource);
-
-            await().atMost(20, TimeUnit.SECONDS).until(TestUtils.pollForWorkflowStart(pipelineID), equalTo(200));
-            await().atMost(20, TimeUnit.SECONDS).until(TestUtils.pollForWorkflowExecution(pipelineID), equalTo("FINISHED_SUCCESS"));
-
-            String ActURL = String.format(TestUtils.getWfapi() + "/0.1/activity");
-
-            Model m1 = RDFDataMgr.loadModel(ActURL);
-
-            assertTrue(!m1.isEmpty());
-
-            String WrfURL = String.format(TestUtils.getWfapi() + "/0.1/workflow");
-
-            Model m2 = RDFDataMgr.loadModel(WrfURL);
-
-            assertTrue(!m2.isEmpty());
-
-        } catch (ConditionTimeoutException cex) {
-                fail("Timeout exceeded. UV exceeded time limit.");
-        } catch (Exception ex) {
-            Logger.getLogger(wfAPI.class.getName()).log(Level.SEVERE, null, ex);
-            TestCase.fail(ex.getMessage());
-        }
-    }
+//    @Test
+//    public void endpointsData() {
+//        try {
+//            URL resource = wfAPI.class.getResource("/testPipeline.zip");
+//            int pipelineID = TestUtils.importPipeline(resource);
+//
+//            await().atMost(20, TimeUnit.SECONDS).until(TestUtils.pollForWorkflowStart(pipelineID), equalTo(200));
+//            await().atMost(20, TimeUnit.SECONDS).until(TestUtils.pollForWorkflowExecution(pipelineID), equalTo("FINISHED_SUCCESS"));
+//
+//            String ActURL = String.format(TestUtils.getWfapi() + "/0.1/activity");
+//
+//            Model m1 = RDFDataMgr.loadModel(ActURL);
+//
+//            assertTrue(!m1.isEmpty());
+//
+//            String WrfURL = String.format(TestUtils.getWfapi() + "/0.1/workflow");
+//
+//            Model m2 = RDFDataMgr.loadModel(WrfURL);
+//
+//            assertTrue(!m2.isEmpty());
+//
+//        } catch (ConditionTimeoutException cex) {
+//                fail("Timeout exceeded. UV exceeded time limit.");
+//        } catch (Exception ex) {
+//            Logger.getLogger(wfAPI.class.getName()).log(Level.SEVERE, null, ex);
+//            TestCase.fail(ex.getMessage());
+//        }
+//    }
 
 
 }

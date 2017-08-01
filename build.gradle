@@ -1,17 +1,18 @@
 plugins {
     id "java"
     id "idea"
-    id "com.chrisgahlert.gradle-dcompose-plugin" version "0.8.2"
+    id "de.undercouch.download" version "3.2.0"
+    id "com.chrisgahlert.gradle-dcompose-plugin" version "0.9.1"
     id "com.github.johnrengelman.shadow" version "1.2.4"
     id "com.bmuschko.docker-remote-api" version "3.0.6"
 }
 
 ext {
-    javaProjectList = ['wf-feature-tests', 
-    'uv-dpu-t-attx-uc1-infras2internal', 
+    javaProjectList = ['wf-feature-tests',
+    'uv-dpu-t-attx-uc1-infras2internal',
     'uv-dpu-t-attx-metadata',
-    'uv-dpu-l-attx-uploader', 
-    'uv-dpu-l-attx-apicaller', 
+    'uv-dpu-l-attx-uploader',
+    'uv-dpu-l-attx-apicaller',
     'uv-dpu-l-attx-uploader',
     'uv-dpu-l-attx-esindexer',
     'uv-dpu-l-attx-linker']
