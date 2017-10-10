@@ -1,2 +1,0 @@
-include src/wf_api/swagger/swagger.yaml
-include database.conf

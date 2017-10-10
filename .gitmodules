@@ -1,0 +1,6 @@
+[submodule "uv-plugins"]
+	path = uv-plugins
+	url = https://github.com/ATTX-project/uv-plugins
+[submodule "uv-provenance-service"]
+	path = uv-provenance-service
+	url = https://github.com/ATTX-project/uv-provenance-service
