@@ -11,4 +11,6 @@ The Workflow Component consists of two main artifacts:
     git clone --recursive https://github.com/ATTX-project/workflow-component
 
     git submodule update --init --recursive
+    
+    git submodule update --init --recursive --remote
 ```
